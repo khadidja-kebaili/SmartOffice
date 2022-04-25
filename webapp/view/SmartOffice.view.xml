@@ -8,7 +8,11 @@
         <App id="app">
             <pages>
                 <Page id="page" title="{i18n>title}">
-                    <content />
+                    <content>
+                        <Button id="B1"
+                        type = "Accept"
+                        text = "Accept"/>
+                    </content>
                 </Page>
             </pages>
         </App>
