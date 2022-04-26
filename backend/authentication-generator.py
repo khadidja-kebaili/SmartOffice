@@ -122,4 +122,4 @@ def main():
 # if __name__ == "__main__":
 # main()
 
-get_sid('https://gmhn0evflkdlpmbw.myfritz.net:8254', 'admin', 'QUANTO_Solutions')
+get_sid('https://gmhn0evflkdlpmbw.myfritz.net:443', 'admin', 'QUANTO_Solutions')
