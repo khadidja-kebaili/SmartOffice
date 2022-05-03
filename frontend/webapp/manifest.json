@@ -7,7 +7,7 @@
     "applicationVersion": {
       "version": "0.0.1"
     },
-    "title": "{{appTitle}}",
+    "title": "Smart Office",
     "description": "{{appDescription}}",
     "resources": "resources.json",
     "sourceTemplate": {
