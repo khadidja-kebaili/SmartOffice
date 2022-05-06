@@ -1,0 +1,14 @@
+<mvc:View
+    controllerName="com.quanto.solutions.ui.smartoffice.controller.Jalousien"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    height="100%"
+    >
+    <Page id="listPage" title="Test" showNavButton="true" navButtonPress="handleNavButtonPress">
+        <headerContent>
+			<Button id="b1" icon="sap-icon://save" tooltip="Save" press="onPress"/>
+		</headerContent>
+        <Text id="text1" text="Juhu, es klappt"/>
+    </Page>
+</mvc:View>

@@ -1,15 +1,12 @@
-sap.ui.define([
-    "sap/ui/core/mvc/Controller"
-],
-    /**
-     * @param {typeof sap.ui.core.mvc.Controller} Controller
-     */
-    function (Controller) {
-        "use strict";
+sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/m/MessageToast'],
+	function(Controller, MessageToast) {
+	"use strict";
 
-        return Controller.extend("com.quanto.solutions.ui.smartoffice.controller.Home", {
-            onInit: function () {
-
-            }
-        });
-    });
+	var PageController = Controller.extend("com.quanto.solutions.ui.smartoffice.controller.Home", {
+		press : function(evt) {
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("jalousien")
+        }
+	});
+	return PageController;
+});
