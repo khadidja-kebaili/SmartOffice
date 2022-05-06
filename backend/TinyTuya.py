@@ -8,5 +8,5 @@ d.set_version(3.3)
 '''d_status = d.status()
 print(d_status)'''
 
-d.set_value(2, 90)
+#d.set_value(2, 90)
 d.set_value(1,'open')
