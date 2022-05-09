@@ -105,23 +105,5 @@ def send_response(box_url: str, username: str, challenge_response: str) -> str:
     return xml.find("SID").text
 
 
-def main():
-    if len(sys.argv) < 4:
-        print(
-            f"Usage: {sys.argv[0]} xxx user pass"
-        )
-        exit(1)
-    url = sys.argv[1]
-    username = sys.argv[2]
-    password = sys.argv[3]
-
-    sid = get_sid(url, username, password)
-    print(f"Successful login for user: {username}")
-    print(f"sid: {sid}")
-
-
-# if __name__ == "__main__":
-# main()
-
 get_sid('https://gmhn0evflkdlpmbw.myfritz.net:8254',
         'admin', 'QUANTO_Solutions')

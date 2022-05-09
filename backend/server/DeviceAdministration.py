@@ -1,5 +1,6 @@
 from .Jalousien import Jalousien
 from .Thermostat import Thermostat
+from .AuthGen import LoginState
 
 
 class Device_Administration():
@@ -107,7 +108,7 @@ class Device_Administration():
         pass
         """Den gegebenen Kunden löschen."""
 #        with ThermostatMapper() as mapper:
-#            accounts = self.get_accounts_of_thermostat(thermostat)
+#            thermostats = self.get_thermostat(thermostat)
 #            mapper.delete(thermostat)
 
     def set_temperature(self, temp):
@@ -115,3 +116,7 @@ class Device_Administration():
 
     def get_temperature(self):
         pass
+
+
+l = Device_Administration()
+l.add_thermostat(139790057201, '1f7ff4699013f11f')
