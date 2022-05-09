@@ -1,5 +1,5 @@
-from .Jalousien import Jalousien
-from .Thermostat import Thermostat
+from .bo.Jalousien import Jalousien
+from .bo.Thermostat import Thermostat
 from .AuthGen import LoginState
 
 

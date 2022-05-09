@@ -1,5 +1,5 @@
 from .Mapper import Mapper
-from ..Thermostat import Thermostat
+from ..bo.Thermostat import Thermostat
 
 
 class ThermostatMapper(Mapper):
