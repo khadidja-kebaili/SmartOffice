@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 import ssl
 
 try:
-   _create_unverified_https_context = ssl._create_unverified_context
+    _create_unverified_https_context = ssl._create_unverified_context
 except AttributeError:
     # Legacy Python that doesn't verify HTTPS certificates by default
     pass
@@ -35,7 +35,8 @@ def get_sid(box_url: str, username: str, password: str) -> str:
         raise Exception("failed to get challenge") from ex
     if state.is_pbkdf2:
         print("PBKDF2 supported")
-        challenge_response = calculate_pbkdf2_response(state.challenge, password)
+        challenge_response = calculate_pbkdf2_response(
+            state.challenge, password)
         print(challenge_response)
     else:
         print("Falling back to MD5")
@@ -122,4 +123,5 @@ def main():
 # if __name__ == "__main__":
 # main()
 
-get_sid('https://gmhn0evflkdlpmbw.myfritz.net:443', 'admin', 'QUANTO_Solutions')
+get_sid('https://gmhn0evflkdlpmbw.myfritz.net:8254',
+        'admin', 'QUANTO_Solutions')
