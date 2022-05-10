@@ -1,0 +1,36 @@
+<mvc:View
+    controllerName="com.quanto.solutions.ui.smartoffice.controller.Thermo-Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+>
+	<Page
+		title="Thermostate"
+		class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer"
+		showNavButton="true"
+    >
+		<content>
+			<VBox>
+                <Button
+                    text="Lounge"
+                    press="handleOpenDialog" />
+				<Button
+                    text="Games Corner"
+                    press="handleOpenDialog" />
+				<Button
+                    text="Besprechung 2a"
+                    press="handleOpenDialog" />
+				<Button
+                    text="Besprechung 2b"
+                    press="handleOpenDialog" />
+			</VBox>
+		</content>
+		<footer>
+			<OverflowToolbar>
+				<!-- <ToolbarSpacer/> -->
+				<Button text="Min. Temp." />
+				<Button text="Wochenplan" />
+			</OverflowToolbar>
+		</footer>
+	</Page>
+</mvc:View>

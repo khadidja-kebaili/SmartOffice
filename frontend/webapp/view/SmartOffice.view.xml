@@ -9,9 +9,11 @@
             <pages>
                 <Page id="page" title="{i18n>title}">
                     <content>
-                        <Button id="B1"
-                        type = "Accept"
-                        text = "Accept"/>
+                        <Button 
+                            id="B1"
+                            text = "Thermostate"
+                            press = ".goTo"
+                        />
                     </content>
                 </Page>
             </pages>

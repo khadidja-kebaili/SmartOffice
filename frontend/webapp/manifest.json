@@ -104,6 +104,11 @@
           "target": [
             "TargetSmartOffice"
           ]
+        },
+        {
+          "name": "Thermo-Main",
+          "pattern": "Thermo-Main",
+          "target": "Thermo-Main"
         }
       ],
       "targets": {
@@ -113,6 +118,10 @@
           "clearControlAggregation": false,
           "viewId": "SmartOffice",
           "viewName": "SmartOffice"
+        },
+        "Thermo-Main": {
+          "viewName": "Thermo-Main",
+          "viewId": "thermo-Main"
         }
       }
     },
