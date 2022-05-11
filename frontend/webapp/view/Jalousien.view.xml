@@ -5,10 +5,52 @@
     xmlns="sap.m"
     height="100%"
     >
-    <Page id="listPage" title="Test" showNavButton="true" navButtonPress="handleNavButtonPress">
-        <headerContent>
-			<Button id="b1" icon="sap-icon://save" tooltip="Save" press="onPress"/>
-		</headerContent>
-        <Text id="text1" text="Juhu, es klappt"/>
-    </Page>
+    <Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page
+                        id ="page3"
+                        title="Jalousien"
+                        class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer"
+                        showNavButton="true"
+                    >
+                    <headerContent>
+                        <Button id="b1" icon="sap-icon://save" tooltip="Save" press="onPress"/>
+                    </headerContent>
+                    <ObjectHeader
+                        id="oh1"
+                        icon="sap-icon://action-settings"
+                        iconDensityAware="false"
+                        iconAlt="Einstellungen Jalousien"
+                        imageShape="Circle"
+                        responsive="true"
+                        fullScreenOptimized="true"
+                        title="Conference S2"
+                        intro="Einstellen der Jalousien"
+                        class="sapUiResponsivePadding--header sapUiMediumMargin"> 
+                    </ObjectHeader>
+                        <content>
+                            
+                            <Text id="textjalousien" text="Auf wie viel Prozent sollen die Jalousien gesteuert werden?" textAlign="Center"/>
+                            
+                            <Slider id="slider" value="0" width="100%"
+                                min="0" max="100"
+                                showAdvancedTooltip="true"
+                                showHandleTooltip="false"
+                                inputsAsTooltips="true"
+                                class="sapUiMediumMarginBottom" />
+                        </content>
+
+                        <footer>
+                            <OverflowToolbar id="ovtb" class="sapUiMediumMarginTop">
+                                <ToolbarSpacer id="tbs1"/>
+                                <Button id = "buttonmt" text="Regeln" />
+                                <Button id = "buttonwp" text="Wochenplan" />
+                                <ToolbarSpacer id="tbs2"/>
+                            </OverflowToolbar>
+                        </footer>
+                    </Page>
+                </pages>
+            </App>
+    </Shell>
 </mvc:View>
