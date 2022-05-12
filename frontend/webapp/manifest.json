@@ -117,10 +117,10 @@
       }
     },
     "rootView": {
-      "viewName": "com.quanto.solutions.ui.smartoffice.view.SmartOffice",
+      "viewName": "com.quanto.solutions.ui.smartoffice.view.Reporting",
       "type": "XML",
       "async": true,
-      "id": "SmartOffice"
+      "id": "Reporting"
     }
   }
 }

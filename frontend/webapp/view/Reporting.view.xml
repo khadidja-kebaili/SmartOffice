@@ -3,16 +3,153 @@
     xmlns:mvc="sap.ui.core.mvc"
     displayBlock="true"
     xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:card="sap.f.cards"
+	xmlns:core="sap.ui.core"
+    xmlns:mc="sap.suite.ui.microchart"
+    xmlns:layout="sap.ui.layout"
+    xmlns:viz="sap.viz.ui5.controls"
+    height="100%"
 >
     <Shell id="shell">
         <App id="app">
             <pages>
-                <Page id="page" title="{i18n>title}">
-                    <content>
-                        <Button id="B1"
-                        type = "Accept"
-                        text = "Accept"/>
-                    </content>
+            
+                <Page 
+                id="page" 
+                title="Reporting zur Energie- und Raumnutzung"
+                class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer"
+                showNavButton="true" >
+
+                <!-- Share Button nicht notwendig!?
+                <headerContent>
+                    <Button icon="sap-icon://action" tooltip="Share" />
+                </headerContent>
+                -->
+
+                <!-- Search Button folgt, könnte ganz nützlich sein-->
+                <subHeader>
+                    <OverflowToolbar>
+                        <SearchField />
+                    </OverflowToolbar>
+                </subHeader>
+
+                <!-- Seitentext Information-->
+                <content>
+                    <VBox>                    
+                        <Text text="Diese Seite enthält Berichte zur Energie- und Raummnutzung des DECT-Thermostates und dem WLAN-Jalousienmodel." />
+                    </VBox>
+                </content>
+
+                <!-- Dect-Thermostat Card Control Header folgt-->
+                <f:Card class="sapUiMediumMargin" width="300px">
+                    <f:header>
+                        <card:Header title="Echtzeit Soll-Ist Vergleich" subtitle=" Dect-Thermostat" />
+                    </f:header>
+
+                <!-- Dect-Thermostat Card Control Content folgt, !muss angepasst werden!-->
+                    <f:content>
+                        <List
+                            showSeparators="None"
+                            items="{
+                                path: 'products>/productItems'
+                            }">
+                            <CustomListItem>
+                                <HBox alignItems="Center" justifyContent="SpaceBetween">
+                                    <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+                                        <Title level="H3" text="{products>title}" />
+                                        <Text text="{products>subtitle}" />
+                                    </VBox>
+                                    <ObjectStatus
+                                        class="sapUiTinyMargin sapUiSmallMarginEnd"
+                                        text="{products>revenue}"
+                                        state="{products>statusSchema}" />
+                                </HBox>
+                            </CustomListItem>
+                        </List>
+                    </f:content>
+                </f:Card>
+
+                <!-- WLAN-Jalousienmodul Card Control Header folgt-->
+                <f:Card class="sapUiMediumMargin" width="300px">
+                    <f:header>
+                        <card:Header title="Echtzeit Soll-Ist Vergleich" subtitle=" WLAN-Jalousienmodul" />
+                    </f:header>
+
+                <!-- WLAN-Jalousienmodul Card Control Content folgt, !muss angepasst werden!-->
+                    <f:content>
+                        <List
+                            showSeparators="None"
+                            items="{
+                                path: 'products>/productItems'
+                            }">
+                            <CustomListItem>
+                                <HBox alignItems="Center" justifyContent="SpaceBetween">
+                                    <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+                                        <Title level="H3" text="{products>title}" />
+                                        <Text text="{products>subtitle}" />
+                                    </VBox>
+                                    <ObjectStatus
+                                        class="sapUiTinyMargin sapUiSmallMarginEnd"
+                                        text="{products>revenue}"
+                                        state="{products>statusSchema}" />
+                                </HBox>
+                            </CustomListItem>
+                        </List>
+                    </f:content>
+                </f:Card>
+
+            <!-- Multiple Line Chart für DECT-Thermostat muss noch angepasst werden-->
+                <Panel
+                        headerText="Temperaturverlauf vom DECT-Thermostat">
+                    <layout:Grid
+                            defaultSpan="XL6 L6 M6 S12"
+                            content="{/multiline}">
+                        <layout:VerticalLayout class="sapUiTinyMargin">
+                            <Text text="{description}" width="17rem"/>
+                            <mc:LineMicroChart
+                                    color="{color}"
+                                    showPoints="{showPoints}"
+                                    size="{/size}"
+                                    threshold="{threshold}"
+                                    showThresholdLine="{showThresholdLine}"
+                                    leftTopLabel="{leftTopLabel}"
+                                    leftBottomLabel="{leftBottomLabel}"
+                                    rightTopLabel="{rightTopLabel}"
+                                    rightBottomLabel="{rightBottomLabel}"
+                                    showTopLabels="{showTopLabels}"
+                                    showBottomLabels="{showBottomLabels}"
+                                    press="press"
+                                    class="sapUiTinyMarginTop"
+                                    lines="{
+                                        path: 'lines',
+                                        templateShareable: true
+                                    }">
+                                <mc:lines>
+                                    <mc:LineMicroChartLine
+                                            points="{
+                                            path: 'points',
+                                            templateShareable: true
+                                        }"
+                                            color="{color}"
+                                            showPoints="{showPoints}"
+                                            type="{type}"
+                                            >
+                                        <mc:LineMicroChartPoint x="{x}" y="{y}"/>
+                                    </mc:LineMicroChartLine>
+                                </mc:lines>
+                            </mc:LineMicroChart>
+                        </layout:VerticalLayout>
+                    </layout:Grid>
+                </Panel>
+
+                <footer>
+                    <OverflowToolbar>
+                        <ToolbarSpacer/>
+                        <Button text="Edit" />
+                    </OverflowToolbar>
+                </footer>
+                    
                 </Page>
             </pages>
         </App>
