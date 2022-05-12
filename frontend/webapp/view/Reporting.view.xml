@@ -1,9 +1,8 @@
 <mvc:View
-    controllerName="com.quanto.solutions.ui.smartoffice.controller.SmartOffice"
+    controllerName="com.quanto.solutions.ui.smartoffice.controller.Reporting"
     xmlns:mvc="sap.ui.core.mvc"
     displayBlock="true"
     xmlns="sap.m"
-    name ="Maria"
 >
     <Shell id="shell">
         <App id="app">
