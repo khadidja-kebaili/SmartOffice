@@ -1,9 +1,13 @@
-class Thermostat():
+from bo.BusinessObject import BusinessObject
+
+
+class Thermostat(BusinessObject):
     """
     Klasse für Thermostat
     """
 
     def __init__(self, ain, port):
+        super().__init__()
         self._ain = ain
         self._port = port
 
@@ -21,12 +25,13 @@ class Thermostat():
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Repräsentation der jeweiligen Kontoinstanz."""
-        return "Jalousie: ain {}, port {}".format(self.get_ain(), self.get_port())
+        return "Jalousie: id {}, ain {}, port {}".format(self.get_id(), self.get_ain(), self.get_port())
 
     @staticmethod
     def from_dict(dictionary=dict()):
         """Umwandeln eines Python dict() in ein Account()."""
         obj = Thermostat()
+        obj.set_id(dictionary["id"])
         obj.set_ain(dictionary["ain"])
         obj.set_port(dictionary["port"])
         return obj

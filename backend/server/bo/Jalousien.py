@@ -1,9 +1,13 @@
-class Jalousien():
+from bo.BusinessObject import BusinessObject
+
+
+class Jalousien(BusinessObject):
     """
     Klasse für Jalousien
     """
 
     def __init__(self, device_id, ip_address, local_key):
+        super().__init__()
         self._device_id = device_id
         self._ip_address = ip_address
         self._local_key = local_key
@@ -35,13 +39,14 @@ class Jalousien():
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Repräsentation der jeweiligen Kontoinstanz."""
-        return "Jalousie: device_id {}, ip_address {}, local_key {}, temperature {}".format(
-            self.get_device_id(), self.get_ip_address(), self.get_local_key(), self.get_temperature())
+        return "Jalousie: id {}, device_id {}, ip_address {}, local_key {}, temperature {}".format(
+            self.get_id(), self.get_device_id(), self.get_ip_address(), self.get_local_key(), self.get_temperature())
 
     @staticmethod
     def from_dict(dictionary=dict()):
         """Umwandeln eines Python dict() in ein Account()."""
         obj = Jalousien()
+        obj.set_id(dictionary["id"])
         obj.set_device_id(dictionary["device_id"])
         obj.set_ip_address(dictionary["ip_address"])
         obj.set_local_key(dictionary['local_key'])

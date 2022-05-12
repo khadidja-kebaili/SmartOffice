@@ -7,8 +7,8 @@ from flask_cors import CORS
 
 # Wir greifen natürlich auf unsere Applikationslogik inkl. BusinessObject-Klassen zurück
 from server.DeviceAdministration import Device_Administration
-from server.Jalousien import Jalousien
-from server.Thermostat import Thermostat
+from server.bo.Jalousien import Jalousien
+from server.bo.Thermostat import Thermostat
 
 """
 Instanzieren von Flask. Am Ende dieser Datei erfolgt dann erst der 'Start' von Flask.
@@ -49,7 +49,7 @@ devicecontrolling = api.namespace(
 BusinessObject dient als Basisklasse, auf der die weiteren Strukturen jalomer, Account und Transaction aufsetzen."""
 
 """Jalousie & Thermostat sind BusinessObjects..."""
-jalousie = api.inherit('jalousie', {
+jalousie = api.inherit('Jalousie', {
     'device_id': fields.String(attribute='_device_id', description='Device_ID der Jalousie'),
     'local_key': fields.String(attribute='_local_key', description='Local_Key der Jalousie'),
     'ip_address': fields.String(attribute='_ip_address', description='IP-Addresse der Jalousie')
@@ -73,7 +73,7 @@ class JalousieListOperations(Resource):
         jalousies = adm.get_all_jalousies()
         return jalousies
 
-    @devicecontrolling.marshal_with(jalousie, code=200)
+    ''' @devicecontrolling.marshal_with(jalousie, code=200)
     # Wir erwarten ein Jalousie-Objekt von Client-Seite.
     @devicecontrolling.expect(jalousie)
     def post(self):
@@ -100,10 +100,11 @@ class JalousieListOperations(Resource):
             return c, 200
         else:
             # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
-            return '', 500
+            return '', 500'''
 
 
-@devicecontrolling.route('/jalousies/<int:id>')
+'''
+@devicecontrolling.route('/jalousie/<int:id>')
 @devicecontrolling.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @devicecontrolling.param('device_id', 'Die Geräte-ID des Jalousie-Objekts')
 class JalousieOperations(Resource):
@@ -114,16 +115,16 @@ class JalousieOperations(Resource):
         Das auszulesende Objekt wird durch die ```device_id``` in dem URI bestimmt.
         """
         adm = Device_Administration()
-        jal = adm.get_jalousie_by_id(id)
+        jal = adm.get_jalousie_by_id(device_id)
         return jal
 
-    def delete(self, id):
+    def delete(self, device_id):
         """Löschen eines bestimmten Jalousie-Objekts.
 
         Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
         """
         adm = Device_Administration()
-        jal = adm.get_jalousie_by_id(id)
+        jal = adm.get_jalousie_by_id(device_id)
         adm.delete_jalousie(jal)
         return '', 200
 
@@ -147,7 +148,7 @@ class JalousieOperations(Resource):
             adm.save_jalousie(c)
             return '', 200
         else:
-            return '', 500
+            return '', 500'''
 
 
 """

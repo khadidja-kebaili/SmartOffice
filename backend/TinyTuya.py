@@ -27,3 +27,5 @@ d = tinytuya.OutletDevice('bf1562e54d66eccf59oq7t',
                           '192.168.2.106', '1877eea950b2d4ff')
 d.set_version(3.3)
 print('hier', d.status())
+
+d.set_value(1, 'close')

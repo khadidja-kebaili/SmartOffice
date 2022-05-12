@@ -1,6 +1,6 @@
 from .bo.Jalousien import Jalousien
 from .bo.Thermostat import Thermostat
-from .AuthGen import LoginState
+#from .AuthGen import LoginState
 
 
 class Device_Administration():
@@ -116,7 +116,3 @@ class Device_Administration():
 
     def get_temperature(self):
         pass
-
-
-l = Device_Administration()
-l.add_thermostat(139790057201, '1f7ff4699013f11f')
