@@ -11,6 +11,7 @@
     >
 		<content>
 			<VBox>
+				<!-- Button für die Navigation -->
                 <Button
                     text="Lounge"
                     press="handleOpenDialog" />
@@ -27,9 +28,11 @@
 		</content>
 		<footer>
 			<OverflowToolbar>
-				<!-- <ToolbarSpacer/> -->
+				<!-- Elemente zentrieren -> ToolbarSpacer -->
+				<ToolbarSpacer/>
 				<Button text="Min. Temp." />
 				<Button text="Wochenplan" />
+				<ToolbarSpacer/>
 			</OverflowToolbar>
 		</footer>
 	</Page>
