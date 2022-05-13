@@ -1,56 +1,61 @@
-<mvc:View
-    controllerName="com.quanto.solutions.ui.smartoffice.controller.Jalousien"
-    xmlns:mvc="sap.ui.core.mvc"
-    displayBlock="true"
-    xmlns="sap.m"
-    height="100%"
-    >
-    <Shell id="shell">
-        <App id="app">
-            <pages>
-                <Page
-                        id ="page3"
-                        title="Jalousien"
-                        class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer"
-                        showNavButton="true"
-                    >
-                    <headerContent>
-                        <Button id="b1" icon="sap-icon://save" tooltip="Save" press="onPress"/>
-                    </headerContent>
-                    <ObjectHeader
-                        id="oh1"
-                        icon="sap-icon://action-settings"
-                        iconDensityAware="false"
-                        iconAlt="Einstellungen Jalousien"
-                        imageShape="Circle"
-                        responsive="true"
-                        fullScreenOptimized="true"
-                        title="Conference S2"
-                        intro="Einstellen der Jalousien"
-                        class="sapUiResponsivePadding--header sapUiMediumMargin"> 
-                    </ObjectHeader>
-                        <content>
-                            
-                            <Text id="textjalousien" text="Auf wie viel Prozent sollen die Jalousien gesteuert werden?" textAlign="Center"/>
-                            
-                            <Slider id="slider" value="0" width="100%"
-                                min="0" max="100"
-                                showAdvancedTooltip="true"
-                                showHandleTooltip="false"
-                                inputsAsTooltips="true"
-                                class="sapUiMediumMarginBottom" />
-                        </content>
+<mvc:View xmlns:core="sap.ui.core"
+		controllerName="com.quanto.solutions.ui.smartoffice.controller.Jalousien"
+		xmlns:mvc="sap.ui.core.mvc"
+		xmlns="sap.m"
+		xmlns:f="sap.f"
+		xmlns:layout="sap.ui.layout"
+		height="100%">
+	<f:DynamicPage id="dpJalousien" headerExpanded="{/headerExpanded}" toggleHeaderOnTitleClick="{/titleClickable}">
+		
+        <!-- DynamicPage Title -->
+			<f:title>
+				<f:DynamicPageTitle id="dptitle">
+					<f:heading>
+						<Title id="maintitle" text="Jalousien"/>
+					</f:heading>
+					
+					<f:expandedContent>
+						<Label id="expandedc" text="Konfiguration der Jalousien bei Quanto Solutions"/>
+					</f:expandedContent>
+					<f:snappedContent>
+						<Label id="snappedc" text="Konfiguration der Jalousien bei Quanto Solutions"/>
+					</f:snappedContent>
+					<f:snappedTitleOnMobile>
+						<Title id="snappedmobile" text="Konfiguration der Jalousien bei Quanto Solutions"/>
+					</f:snappedTitleOnMobile>
+				</f:DynamicPageTitle>
+			</f:title>
 
-                        <footer>
-                            <OverflowToolbar id="ovtb" class="sapUiMediumMarginTop">
-                                <ToolbarSpacer id="tbs1"/>
-                                <Button id = "buttonmt" text="Regeln" />
-                                <Button id = "buttonwp" text="Wochenplan" />
-                                <ToolbarSpacer id="tbs2"/>
-                            </OverflowToolbar>
-                        </footer>
-                    </Page>
-                </pages>
-            </App>
-    </Shell>
+		<!-- DynamicPage Header -->
+            <f:header>
+				<f:DynamicPageHeader id="dpheader" pinnable="false">
+					<layout:VerticalLayout id="verticallayoutheader" >
+                        <core:Icon id="iconsettings" src="sap-icon://action-settings" class="size3"> </core:Icon>
+					</layout:VerticalLayout>
+				</f:DynamicPageHeader>
+		    </f:header>
+
+        <!-- Page Content -->
+            <f:content>
+            <layout:VerticalLayout id="verticallayoutcontent" width="100%">
+                <Text id="textjalousien" text="Auf wie viel Prozent sollen die Jalousien gesteuert werden?"/>            
+                <Slider id="slider" value="0" width="100%"
+                    min="0" max="100"
+                    showAdvancedTooltip="true"
+                    showHandleTooltip="false"
+                    inputsAsTooltips="true"
+                    class="sapUiSmallMarginBottom" />
+            </layout:VerticalLayout>
+            </f:content>
+
+        <!-- DynamicPage Footer -->
+		    <f:footer>
+				<OverflowToolbar id="toolbarjalousien" class="sapUiMediumMarginTop">
+                    <ToolbarSpacer id="tbs1"/>
+                    <Button id="buttonregeln" text="Regeln" />
+                    <Button id="buttonwp" text="Wochenplan" />
+                    <ToolbarSpacer id="tbs2"/>
+                </OverflowToolbar>
+			</f:footer>
+        </f:DynamicPage>
 </mvc:View>
