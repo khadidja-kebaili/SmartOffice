@@ -6,9 +6,8 @@ from flask_restx import Api, Resource, fields
 from flask_cors import CORS
 
 # Wir greifen natürlich auf unsere Applikationslogik inkl. BusinessObject-Klassen zurück
-from server.DeviceAdministration import Device_Administration
-from server.bo.Jalousien import Jalousien
-from server.bo.Thermostat import Thermostat
+from server.bo.Jalousien import JalousienBO
+from server.DeviceAdministration import DeviceAdministration
 
 """
 Instanzieren von Flask. Am Ende dieser Datei erfolgt dann erst der 'Start' von Flask.
@@ -69,13 +68,14 @@ class JalousieListOperations(Resource):
         """Auslesen aller Jalousie-Objekte.
 
         Sollten keine Jalousie-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
-        adm = Device_Administration()
+        adm = DeviceAdministration()
         jalousies = adm.get_all_jalousies()
         return jalousies
 
-    ''' @devicecontrolling.marshal_with(jalousie, code=200)
+    @devicecontrolling.marshal_with(jalousie, code=200)
     # Wir erwarten ein Jalousie-Objekt von Client-Seite.
     @devicecontrolling.expect(jalousie)
+
     def post(self):
         """Anlegen eines neuen Jalousie-Objekts.
 
@@ -85,9 +85,9 @@ class JalousieListOperations(Resource):
         liegt es an der DeviceAdministration (Businesslogik), eine korrekte ID
         zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
         """
-        adm = Device_Administration()
+        adm = DeviceAdministration()
 
-        proposal = Jalousien.from_dict(api.payload)
+        proposal = jalousie.from_dict(api.payload)
 
         """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
         if proposal is not None:
@@ -95,27 +95,35 @@ class JalousieListOperations(Resource):
             eines Jalousie-Objekts. Das serverseitig erzeugte Objekt ist das maßgebliche und 
             wird auch dem Client zurückgegeben. 
             """
-            c = adm.create_jalousie(
+            c = adm.add_device(
                 proposal.get_device_id(), proposal.get_ip_address(), proposal.get_local_key())
             return c, 200
         else:
             # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
-            return '', 500'''
+            return '', 500
 
 
-'''
 @devicecontrolling.route('/jalousie/<int:id>')
 @devicecontrolling.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @devicecontrolling.param('device_id', 'Die Geräte-ID des Jalousie-Objekts')
 class JalousieOperations(Resource):
-    @devicecontrolling.marshal_with(jalousie)
+    @devicecontrolling.marshal_list_with(jalousie)
     def get(self, device_id):
         """Auslesen eines bestimmten Jalousie-Objekts.
 
         Das auszulesende Objekt wird durch die ```device_id``` in dem URI bestimmt.
         """
-        adm = Device_Administration()
-        jal = adm.get_jalousie_by_id(device_id)
+        adm = DeviceAdministration()
+        jal = adm.get_jalousie_by_device_id(device_id)
+        return jal
+
+    def get(self, id):
+        """Auslesen eines bestimmten Jalousie-Objekts.
+
+        Das auszulesende Objekt wird durch die ```id``` in dem URI bestimmt.
+        """
+        adm = DeviceAdministration()
+        jal = adm.get_jalousie_by_id(id)
         return jal
 
     def delete(self, device_id):
@@ -123,7 +131,7 @@ class JalousieOperations(Resource):
 
         Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
         """
-        adm = Device_Administration()
+        adm = DeviceAdministration()
         jal = adm.get_jalousie_by_id(device_id)
         adm.delete_jalousie(jal)
         return '', 200
@@ -137,8 +145,8 @@ class JalousieOperations(Resource):
         verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
         Jalousie-Objekts.
         """
-        adm = Device_Administration()
-        c = Jalousien.from_dict(api.payload)
+        adm = DeviceAdministration()
+        c = jalousie.from_dict(api.payload)
 
         if c is not None:
             """Hierdurch wird die id des zu überschreibenden (vgl. Update) Jalousie-Objekts gesetzt.
@@ -148,7 +156,7 @@ class JalousieOperations(Resource):
             adm.save_jalousie(c)
             return '', 200
         else:
-            return '', 500'''
+            return '', 500
 
 
 """

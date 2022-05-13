@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class BusinessObject(ABC):
+class Businessobject(ABC):
 
     def __init__(self):
         # Die eindeutige Identifikationsnummer einer Instanz dieser Klasse.

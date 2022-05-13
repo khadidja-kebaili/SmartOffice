@@ -1,7 +1,7 @@
-from bo.BusinessObject import BusinessObject
+from .BusinessObject import Businessobject
 
 
-class Thermostat(BusinessObject):
+class ThermostatBO(Businessobject):
     """
     Klasse für Thermostat
     """
