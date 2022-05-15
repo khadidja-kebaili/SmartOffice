@@ -1,5 +1,5 @@
 from .Mapper import Mapper
-from ..bo.Thermostat import Thermostat
+from ..bo.Thermostat import ThermostatBO
 
 
 class ThermostatMapper(Mapper):
@@ -9,21 +9,18 @@ class ThermostatMapper(Mapper):
 
     def insert(self, thermostat):
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM demo.demo ")
+        cursor.execute("SELECT MAX(id) AS maxid FROM thermostate ")
         tuples = cursor.fetchall()
         for (maxid) in tuples:
-            if maxid[0] is not None:
-                thermostat.set_ain(maxid[0] + 1)
-
+            if len(maxid) == 1:
+                thermostat.set_id(1)
             else:
-                """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
-                davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
-                thermostat.set_ain(1)
+                thermostat.set_id(int(maxid[0]) + 1)
 
-        command = "INSERT INTO demo.demo (ain, port) VALUES (%s, %s)"
+        command = "INSERT INTO thermostate (ain, sid) VALUES (%s, %s)"
         data = (
             thermostat.get_ain(),
-            thermostat.get_port()
+            thermostat.get_sid()
         )
 
         cursor.execute(command, data)
@@ -36,14 +33,15 @@ class ThermostatMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, dateoflastchange, time FROM demo.demo"
+        command = "SELECT id, ain, sid FROM thermostate"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, port) in tuples:
-            thermostat = Thermostat()
-            thermostat.set_ain(id)
-            thermostat.set_port(port)
+        for (id, ain, sid) in tuples:
+            thermostat = ThermostatBO()
+            thermostat.set_id(id)
+            thermostat.set_ain(ain)
+            thermostat.set_sid(sid)
             result.append(thermostat)
 
         self._cnx.commit()
@@ -55,16 +53,42 @@ class ThermostatMapper(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT ain, port, time FROM demo.demo WHERE id={}".format(
+        command = "SELECT ain, sid FROM thermostate WHERE ain={}".format(
             ain)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (ain, port) = tuples[0]
-            thermostat = Thermostat()
+            (ain, box_url, user_name, password) = tuples[0]
+            thermostat = ThermostatBO()
             thermostat.set_ain(ain)
-            thermostat.set_port(port)
+            thermostat.set_sid(box_url, user_name, password)
+            result = thermostat
+
+        except IndexError:
+            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+            result = None
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
+    def find_by_id(self, id):
+        result = None
+
+        cursor = self._cnx.cursor()
+        command = "SELECT ain, sid FROM thermostate WHERE id={}".format(
+            id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        try:
+            (ain, box_url, user_name, password) = tuples[0]
+            thermostat = ThermostatBO()
+            thermostat.set_ain(ain)
+            thermostat.set_sid(box_url, user_name, password)
             result = thermostat
 
         except IndexError:
@@ -80,10 +104,10 @@ class ThermostatMapper(Mapper):
     def update(self, thermostat):
         cursor = self._cnx.cursor()
 
-        command = "UPDATE demo.demo " + \
+        command = "UPDATE thermostate " + \
             "SET x=%s WHERE id=%s"
-        data = (thermostat.get_port(),
-                thermostat.get_ain())
+        data = (thermostat.get_ain(),
+                thermostat.get_sid())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -94,8 +118,8 @@ class ThermostatMapper(Mapper):
     def delete(self, thermostat):
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM demo.demo WHERE id={}".format(
-            thermostat.get_ain())
+        command = "DELETE FROM thermostate WHERE id={}".format(
+            thermostat.get_id())
         cursor.execute(command)
 
         self._cnx.commit()

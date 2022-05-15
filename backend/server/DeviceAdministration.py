@@ -1,5 +1,7 @@
 from server.bo.Jalousien import JalousienBO
 from server.database.JalousienMapper import JalousienMapper
+from server.bo.Thermostat import ThermostatBO
+from server.database.ThermostatMapper import ThermostatMapper
 #from .AuthGen import get_sid
 import tinytuya
 
@@ -53,6 +55,7 @@ class DeviceAdministration(object):
         with JalousienMapper() as mapper:
             return mapper.find_all()
 
+    def save_jalousie(self, jalousie):
         """Den gegebenen Benutzer speichern."""
         with JalousienMapper() as mapper:
             mapper.update(jalousie)
@@ -71,7 +74,7 @@ class DeviceAdministration(object):
             for x in elem:
                 x.set_device()
                 dev = x.get_device()
-                dev.set_value(1,'open')
+                dev.set_value(1, 'open')
                 status.append(dev.status())
         return status
 
@@ -84,7 +87,7 @@ class DeviceAdministration(object):
             for x in elem:
                 x.set_device()
                 dev = x.get_device()
-                dev.set_value(1,'close')
+                dev.set_value(1, 'close')
                 status.append(dev.status())
         return status
 
@@ -120,7 +123,7 @@ class DeviceAdministration(object):
                     pass
         return status
 
-    def set_to_percentage_by_id(self, id, percentage = int):
+    def set_to_percentage_by_id(self, id, percentage=int):
         jalousies = []
         status = []
         with JalousienMapper() as mapper:
@@ -140,15 +143,14 @@ class DeviceAdministration(object):
     Thermostat-spezifische Methoden
     """
 
-    def add_thermostat(self, ain, port):
+    def add_thermostat(self, ain, box_url, user_name, password):
         """Einen Kunden anlegen."""
-        #thermostat = Thermostat()
-        # thermostat.set_ain(ain)
-        # thermostat.set_port(port)
-        pass
+        thermostat = ThermostatBO()
+        thermostat.set_ain(ain)
+        thermostat.set_sid(box_url, user_name, password)
 
-#        with ThermostatMapper() as mapper:
-#            return mapper.insert(thermostat)
+        with ThermostatMapper() as mapper:
+            return mapper.insert(thermostat)
 
     def get_thermostat_by_ain(self, ain):
         pass
@@ -157,10 +159,8 @@ class DeviceAdministration(object):
 #            return mapper.find_by_port(port)
 
     def get_all_thermostats(self):
-        pass
-        """Alle Kunden auslesen."""
-#        with ThermostatMapper() as mapper:
-#            return mapper.find_all()
+        with ThermostatMapper() as mapper:
+            return mapper.find_all()
 
     def save_thermostat(self, thermostat):
         pass
@@ -183,6 +183,7 @@ class DeviceAdministration(object):
         # return sid
         pass
 
+
 '''    def get_sid(self, ip, name, passw):
         sid = get_sid(ip, name, passw)
         return sid'''
@@ -191,8 +192,13 @@ class DeviceAdministration(object):
 '''
 print(l.get_sid('https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions'))
 '''
-
+'''
 adm = DeviceAdministration()
 status = adm.set_to_percentage_by_id(1, 90)
 for elem in status:
     print(elem)
+adm.add_thermostat(139790057201, 'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
+t = adm.get_all_thermostats()
+for elem in t:
+    print (elem)
+'''

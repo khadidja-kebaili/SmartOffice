@@ -37,7 +37,7 @@ def get_sid(box_url: str, username: str, password: str) -> str:
         print("PBKDF2 supported")
         challenge_response = calculate_pbkdf2_response(
             state.challenge, password)
-        print(challenge_response)
+        # print(challenge_response)
     else:
         print("Falling back to MD5")
         challenge_response = calculate_md5_response(state.challenge, password)
@@ -46,7 +46,7 @@ def get_sid(box_url: str, username: str, password: str) -> str:
         time.sleep(state.blocktime)
     try:
         sid = send_response(box_url, username, challenge_response)
-        print('This is the SID:', sid)
+        #print('This is the SID:', sid)
     except Exception as ex:
         raise Exception("failed to login") from ex
     if sid == "0000000000000000":
@@ -116,30 +116,30 @@ class ThermostatBO(bo):
         self._sid = None
         self._timestamp = None
 
-
     def set_ain(self, ain):
         self._ain = ain
 
     def get_ain(self):
         return self._ain
 
-    def set_sid(self):
-        self._sid = get_sid('https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
+    def set_sid(self, box_url, user_name, password):
+        sid = get_sid(box_url, user_name, password)
+        self._sid = sid
 
     def get_sid(self):
-        timestamp_now = int(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
+        '''        timestamp_now = int(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
         delta = self.get_timestamp() - timestamp_now
         if delta >= 3600:
             self._sid = get_sid('https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
         else:
-            return self._sid
+            return self._sid'''
+        return self._sid
 
     def set_timestamp(self, timestamp):
         self._timestamp = int(timestamp.strftime("%Y%m%d%H%M%S"))
 
     def get_timestamp(self):
         return self._timestamp
-
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Repräsentation der jeweiligen Kontoinstanz."""
@@ -154,3 +154,5 @@ class ThermostatBO(bo):
         obj.set_sid(dictionary["sid"])
         return obj
 
+
+print(get_sid('https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions'))
