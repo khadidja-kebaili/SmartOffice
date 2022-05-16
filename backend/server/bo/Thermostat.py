@@ -113,8 +113,7 @@ class ThermostatBO(bo):
     def __init__(self):
         super().__init__()
         self._ain = None
-        self._sid = None
-        self._timestamp = None
+
 
     def set_ain(self, ain):
         self._ain = ain
@@ -122,28 +121,17 @@ class ThermostatBO(bo):
     def get_ain(self):
         return self._ain
 
-    def set_sid(self, box_url, user_name, password):
-        sid = get_sid(box_url, user_name, password)
-        self._sid = sid
 
-    def get_sid(self):
-        '''        timestamp_now = int(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
-        delta = self.get_timestamp() - timestamp_now
-        if delta >= 3600:
-            self._sid = get_sid('https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
-        else:
-            return self._sid'''
-        return self._sid
 
-    def set_timestamp(self, timestamp):
+    '''    def set_timestamp(self, timestamp):
         self._timestamp = int(timestamp.strftime("%Y%m%d%H%M%S"))
 
     def get_timestamp(self):
-        return self._timestamp
+        return self._timestamp'''
 
     def __str__(self):
         """Erzeugen einer einfachen textuellen Repräsentation der jeweiligen Kontoinstanz."""
-        return "Jalousie: id {}, ain {}, port {}".format(self.get_id(), self.get_ain(), self.get_sid())
+        return "Jalousie: id {}, ain {}".format(self.get_id(), self.get_ain())
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -151,8 +139,5 @@ class ThermostatBO(bo):
         obj = ThermostatBO()
         obj.set_id(dictionary["id"])
         obj.set_ain(dictionary["ain"])
-        obj.set_sid(dictionary["sid"])
         return obj
 
-
-print(get_sid('https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions'))

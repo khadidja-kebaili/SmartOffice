@@ -8,8 +8,11 @@ from flask_cors import CORS
 # Wir greifen natürlich auf unsere Applikationslogik inkl. BusinessObject-Klassen zurück
 from server.bo.Jalousien import JalousienBO
 from server.DeviceAdministration import DeviceAdministration
+from server.AuthGen import get_login_state, send_response, calculate_md5_response, calculate_pbkdf2_response
+import requests
+from flask import Response
 
-"""
+""""
 Instanzieren von Flask. Am Ende dieser Datei erfolgt dann erst der 'Start' von Flask.
 """
 app = Flask(__name__)
@@ -56,9 +59,11 @@ jalousie = api.inherit('Jalousie', {
 
 thermostat = api.inherit('Thermostat', {
     'ain': fields.String(attribute='_ain', description='Geräte-ID für AVM Geräte'),
-    'port': fields.String(attribute='_port', description='Netzwerk-Port')
 })
 
+bspw = api.inherit('Thermostat', {
+    'ain': fields.Integer(attribute='_ain', description='Geräte-ID für AVM Geräte'),
+})
 
 @devicecontrolling.route('/jalousie')
 @devicecontrolling.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -75,7 +80,6 @@ class JalousieListOperations(Resource):
     @devicecontrolling.marshal_with(jalousie, code=200)
     # Wir erwarten ein Jalousie-Objekt von Client-Seite.
     @devicecontrolling.expect(jalousie)
-
     def post(self):
         """Anlegen eines neuen Jalousie-Objekts.
 
@@ -158,6 +162,22 @@ class JalousieOperations(Resource):
         else:
             return '', 500
 
+        '''
+        @devicecontrolling.route('/test/', methods=['POST'])
+        def test():
+            state = get_login_state(box_url='https://gmhn0evflkdlpmbw.myfritz.net:8254')
+            password = 'QUANTO_Solutions'
+            url = 'https://gmhn0evflkdlpmbw.myfritz.net:8254/webservices/homeautoswitch.lua?sid=2ec08b1ab153582e&ain=139790057201&switchcmd=sethkrtsoll&param=50'
+            headers = {'Content-type': "application/x-www-form-urlencoded"}
+            c_response = calculate_pbkdf2_response(state.challenge, password)
+            response = c_response.post(url, data=data, headers=headers)
+            # wait for the response. it should not be higher
+            # than keep alive time for TCP connection
+        
+            # render template or redirect to some url:
+            # return redirect("some_url")
+            # or response.json()
+            return render_template("some_page.html", message=str(response.text))'''
 
 """
 Nachdem wir nun sämtliche Resourcen definiert haben, die wir via REST bereitstellen möchten,

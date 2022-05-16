@@ -2,8 +2,9 @@ from server.bo.Jalousien import JalousienBO
 from server.database.JalousienMapper import JalousienMapper
 from server.bo.Thermostat import ThermostatBO
 from server.database.ThermostatMapper import ThermostatMapper
-#from .AuthGen import get_sid
+from server.AuthGen import get_sid, get_login_state, send_response, calculate_md5_response
 import tinytuya
+import http.client
 
 
 class DeviceAdministration(object):
@@ -143,62 +144,64 @@ class DeviceAdministration(object):
     Thermostat-spezifische Methoden
     """
 
+
+    def generate_sid(self, box_url, user_name, password):
+        sid = get_sid(box_url, user_name, password)
+        return sid
+
+
     def add_thermostat(self, ain, box_url, user_name, password):
         """Einen Kunden anlegen."""
         thermostat = ThermostatBO()
         thermostat.set_ain(ain)
-        thermostat.set_sid(box_url, user_name, password)
-
         with ThermostatMapper() as mapper:
             return mapper.insert(thermostat)
 
     def get_thermostat_by_ain(self, ain):
-        pass
         """Alle Kunden mit übergebenem Nachnamen auslesen."""
-#        with ThermostatMapper() as mapper:
-#            return mapper.find_by_port(port)
+        with ThermostatMapper() as mapper:
+            return mapper.find_by_ain(ain)
+
+    def get_thermostat_by_id(self, id):
+        """Alle Kunden mit übergebenem Nachnamen auslesen."""
+        with ThermostatMapper() as mapper:
+            return mapper.find_by_key(id)
 
     def get_all_thermostats(self):
         with ThermostatMapper() as mapper:
             return mapper.find_all()
 
     def save_thermostat(self, thermostat):
-        pass
         """Den gegebenen Kunden speichern."""
-#        with ThermostatMapper() as mapper:
-#            mapper.update(thermostat)
+        with ThermostatMapper() as mapper:
+            mapper.update(thermostat)
 
     def delete_thermostat(self, thermostat):
-        pass
         """Den gegebenen Kunden löschen."""
-#        with ThermostatMapper() as mapper:
-#            thermostats = self.get_thermostat(thermostat)
-#            mapper.delete(thermostat)
+        with ThermostatMapper() as mapper:
+            thermostat = self.get_thermostat(thermostat)
+            mapper.delete(thermostat)
 
     def set_temperature(self, temp):
-        pass
+        conn = http.client.HTTPSConnection("gmhn0evflkdlpmbw.myfritz.net", 8254)
+        payload = ''
+        headers = {}
+        sid = self.generate_sid('https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
+        conn.request("GET",
+                     "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param={}".format(sid, temp),
+                     payload, headers)
+        res = conn.getresponse()
+        data = res.read()
+        print(data.decode("utf-8"))
 
     def get_temperature(self):
-        #sid = get_sid('https://192.168.2.254:8254/','admin', 'QUANTO_Solutions')
-        # return sid
-        pass
-
-
-'''    def get_sid(self, ip, name, passw):
-        sid = get_sid(ip, name, passw)
-        return sid'''
-
-
-'''
-print(l.get_sid('https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions'))
-'''
-'''
-adm = DeviceAdministration()
-status = adm.set_to_percentage_by_id(1, 90)
-for elem in status:
-    print(elem)
-adm.add_thermostat(139790057201, 'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
-t = adm.get_all_thermostats()
-for elem in t:
-    print (elem)
-'''
+        conn = http.client.HTTPSConnection("192.168.2.254", 8254)
+        payload = ''
+        headers = {}
+        sid = self.generate_sid('https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
+        conn.request("GET",
+                     "/webservices/homeautoswitch.lua?ain=139790057201&switchcmd=gettemperature&sid={}".format(sid),
+                     payload, headers)
+        res = conn.getresponse()
+        data = res.read()
+        print(data.decode("utf-8"))

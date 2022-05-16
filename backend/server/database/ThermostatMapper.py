@@ -17,8 +17,9 @@ class ThermostatMapper(Mapper):
             else:
                 thermostat.set_id(int(maxid[0]) + 1)
 
-        command = "INSERT INTO thermostate (ain, sid) VALUES (%s, %s)"
+        command = "INSERT INTO thermostate (id, ain) VALUES (%s, %s)"
         data = (
+            thermostat.get_id(),
             thermostat.get_ain(),
             thermostat.get_sid()
         )
@@ -33,15 +34,13 @@ class ThermostatMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, ain, sid FROM thermostate"
+        command = "SELECT id, ain FROM thermostate"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, ain, sid) in tuples:
+        for (id) in tuples:
             thermostat = ThermostatBO()
             thermostat.set_id(id)
-            thermostat.set_ain(ain)
-            thermostat.set_sid(sid)
             result.append(thermostat)
 
         self._cnx.commit()
@@ -53,16 +52,15 @@ class ThermostatMapper(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT ain, sid FROM thermostate WHERE ain={}".format(
+        command = "SELECT ain FROM thermostate WHERE ain={}".format(
             ain)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (ain, box_url, user_name, password) = tuples[0]
+            (ain) = tuples[0]
             thermostat = ThermostatBO()
             thermostat.set_ain(ain)
-            thermostat.set_sid(box_url, user_name, password)
             result = thermostat
 
         except IndexError:
@@ -75,20 +73,19 @@ class ThermostatMapper(Mapper):
 
         return result
 
-    def find_by_id(self, id):
+    def find_by_key(self, id):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT ain, sid FROM thermostate WHERE id={}".format(
+        command = "SELECT ain  FROM thermostate WHERE id={}".format(
             id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (ain, box_url, user_name, password) = tuples[0]
+            (id) = tuples[0]
             thermostat = ThermostatBO()
-            thermostat.set_ain(ain)
-            thermostat.set_sid(box_url, user_name, password)
+            thermostat.set_id(id)
             result = thermostat
 
         except IndexError:
@@ -105,9 +102,8 @@ class ThermostatMapper(Mapper):
         cursor = self._cnx.cursor()
 
         command = "UPDATE thermostate " + \
-            "SET x=%s WHERE id=%s"
-        data = (thermostat.get_ain(),
-                thermostat.get_sid())
+            "SET ain=%s WHERE id=%s"
+        data = (thermostat.get_ain())
         cursor.execute(command, data)
 
         self._cnx.commit()
