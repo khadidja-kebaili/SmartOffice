@@ -1,11 +1,8 @@
-from server.bo.Jalousien import JalousienBO
-from server.database.JalousienMapper import JalousienMapper
-from server.bo.Thermostat import ThermostatBO
-from server.database.ThermostatMapper import ThermostatMapper
-from server.bo.JalosuienStatusBO import JalousienStatusBO
-from server.database.JalousienStatusMapper import JalousienStatusMapper
-from server.AuthGen import get_sid, get_login_state, send_response, calculate_md5_response
-import time
+from bo.Jalousien import JalousienBO
+from database.JalousienMapper import JalousienMapper
+from bo.Thermostat import ThermostatBO
+from database.ThermostatMapper import ThermostatMapper
+from AuthGen import get_sid, get_login_state, send_response, calculate_md5_response
 import tinytuya
 import http.client
 
@@ -69,107 +66,80 @@ class DeviceAdministration(object):
         with JalousienMapper() as mapper:
             mapper.delete(jalousie)
 
-    def get_all_status(self):
-        with JalousienStatusMapper() as mapper:
-            return mapper.find_all()
+    def open_all_jalousies(self):
+        jalousies = []
+        status = []
+        with JalousienMapper() as mapper:
+            jalousies.append(mapper.find_all())
+        for elem in jalousies:
+            for x in elem:
+                x.set_device()
+                dev = x.get_device()
+                dev.set_value(1, 'open')
+                status.append(dev.status())
+        return status
 
-    '''    def open_all_jalousies(self):
-            jalousies = []
-            status = []
-            with JalousienMapper() as mapper:
-                jalousies.append(mapper.find_all())
-            for elem in jalousies:
-                for x in elem:
-                    x.set_device()
-                    dev = x.get_device()
-                    dev.set_value(1, 'open')
-                    status.append(dev.status())
-            return status
-    
-        def close_all_jalousies(self):
-            jalousies = []
-            status = JalousienStatusBO()
-            jalousies.append(self.get_all_jalousies())
-            for elem in jalousies:
-                for x in elem:
-                        x.set_device()
-                        dev = x.get_device()
-                        dev.set_value(1, 'close')
-                        time.sleep(10)
-                        status.set_status(str(dev.status()))
-                        status.set_device(id)
-            return status'''
+    def close_all_jalousies(self):
+        jalousies = []
+        status = []
+        with JalousienMapper() as mapper:
+            jalousies.append(mapper.find_all())
+        for elem in jalousies:
+            for x in elem:
+                x.set_device()
+                dev = x.get_device()
+                dev.set_value(1, 'close')
+                status.append(dev.status())
+        return status
 
     def open_jalousie_by_id(self, id):
         jalousies = []
-        status = JalousienStatusBO()
-        jalousies.append(self.get_all_jalousies())
-        dev_stat = None
+        status = []
+        with JalousienMapper() as mapper:
+            jalousies.append(mapper.find_all())
         for elem in jalousies:
             for x in elem:
                 if x.get_id() == id:
                     x.set_device()
                     dev = x.get_device()
                     dev.set_value(1, 'open')
-                    time.sleep(10)
-                    status.set_status(str(dev.status()))
-                    status.set_device(id)
-                    dev_stat = dev.status()
-        new_list = []
-        for key in dev_stat:
-            for elem in dev_stat[key].values():
-                new_list.append(elem)
-        status.set_percentage(new_list[1])
+                    status.append(dev.status())
+                else:
+                    pass
         return status
 
     def close_jalousie_by_id(self, id):
         jalousies = []
-        status = JalousienStatusBO()
-        jalousies.append(self.get_all_jalousies())
-        dev_stat = None
+        status = []
+        with JalousienMapper() as mapper:
+            jalousies.append(mapper.find_all())
         for elem in jalousies:
             for x in elem:
                 if x.get_id() == id:
                     x.set_device()
                     dev = x.get_device()
                     dev.set_value(1, 'close')
-                    time.sleep(10)
-                    status.set_status(str(dev.status()))
-                    status.set_device(id)
-                    dev_stat = dev.status()
-        new_list = []
-        for key in dev_stat:
-            for elem in dev_stat[key].values():
-                new_list.append(elem)
-        status.set_percentage(new_list[1])
+                    status.append(dev.status())
+                else:
+                    pass
         return status
 
-    def set_status_to_percentage_by_id(self, id, percentage=int):
+    def set_to_percentage_by_id(self, id, percentage=int):
         jalousies = []
-        status = JalousienStatusBO()
-        status.set_percentage(percentage)
-        perc = status.get_percentage()
-        jalousies.append(self.get_all_jalousies())
+        status = []
+        with JalousienMapper() as mapper:
+            jalousies.append(mapper.find_all())
         for elem in jalousies:
             for x in elem:
                 if x.get_id() == id:
                     x.set_device()
                     dev = x.get_device()
-                    dev.set_value(2, perc)
-                    time.sleep(1)
-                    status.set_status(str(dev.status()))
-                    status.set_device(id)
-        with JalousienStatusMapper() as mapper:
-            return mapper.insert(status)
+                    dev.set_value(2, percentage)
+                    status.append(dev.status())
+                else:
+                    pass
+        return status
 
-    def get_status_of_jalousie_by_id(self, id):
-        with JalousienStatusMapper() as mapper:
-            return mapper.find_by_key(id)
-
-    def delete_status_by_id(self,id):
-        status = self.get_status_of_jalousie_by_id(id)
-        with JalousienStatusMapper() as mapper:
-            mapper.delete(status)
     """
     Thermostat-spezifische Methoden
     """
@@ -238,3 +208,8 @@ class DeviceAdministration(object):
         res = conn.getresponse()
         data = res.read()
         print(data.decode("utf-8"))
+
+
+d = DeviceAdministration()
+temp = d.get_temperature()
+print(temp)

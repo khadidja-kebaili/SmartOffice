@@ -1,4 +1,4 @@
-from server.bo.BusinessObject import Businessobject as bo
+from bo.BusinessObject import Businessobject as bo
 from TinyTuya import tinytuya
 
 
@@ -13,7 +13,6 @@ class JalousienBO(bo):
         self._device_id = ''
         self._ip_address = ''
         self._local_key = ''
-
 
     def set_device_id(self, device_id):
         self._device_id = device_id
@@ -34,7 +33,8 @@ class JalousienBO(bo):
         return self._local_key
 
     def set_device(self):
-        self._d = tinytuya.OutletDevice(self.get_device_id(), self.get_ip_address(), self.get_local_key())
+        self._d = tinytuya.OutletDevice(
+            self.get_device_id(), self.get_ip_address(), self.get_local_key())
         self._d.set_version(3.3)
 
     def get_device(self):

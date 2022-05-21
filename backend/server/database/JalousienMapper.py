@@ -72,7 +72,7 @@ class JalousienMapper(Mapper):
         :return Eine Sammlung mit Account-Objekten, die sämtliche Konten des
                 betreffenden Kunden repräsentieren.
         """
-        result = []
+        result = None
         cursor = self._cnx.cursor()
         command = "SELECT id, device_id, ip_address, local_key FROM jalousien WHERE device_id={} ORDER BY id".format(device_id)
         cursor.execute(command)
@@ -83,7 +83,7 @@ class JalousienMapper(Mapper):
             jalousie.set_id(id)
             jalousie.set_device_id(device_id)
             jalousie.set_ip_address(ip_address)
-            result.append(jalousie)
+            result = jalousie
 
         self._cnx.commit()
         cursor.close()
@@ -97,7 +97,7 @@ class JalousienMapper(Mapper):
         :return Eine Sammlung mit Account-Objekten, die sämtliche Konten des
                 betreffenden Kunden repräsentieren.
         """
-        result = []
+        result = None
         cursor = self._cnx.cursor()
         command = "SELECT id, device_id, ip_address, local_key FROM jalousien WHERE id={} ORDER BY id".format(id)
         cursor.execute(command)
@@ -108,7 +108,7 @@ class JalousienMapper(Mapper):
             jalousie.set_id(id)
             jalousie.set_device_id(device_id)
             jalousie.set_ip_address(ip_address)
-            result.append(jalousie)
+            result = jalousie
 
         self._cnx.commit()
         cursor.close()
@@ -123,7 +123,7 @@ class JalousienMapper(Mapper):
         :return Konto-Objekt, das dem übergebenen Schlüssel entspricht, None bei
             nicht vorhandenem DB-Tupel.
         """
-        result = []
+        result = None
 
         cursor = self._cnx.cursor()
         command = "SELECT id, device_id, ip_address, local_key FROM jalousien WHERE local_key={}".format(local_key)
@@ -137,7 +137,7 @@ class JalousienMapper(Mapper):
             jalousie.set_device_id(device_id)
             jalousie.set_ip_address(ip_address)
             jalousie.set_local_key(local_key)
-            result.append(jalousie)
+            result = jalousie
 
         self._cnx.commit()
         cursor.close()

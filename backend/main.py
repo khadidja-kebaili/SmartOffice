@@ -11,6 +11,8 @@ from server.DeviceAdministration import DeviceAdministration
 from server.AuthGen import get_login_state, send_response, calculate_md5_response, calculate_pbkdf2_response
 import requests
 from flask import Response
+from server.bo.BusinessObject import Businessobject
+from server.bo.JalosuienStatusBO import JalousienStatusBO
 
 """"
 Instanzieren von Flask. Am Ende dieser Datei erfolgt dann erst der 'Start' von Flask.
@@ -51,18 +53,25 @@ devicecontrolling = api.namespace(
 BusinessObject dient als Basisklasse, auf der die weiteren Strukturen jalomer, Account und Transaction aufsetzen."""
 
 """Jalousie & Thermostat sind BusinessObjects..."""
-jalousie = api.inherit('Jalousie', {
+
+bo = api.model('Businessobject', {
+    'id': fields.Integer(attribute='_id', description='Der Unique Identifier eines Business Object'),
+})
+
+jalousie = api.inherit('Jalousie', bo, {
     'device_id': fields.String(attribute='_device_id', description='Device_ID der Jalousie'),
     'local_key': fields.String(attribute='_local_key', description='Local_Key der Jalousie'),
     'ip_address': fields.String(attribute='_ip_address', description='IP-Addresse der Jalousie')
 })
 
-thermostat = api.inherit('Thermostat', {
+thermostat = api.inherit('Thermostat', bo,{
     'ain': fields.String(attribute='_ain', description='Geräte-ID für AVM Geräte'),
 })
 
-bspw = api.inherit('Thermostat', {
-    'ain': fields.Integer(attribute='_ain', description='Geräte-ID für AVM Geräte'),
+status = api.inherit('Jalousienstatus', bo,{
+    'percentage': fields.Integer(attribute = '_percentage', description = 'Höhe des Jalousienstands in Prozent'),
+    'status': fields.String(attribute='_status', description='Status der Jalousie'),
+    'jalousieid': fields.Integer(attribute='_jalousieid', description='ID der Jalousie')
 })
 
 @devicecontrolling.route('/jalousie')
@@ -116,7 +125,7 @@ class JalousieOperations(Resource):
         """Auslesen eines bestimmten Jalousie-Objekts.
 
         Das auszulesende Objekt wird durch die ```device_id``` in dem URI bestimmt.
-        """
+"""
         adm = DeviceAdministration()
         jal = adm.get_jalousie_by_device_id(device_id)
         return jal
@@ -162,22 +171,96 @@ class JalousieOperations(Resource):
         else:
             return '', 500
 
-        '''
-        @devicecontrolling.route('/test/', methods=['POST'])
-        def test():
-            state = get_login_state(box_url='https://gmhn0evflkdlpmbw.myfritz.net:8254')
-            password = 'QUANTO_Solutions'
-            url = 'https://gmhn0evflkdlpmbw.myfritz.net:8254/webservices/homeautoswitch.lua?sid=2ec08b1ab153582e&ain=139790057201&switchcmd=sethkrtsoll&param=50'
-            headers = {'Content-type': "application/x-www-form-urlencoded"}
-            c_response = calculate_pbkdf2_response(state.challenge, password)
-            response = c_response.post(url, data=data, headers=headers)
-            # wait for the response. it should not be higher
-            # than keep alive time for TCP connection
-        
-            # render template or redirect to some url:
-            # return redirect("some_url")
-            # or response.json()
-            return render_template("some_page.html", message=str(response.text))'''
+
+@devicecontrolling.route('/jalousienstatus')
+@devicecontrolling.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class JalousienStatusListOperations(Resource):
+    @devicecontrolling.marshal_list_with(status)
+    def get(self):
+        """Auslesen aller Jalousie-Objekte.
+
+        Sollten keine Jalousie-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
+        adm = DeviceAdministration()
+        stats = adm.get_all_status()
+        return stats
+
+
+@devicecontrolling.route('/setstatus')
+@devicecontrolling.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class JalousienSetStatusListOperations(Resource):
+    @devicecontrolling.marshal_with(status, code=200)
+    @devicecontrolling.expect(status)
+    def post(self):
+        """Anlegen eines neuen Jalousie-Objekts.
+
+        **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
+        So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
+        Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
+        liegt es an der DeviceAdministration (Businesslogik), eine korrekte ID
+        zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
+        """
+        adm = DeviceAdministration()
+        proposal = JalousienStatusBO.from_dict(api.payload)
+        if proposal is not None:
+
+            c = adm.set_status_to_percentage_by_id(
+                proposal.get_device(), proposal.get_percentage())
+            return c, 200
+        else:
+            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
+            return '', 500
+
+@devicecontrolling.route('/openjalousie')
+@devicecontrolling.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class JalousienSetStatusListOperations(Resource):
+    @devicecontrolling.marshal_with(status, code=200)
+    @devicecontrolling.expect(status)
+    def post(self):
+        """Anlegen eines neuen Jalousie-Objekts.
+
+        **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
+        So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
+        Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
+        liegt es an der DeviceAdministration (Businesslogik), eine korrekte ID
+        zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
+        """
+        adm = DeviceAdministration()
+        proposal = JalousienStatusBO.from_dict(api.payload)
+        if proposal is not None:
+
+            c = adm.open_jalousie_by_id(
+                proposal.get_device())
+            return c, 200
+        else:
+            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
+            return '', 500
+
+
+@devicecontrolling.route('/closejalousie')
+@devicecontrolling.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+class JalousienSetStatusListOperations(Resource):
+    @devicecontrolling.marshal_with(status, code=200)
+    @devicecontrolling.expect(status)
+    def post(self):
+        """Anlegen eines neuen Jalousie-Objekts.
+
+        **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
+        So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
+        Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
+        liegt es an der DeviceAdministration (Businesslogik), eine korrekte ID
+        zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
+        """
+        adm = DeviceAdministration()
+        proposal = JalousienStatusBO.from_dict(api.payload)
+        if proposal is not None:
+
+            c = adm.close_jalousie_by_id(
+                proposal.get_device())
+            return c, 200
+        else:
+            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
+            return '', 500
+
 
 """
 Nachdem wir nun sämtliche Resourcen definiert haben, die wir via REST bereitstellen möchten,
