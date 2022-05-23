@@ -9,7 +9,7 @@ sap.ui.define([
 
         return Controller.extend("com.quanto.solutions.ui.smartoffice.controller.SmartOffice", {
             onInit: function () {
-
+                
             }
         });
     });
