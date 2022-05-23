@@ -1,0 +1,16 @@
+<core:FragmentDefinition
+        xmlns="sap.m"
+        xmlns:core="sap.ui.core"
+>
+    <Bar>
+        <contentLeft>
+            <Button class="sapUiMediumMarginBegin sapUiMediumMarginEnd" icon="sap-icon://nav-back" press="onNavBack" />
+            <Select>
+            </Select>
+        </contentLeft>
+        <contentMiddle>
+        </contentMiddle>
+        <contentRight>
+        </contentRight>
+    </Bar>
+</core:FragmentDefinition>

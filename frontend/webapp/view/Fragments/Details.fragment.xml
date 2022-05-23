@@ -1,0 +1,48 @@
+<core:FragmentDefinition
+        xmlns="sap.m"
+        xmlns:f="sap.f"
+        xmlns:core="sap.ui.core"
+        xmlns:u="sap.ui.unified"
+        xmlns:t="sap.ui.table"
+        xmlns:layout="sap.ui.layout">
+	<f:DynamicPage id="dynamicPageId" preserveHeaderStateOnScroll="true" headerExpanded="{/headerExpanded}">
+		<!-- DynamicPage Title -->
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
+					<Title text="Entity name: {SELECTED_ATTACHMENT>/pname}"/>
+				</f:heading>
+				<f:expandedContent>
+					<Label text="Age: {SELECTED_ATTACHMENT>/age}"/>
+				</f:expandedContent>
+
+				<f:actions>
+					<ToolbarSpacer/>
+				</f:actions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<!-- DynamicPage Header -->
+		<f:header>
+			<f:DynamicPageHeader pinnable="true">
+				<f:content>
+					<HBox alignItems="Start" justifyContent="SpaceBetween">
+					<!--<layout:HorizontalLayout allowWrapping="true" >-->
+						<layout:VerticalLayout class="sapUiMediumMarginEnd">
+							<ObjectAttribute title="Name" text="{TestModel>/results/0/name}"/>
+							<ObjectAttribute title="Date" text="{TestModel>/results/0/datetime}"/>
+						</layout:VerticalLayout>
+					</HBox>
+					<!--</layout:HorizontalLayout>-->
+				</f:content>
+			</f:DynamicPageHeader>
+		</f:header>
+
+		<f:content>
+			<VBox>
+				<!--
+				<core:Fragment fragmentName="com.quanto.solutions.ui.smartoffice.view.Fragments.TabbedControl" type="XML" />
+				!-->
+			</VBox>
+		</f:content>
+	</f:DynamicPage>
+</core:FragmentDefinition>
