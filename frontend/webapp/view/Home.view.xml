@@ -1,0 +1,25 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="com.quanto.solutions.ui.smartoffice.controller.Home" displayBlock="true" height="100%">
+    <Page id="p1" title="Smart Office" class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer" showNavButton="true">
+		<headerContent>
+			<Button id="b1" icon="sap-icon://save" tooltip="Save" press="onPress"/>
+		</headerContent>
+		<content>
+			<GenericTile id="gt1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" press="press">
+            <TileContent id="tc1">
+                    <Text id="t1" text="Thermostate verwalten"/>
+                </TileContent>
+            </GenericTile>
+            <GenericTile id="gt2" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Jalousien" subheader="Einstellungen" press="press">
+                <TileContent id="tc2">
+                    
+                </TileContent>
+            </GenericTile>
+            <GenericTile id="gt3" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Reporting" press="press">
+                <TileContent id="tc3">
+                    <ImageContent id="image1" src="sap-icon://area-chart"/>
+                </TileContent>
+            </GenericTile>
+		
+		</content>
+	</Page>
+</mvc:View>

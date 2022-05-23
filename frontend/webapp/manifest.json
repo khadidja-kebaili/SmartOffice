@@ -7,7 +7,7 @@
     "applicationVersion": {
       "version": "0.0.1"
     },
-    "title": "{{appTitle}}",
+    "title": "Smart Office",
     "description": "{{appDescription}}",
     "resources": "resources.json",
     "sourceTemplate": {
@@ -99,12 +99,19 @@
       },
       "routes": [
         {
-          "name": "RouteSmartOffice",
-          "pattern": "RouteSmartOffice",
-          "target": [
-            "TargetSmartOffice"
-          ]
-        }
+            "name": "home",
+            "pattern": "",
+            "target": [
+              "TargetHome"
+            ]
+          },
+          {
+              "name": "jalousien",
+              "pattern": "jalousien",
+              "target": [
+                "TargetJalousien"
+              ]
+            }
       ],
       "targets": {
         "TargetSmartOffice": {
@@ -113,7 +120,21 @@
           "clearControlAggregation": false,
           "viewId": "SmartOffice",
           "viewName": "SmartOffice"
-        }
+        },
+        "TargetHome": {
+            "viewType": "XML",
+            "transition": "slide",
+            "clearControlAggregation": false,
+            "viewId": "home",
+            "viewName": "Home"
+          },
+          "TargetJalousien": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "jalousien",
+              "viewName": "Jalousien"
+            }
       }
     },
     "rootView": {
