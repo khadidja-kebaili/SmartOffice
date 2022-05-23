@@ -1,13 +1,15 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller"
+    "sap/ui/core/mvc/Controller",
+    "../model/formatter",
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller) {
+    function (Controller, formatter) {
         "use strict";
 
         return Controller.extend("com.quanto.solutions.ui.smartoffice.controller.SmartOffice", {
+            formatter: formatter,
             onInit: function () {
                 
             },

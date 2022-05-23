@@ -1,11 +1,12 @@
 sap.ui.define([
     'sap/m/MessageToast',
-    "sap/ui/core/mvc/Controller"
+    "sap/ui/core/mvc/Controller",
+    "sap/ui/model/json/JSONModel",
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (MessageToast, Controller) {
+    function (MessageToast, Controller, JSONModel) {
         "use strict";
 
         return Controller.extend("com.quanto.solutions.ui.smartoffice.controller.Jalousien", {
