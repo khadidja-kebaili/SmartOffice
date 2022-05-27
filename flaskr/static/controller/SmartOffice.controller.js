@@ -21,6 +21,7 @@ sap.ui.define([
 				var oModel = new sap.ui.model.json.JSONModel(result.d);
 				sap.ui.getCore().setModel(oModel, "TestModel");
 				self.routeToApp(tile);
+				console.log('Hier ist der Result', result)
 
 			}).fail(function(result) {
 				console.log(result);

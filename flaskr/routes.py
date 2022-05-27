@@ -2,7 +2,7 @@ from flask import render_template, jsonify
 from flask_restx import Resource, Api, fields
 import time
 from datetime import datetime
-from . import app
+from flaskr import app
 
 
 
@@ -11,8 +11,8 @@ def index():
     return render_template("index.html")
 
 
-@app.route('/DashboardAnalytics', methods=["GET"])
-def Test_migration():
+@app.route('/TestModel', methods=["GET"])
+def TestModel():
     """
     Return a simple odata container with date time information
     :return:
@@ -27,9 +27,7 @@ def Test_migration():
     while i < 20:
         odata['d']['results'].append({
             "id": i,
-            "name": names[i],
-            "datetime": datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'),
-
+            "name": names[i]
         })
         i += 1
 

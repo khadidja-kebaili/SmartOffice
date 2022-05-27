@@ -47,6 +47,7 @@
                     class="sapUiSmallMarginBottom" 
                     liveChange=".onLiveChange"/>
                 <Text id="getValue" />
+				<Button id="testbutton" text="testbutton" press="press('TestModel')"/>
             </layout:VerticalLayout>
             </f:content>
 
