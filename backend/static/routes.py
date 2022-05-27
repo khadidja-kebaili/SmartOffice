@@ -10,7 +10,7 @@ def index():
 
 
 @app.route('/DashboardAnalytics', methods=["GET"])
-def DashboardAnalytics():
+def Test_migration():
     """
     Return a simple odata container with date time information
     :return:
