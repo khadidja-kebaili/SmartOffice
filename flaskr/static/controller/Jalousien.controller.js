@@ -22,7 +22,7 @@ sap.ui.define([
 			sap.ui.core.BusyIndicator.hide(0);
 
             },
-             press: function(tile) {
+            press: function(tile) {
 
 			var selectedData = {};
 			sap.ui.core.BusyIndicator.show(0);
@@ -37,6 +37,7 @@ sap.ui.define([
 			});
 
 		},
+
             handleNavButtonPress: function (evt) {
                 var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.navTo("home");
