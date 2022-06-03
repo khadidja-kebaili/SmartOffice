@@ -5,13 +5,16 @@
 		</headerContent>
 		<content>
 			<GenericTile id="gt1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" press="press">
-            <TileContent id="tc1">
-                    <Text id="t1" text="Thermostate verwalten"/>
+                <TileContent id="tc1">
+                        <Text id="t1" text="Thermostate verwalten"/>
                 </TileContent>
             </GenericTile>
             <GenericTile id="gt2" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Jalousien" subheader="Einstellungen" press="press">
-                <TileContent id="tc2">
-                    
+                <TileContent id="tc2"/>
+            </GenericTile>
+            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Test1" subheader="Test2" press="press('Test')">
+                <TileContent>
+                    <NumericContent value="1" icon="sap-icon://multiple-line-chart" />
                 </TileContent>
             </GenericTile>
             <GenericTile id="gt3" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Reporting" press="press">

@@ -1,47 +1,35 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
-    "../model/formatter",
+	"sap/ui/core/mvc/Controller",
+	"../model/formatter",
 ],
-    /**
-     * @param {typeof sap.ui.core.mvc.Controller} Controller
-     */
-    function (Controller, formatter) {
-        "use strict";
+	/**
+	 * @param {typeof sap.ui.core.mvc.Controller} Controller
+	 */
+	function (Controller, formatter) {
+		"use strict";
 
-        return Controller.extend("com.quanto.solutions.ui.smartoffice.controller.SmartOffice", {
-            formatter: formatter,
-            onInit: function () {
-                
-            },
-            press: function(tile) {
+		return Controller.extend("com.quanto.solutions.ui.smartoffice.controller.SmartOffice", {
+			formatter: formatter,
+			onInit: function () {
 
-			var selectedData = {};
-			sap.ui.core.BusyIndicator.show(0);
-			this.getData(tile).done(function(result) {
-				var oModel = new sap.ui.model.json.JSONModel(result.d);
-				sap.ui.getCore().setModel(oModel, "TestModel");
-				self.routeToApp(tile);
-				console.log('Hier ist der Result', result)
+			},
 
-			}).fail(function(result) {
-				console.log(result);
-			});
+			getData: function (url) {
+				console.log('Something')
+				console.log(url)
+				return jQuery.ajax({
+					url: url,
+					type: "GET"
+				});
+			},
 
-		},
-		getData: function(url){
-			return jQuery.ajax({
-				url: url,
-				type: "GET"
-			});
-		},
+			getRouter: function () {
+				return sap.ui.core.UIComponent.getRouterFor(this);
+			},
 
-		getRouter : function () {
-			return sap.ui.core.UIComponent.getRouterFor(this);
-		},
+			routeToApp: function (tile) {
+				self.getRouter().navTo(tile, {});
 
-		routeToApp: function(tile) {
-			self.getRouter().navTo(tile, {});
-
-		},
-        });
-    });
+			},
+		});
+	});
