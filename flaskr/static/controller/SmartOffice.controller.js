@@ -9,8 +9,32 @@ sap.ui.define([
 		"use strict";
 
 		return Controller.extend("com.quanto.solutions.ui.smartoffice.controller.SmartOffice", {
+			
 			formatter: formatter,
+
 			onInit: function () {
+
+				self = this;
+
+			},
+			pressnav: function (evt) {
+				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+				oRouter.navTo("jalousien")
+			},
+
+			press: function(tile) {
+			console.log("Got there!")
+			var selectedData = {};
+			sap.ui.core.BusyIndicator.hide(0);
+			this.getData(tile).done(function(result) {
+				var oModel = new sap.ui.model.json.JSONModel(result.d);
+				sap.ui.getCore().setModel(oModel, "TestModel");
+				self.routeToApp(tile);
+				console.log(result)
+
+			}).fail(function(result) {
+				console.log(result);
+			});
 
 			},
 
