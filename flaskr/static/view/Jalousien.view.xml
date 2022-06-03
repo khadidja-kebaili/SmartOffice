@@ -47,7 +47,33 @@
                     class="sapUiSmallMarginBottom" 
                     liveChange=".onLiveChange"/>
                 <Text id="getValue" />
-				<Button id="testbutton" text="testbutton" press="press('TestModel')"/>
+				<Button id="testbutton" text="testbutton" press="pressit('Test')"/>
+				<Text text="{TestModel>/results/0/name}"/>
+				<List
+					id="attachmentsList"
+					itemPress="masterListItemSelected"
+					items="{TestModel>/results}"
+					growing="true"
+					growingThreshold="50"
+					growingScrollToLoad="true">
+
+					<CustomListItem type="Active">
+						<HBox alignItems="Start" justifyContent="SpaceBetween">
+							<HBox>
+								<VBox class="sapUiTinyMarginTop sapUiTinyMarginBottom">
+
+									<Label text="Name:" />
+									<Text class="titleText" text="{TestModel>name}" />
+
+									<Label class="sapUiTinyMarginTop" text="Date:" />
+									<Text text="{TestModel>datetime}" />
+
+								</VBox>
+							</HBox>
+						</HBox>
+					</CustomListItem>
+				</List>
+
             </layout:VerticalLayout>
             </f:content>
 
