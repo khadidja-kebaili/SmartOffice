@@ -8,6 +8,7 @@ from server.AuthGen import get_sid, get_login_state, send_response, calculate_md
 import time
 import tinytuya
 import http.client
+from datetime import datetime
 
 
 class DeviceAdministration(object):
@@ -149,6 +150,8 @@ class DeviceAdministration(object):
         status = JalousienStatusBO()
         status.set_percentage(percentage)
         perc = status.get_percentage()
+        date = datetime.now()
+        status.set_date(date)
         jalousies.append(self.get_all_jalousies())
         for elem in jalousies:
             for x in elem:
@@ -156,7 +159,6 @@ class DeviceAdministration(object):
                     x.set_device()
                     dev = x.get_device()
                     dev.set_value(2, perc)
-                    time.sleep(1)
                     status.set_status(str(dev.status()))
                     status.set_device(id)
         with JalousienStatusMapper() as mapper:
@@ -170,6 +172,10 @@ class DeviceAdministration(object):
         status = self.get_status_of_jalousie_by_id(id)
         with JalousienStatusMapper() as mapper:
             mapper.delete(status)
+
+    def get_last_status(self):
+        status = self.get_all_status()
+        return status[-1]
     """
     Thermostat-spezifische Methoden
     """
@@ -238,3 +244,6 @@ class DeviceAdministration(object):
         res = conn.getresponse()
         data = res.read()
         print(data.decode("utf-8"))
+
+adm = DeviceAdministration()
+print(adm.set_status_to_percentage_by_id(1,20))

@@ -45,7 +45,7 @@ def TestJalousien():
     adm = DeviceAdministration()
 
     data = request.form["value"]
-    time.sleep(3)
+    time.sleep(4)
     adm.set_status_to_percentage_by_id(1, data)
     jal = adm.get_last_status()
     print('Jal: ', jal)
