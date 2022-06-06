@@ -45,7 +45,7 @@
                     showHandleTooltip="false"
                     inputsAsTooltips="true"
                     class="sapUiSmallMarginBottom" 
-                    liveChange=".onLiveChange"/>
+                    liveChange=".sendValue"/>
                 <Text id="getValue" />
 
 				<List
