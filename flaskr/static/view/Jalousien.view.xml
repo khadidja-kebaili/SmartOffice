@@ -61,8 +61,11 @@
 							<HBox>
 								<VBox class="sapUiTinyMarginTop sapUiTinyMarginBottom">
 
-									<Label text="Name:" />
-									<Text class="titleText" text="{TestModel>name}" />
+									<Label text="Date:" />
+									<Text class="titleText" text="{TestModel>date}" />
+
+									<Label text="Percentage:" />
+									<Text class="titleText" text="{TestModel>percentage}" />
 								</VBox>
 							</HBox>
 						</HBox>

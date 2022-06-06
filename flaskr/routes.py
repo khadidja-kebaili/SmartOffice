@@ -13,30 +13,33 @@ def index():
 
 
 @app.route('/Test', methods=["GET"])
+#hier ist die get_Status Methode
 def Test():
     """
     Return a simple odata container with date time information
     :return:
     """
+    adm = DeviceAdministration()
+
     odata = {
         'd': {
             'results': []
         }
     }
     i = 0
-    names = 'abcdefghijklmnopqrxtu'
-    while i < 20:
+    names = adm.get_all_status()
+
+    for elem in names:
         odata['d']['results'].append({
-            "id": i,
-            "name": names[i]
+            'date': elem.get_date(),
+            'percentage': elem.get_percentage()
         })
-        i += 1
 
     return jsonify(odata)
 
 
 @app.route('/Jalousien', methods=["POST"])
-def TestJalousien():
+def Jalousien():
     """
     Return a simple odata container with date time information
     :return:
@@ -50,3 +53,35 @@ def TestJalousien():
     jal = adm.get_last_status()
     print('Jal: ', jal)
     return data
+
+@app.route('/Status', methods=["GET"])
+def Status():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    start = request.form["start"]
+    end = request.form["end"]
+    stats = adm.get_all_stats_by_timeperiod(start, end)
+    print('Jal: ', stats)
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    for elem in stats:
+        odata['d']['results'].append({
+            'date': elem.get_date(),
+            'percentage': elem.get_percentage()
+        })
+
+    return odata

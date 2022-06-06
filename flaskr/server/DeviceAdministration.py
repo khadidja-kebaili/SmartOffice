@@ -115,6 +115,8 @@ class DeviceAdministration(object):
                     time.sleep(10)
                     status.set_status(str(dev.status()))
                     status.set_device(id)
+                    date = datetime.now()
+                    status.set_date(date)
                     dev_stat = dev.status()
         new_list = []
         for key in dev_stat:
@@ -137,6 +139,8 @@ class DeviceAdministration(object):
                     time.sleep(10)
                     status.set_status(str(dev.status()))
                     status.set_device(id)
+                    date = datetime.now()
+                    status.set_date(date)
                     dev_stat = dev.status()
         new_list = []
         for key in dev_stat:
@@ -175,7 +179,30 @@ class DeviceAdministration(object):
 
     def get_last_status(self):
         status = self.get_all_status()
-        return status[-1]
+        return status[-1].get_percentage()
+
+    def in_between_times(self, timeframe, start, end):
+        if timeframe >= start and timeframe <= end:
+            return True
+        else:  # over midnight e.g., 23:30-04:15
+            return False
+
+    def get_all_stats_by_timeperiod(self, start, end):
+        enddate = datetime.now().fromisoformat(str(end))
+        startdate = datetime.now().fromisoformat(str(start))
+        stats = self.get_all_status()
+        interval = []
+        for elem in stats:
+            if self.in_between_times(elem.get_date(), startdate, enddate) == True:
+                print(elem.get_date())
+                interval.append(elem)
+            else:
+                pass
+        return interval
+
+    def set_weekly_plan_jal(self, start, ende):
+        pass
+
     """
     Thermostat-spezifische Methoden
     """
