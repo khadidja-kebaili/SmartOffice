@@ -1,5 +1,4 @@
 from flask import request
-from flaskr import app
 from flask import render_template, jsonify, Flask, request
 from flask_restx import Resource, Api, fields, marshal
 from flask_cors import CORS
@@ -93,6 +92,7 @@ def Jal():
 
 @app.route('/Jal', methods=["POST"])
 def post():
+    pass
 
 
 @app.route('/Jalousien', methods=["POST"])
@@ -118,6 +118,3 @@ def TestJalousien():
 
 if __name__ == "__main__":
     app.run(debug=True)
-    data = request.form["value"]
-    print(data)
-    return data
