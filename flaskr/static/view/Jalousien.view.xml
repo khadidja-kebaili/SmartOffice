@@ -47,8 +47,7 @@
                     class="sapUiSmallMarginBottom" 
                     liveChange=".onLiveChange"/>
                 <Text id="getValue" />
-				<Button id="testbutton" text="testbutton" press="pressit('Test')"/>
-				<Text text="{TestModel>/results/0/name}"/>
+
 				<List
 					id="attachmentsList"
 					itemPress="masterListItemSelected"
@@ -64,10 +63,6 @@
 
 									<Label text="Name:" />
 									<Text class="titleText" text="{TestModel>name}" />
-
-									<Label class="sapUiTinyMarginTop" text="Date:" />
-									<Text text="{TestModel>datetime}" />
-
 								</VBox>
 							</HBox>
 						</HBox>

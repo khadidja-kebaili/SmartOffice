@@ -45,7 +45,8 @@ def Test():
 
     return jsonify(odata)
 
-    @app.route('/jalousie')
+
+@app.route('/jalousie')
 @app.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 class JalousieListOperations(Resource):
     @app.marshal_list_with(jalousie)
