@@ -244,6 +244,3 @@ class DeviceAdministration(object):
         res = conn.getresponse()
         data = res.read()
         print(data.decode("utf-8"))
-
-adm = DeviceAdministration()
-print(adm.set_status_to_percentage_by_id(1,20))
