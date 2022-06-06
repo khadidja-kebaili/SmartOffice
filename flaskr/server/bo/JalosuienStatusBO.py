@@ -1,5 +1,4 @@
-from bo.BusinessObject import Businessobject as bo
-from bo.Jalousien import JalousienBO
+from server.bo.BusinessObject import Businessobject as bo
 
 
 class JalousienStatusBO(bo):

@@ -13,7 +13,6 @@ class JalousienStatusMapper(Mapper):
     def __init__(self):
         super().__init__()
 
-
     def insert(self, status):
         """Einfügen eines Account-Objekts in die Datenbank.
 
@@ -34,7 +33,8 @@ class JalousienStatusMapper(Mapper):
                 status.set_id(1)
 
         command = "INSERT INTO jalousienstatus (id, percentage, status, jalousieid) VALUES (%s,%s,%s,%s)"
-        data = (status.get_id(), status.get_percentage(), status.get_status(), status.get_device())
+        data = (status.get_id(), status.get_percentage(),
+                status.get_status(), status.get_device())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -49,7 +49,8 @@ class JalousienStatusMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT id, percentage, status, jalousieid from jalousienstatus")
+        cursor.execute(
+            "SELECT id, percentage, status, jalousieid from jalousienstatus")
         tuples = cursor.fetchall()
 
         for (id, percentage, status, jalousieid) in tuples:
@@ -74,7 +75,8 @@ class JalousienStatusMapper(Mapper):
         """
         result = None
         cursor = self._cnx.cursor()
-        command = "SELECT id, percentage, status, jalousieid FROM jalousienstatus WHERE id={} ORDER BY id".format(id)
+        command = "SELECT id, percentage, status, jalousieid FROM jalousienstatus WHERE id={} ORDER BY id".format(
+            id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -90,7 +92,6 @@ class JalousienStatusMapper(Mapper):
         cursor.close()
 
         return result
-
 
     def update(self, status):
         """Wiederholtes Schreiben eines Objekts in die Datenbank.
@@ -113,7 +114,8 @@ class JalousienStatusMapper(Mapper):
         """
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM jalousienstatus WHERE id={}".format(status.get_id())
+        command = "DELETE FROM jalousienstatus WHERE id={}".format(
+            status.get_id())
         cursor.execute(command)
 
         self._cnx.commit()

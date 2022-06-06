@@ -114,14 +114,11 @@ class ThermostatBO(bo):
         super().__init__()
         self._ain = None
 
-
     def set_ain(self, ain):
         self._ain = ain
 
     def get_ain(self):
         return self._ain
-
-
 
     '''    def set_timestamp(self, timestamp):
         self._timestamp = int(timestamp.strftime("%Y%m%d%H%M%S"))
@@ -140,4 +137,3 @@ class ThermostatBO(bo):
         obj.set_id(dictionary["id"])
         obj.set_ain(dictionary["ain"])
         return obj
-

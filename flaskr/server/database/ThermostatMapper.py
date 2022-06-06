@@ -1,4 +1,4 @@
-from .Mapper import Mapper
+from server.database.Mapper import Mapper
 from ..bo.Thermostat import ThermostatBO
 
 

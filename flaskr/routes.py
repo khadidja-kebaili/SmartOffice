@@ -1,8 +1,16 @@
-from flask import render_template, jsonify
-from flask_restx import Resource, Api, fields
+from flask import render_template, jsonify, Flask, request
+from flask_restx import Resource, Api, fields, marshal
+from flask_cors import CORS
 import time
 from datetime import datetime
-from flaskr import app
+from server.DeviceAdministration import DeviceAdministration
+from server.bo.Jalousien import JalousienBO
+import json
+
+
+app = Flask(__name__, template_folder='templates')
+
+CORS(app, resources=r'/devicemanagement/*')
 
 api = Api(app, version='1.0', title='Device API',
           description='Eine rudimentäre Demo-API für eine einfache Gerätesteuerung.')
@@ -15,6 +23,16 @@ jalousie = api.inherit('Jalousie', bo, {
     'device_id': fields.String(attribute='_device_id', description='Device_ID der Jalousie'),
     'local_key': fields.String(attribute='_local_key', description='Local_Key der Jalousie'),
     'ip_address': fields.String(attribute='_ip_address', description='IP-Addresse der Jalousie')
+})
+
+thermostat = api.inherit('Thermostat', bo, {
+    'ain': fields.String(attribute='_ain', description='Geräte-ID für AVM Geräte'),
+})
+
+status = api.inherit('Jalousienstatus', bo, {
+    'percentage': fields.Integer(attribute='_percentage', description='Höhe des Jalousienstands in Prozent'),
+    'status': fields.String(attribute='_status', description='Status der Jalousie'),
+    'jalousieid': fields.Integer(attribute='_jalousieid', description='ID der Jalousie')
 })
 
 
@@ -46,180 +64,51 @@ def Test():
     return jsonify(odata)
 
 
-@app.route('/jalousie')
-@app.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class JalousieListOperations(Resource):
-    @app.marshal_list_with(jalousie)
-    def get(self):
-        """Auslesen aller Jalousie-Objekte.
-        Sollten keine Jalousie-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
-        adm = DeviceAdministration()
-        jalousies = adm.get_all_jalousies()
-        return jalousies
+@app.route('/jalousie', methods=["GET"])
+def Jal():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
 
-    @app.marshal_with(jalousie, code=200)
-    # Wir erwarten ein Jalousie-Objekt von Client-Seite.
-    @app.expect(jalousie)
-    def post(self):
-        """Anlegen eines neuen Jalousie-Objekts.
-        **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
-        So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
-        Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
-        liegt es an der DeviceAdministration (Businesslogik), eine korrekte ID
-        zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
-        """
-        adm = DeviceAdministration()
+    adm = DeviceAdministration()
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+    i = 0
+    names = adm.get_all_jalousies()
+    while i < len(names):
+        odata['d']['results'].append({
+            "id": i,
+            "name": str(names[i])
+        })
+        i += 1
 
-        proposal = jalousie.from_dict(api.payload)
-
-        """RATSCHLAG: Prüfen Sie stets die Referenzen auf valide Werte, bevor Sie diese verwenden!"""
-        if proposal is not None:
-            """ Wir verwenden lediglich Vor- und Nachnamen des Proposals für die Erzeugung
-            eines Jalousie-Objekts. Das serverseitig erzeugte Objekt ist das maßgebliche und 
-            wird auch dem Client zurückgegeben. 
-            """
-            c = adm.add_device(
-                proposal.get_device_id(), proposal.get_ip_address(), proposal.get_local_key())
-            return c, 200
-        else:
-            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
-            return '', 500
+    return (odata)
 
 
-@app.route('/jalousie/<int:id>')
-@app.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@app.param('device_id', 'Die Geräte-ID des Jalousie-Objekts')
-class JalousieOperations(Resource):
-    @app.marshal_list_with(jalousie)
-    def get(self, device_id):
-        """Auslesen eines bestimmten Jalousie-Objekts.
-        Das auszulesende Objekt wird durch die ```device_id``` in dem URI bestimmt.
-"""
-        adm = DeviceAdministration()
-        jal = adm.get_jalousie_by_device_id(device_id)
-        return jal
+@app.route('/Jal', methods=["POST"])
+def post():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
 
-    def get(self, id):
-        """Auslesen eines bestimmten Jalousie-Objekts.
-        Das auszulesende Objekt wird durch die ```id``` in dem URI bestimmt.
-        """
-        adm = DeviceAdministration()
-        jal = adm.get_jalousie_by_id(id)
-        return jal
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
 
-    def delete(self, device_id):
-        """Löschen eines bestimmten Jalousie-Objekts.
-        Das zu löschende Objekt wird durch die ```id``` in dem URI bestimmt.
-        """
-        adm = DeviceAdministration()
-        jal = adm.get_jalousie_by_id(device_id)
-        adm.delete_jalousie(jal)
-        return '', 200
+    data = request.form["value"]
+    print(data)
 
-    @app.marshal_with(jalousie)
-    @app.expect(jalousie, validate=True)
-    def put(self, id):
-        """Update eines bestimmten Jalousie-Objekts.
-        **ACHTUNG:** Relevante id ist die id, die mittels URI bereitgestellt und somit als Methodenparameter
-        verwendet wird. Dieser Parameter überschreibt das ID-Attribut des im Payload der Anfrage übermittelten
-        Jalousie-Objekts.
-        """
-        adm = DeviceAdministration()
-        c = jalousie.from_dict(api.payload)
-
-        if c is not None:
-            """Hierdurch wird die id des zu überschreibenden (vgl. Update) Jalousie-Objekts gesetzt.
-            Siehe Hinweise oben.
-            """
-            c.set_id(id)
-            adm.save_jalousie(c)
-            return '', 200
-        else:
-            return '', 500
+    adm.set_status_to_percentage_by_id(data)
+    return int(data)
 
 
-@app.route('/jalousienstatus')
-@app.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class JalousienStatusListOperations(Resource):
-    @app.marshal_list_with(status)
-    def get(self):
-        """Auslesen aller Jalousie-Objekte.
-        Sollten keine Jalousie-Objekte verfügbar sein, so wird eine leere Sequenz zurückgegeben."""
-        adm = DeviceAdministration()
-        stats = adm.get_all_status()
-        return stats
-
-
-@app.route('/setstatus')
-@app.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class JalousienSetStatusListOperations(Resource):
-    @app.marshal_with(status, code=200)
-    @app.expect(status)
-    def post(self):
-        """Anlegen eines neuen Jalousie-Objekts.
-        **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
-        So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
-        Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
-        liegt es an der DeviceAdministration (Businesslogik), eine korrekte ID
-        zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
-        """
-        adm = DeviceAdministration()
-        proposal = JalousienStatusBO.from_dict(api.payload)
-        if proposal is not None:
-
-            c = adm.set_status_to_percentage_by_id(
-                proposal.get_device(), proposal.get_percentage())
-            return c, 200
-        else:
-            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
-            return '', 500
-
-
-@app.route('/openjalousie')
-@app.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class JalousienSetStatusListOperations(Resource):
-    @app.marshal_with(status, code=200)
-    @app.expect(status)
-    def post(self):
-        """Anlegen eines neuen Jalousie-Objekts.
-        **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
-        So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
-        Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
-        liegt es an der DeviceAdministration (Businesslogik), eine korrekte ID
-        zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
-        """
-        adm = DeviceAdministration()
-        proposal = JalousienStatusBO.from_dict(api.payload)
-        if proposal is not None:
-
-            c = adm.open_jalousie_by_id(
-                proposal.get_device())
-            return c, 200
-        else:
-            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
-            return '', 500
-
-
-@app.route('/closejalousie')
-@app.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-class JalousienSetStatusListOperations(Resource):
-    @app.marshal_with(status, code=200)
-    @app.expect(status)
-    def post(self):
-        """Anlegen eines neuen Jalousie-Objekts.
-        **ACHTUNG:** Wir fassen die vom Client gesendeten Daten als Vorschlag auf.
-        So ist zum Beispiel die Vergabe der ID nicht Aufgabe des Clients.
-        Selbst wenn der Client eine ID in dem Proposal vergeben sollte, so
-        liegt es an der DeviceAdministration (Businesslogik), eine korrekte ID
-        zu vergeben. *Das korrigierte Objekt wird schließlich zurückgegeben.*
-        """
-        adm = DeviceAdministration()
-        proposal = JalousienStatusBO.from_dict(api.payload)
-        if proposal is not None:
-
-            c = adm.close_jalousie_by_id(
-                proposal.get_device())
-            return c, 200
-        else:
-            # Wenn irgendetwas schiefgeht, dann geben wir nichts zurück und werfen einen Server-Fehler.
-            return '', 500
+if __name__ == "__main__":
+    app.run(debug=True)

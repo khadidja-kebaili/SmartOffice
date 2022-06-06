@@ -14,9 +14,9 @@ class Mapper (AbstractContextManager, ABC):
         """Check ob der Code im Kontext der lokalen Entwicklungsumgebung oder in der Cloud ausgeführt wird.
         Dies ist erforderlich, da die Modalitäten für den Verbindungsaufbau mit der Datenbank kontextabhängig sind."""
 
-        self._cnx = connector.connect(user='root', password='hdmsw2022!',
-                                          host='localhost',
-                                          database='smartoffice')
+        self._cnx = connector.connect(user='root', password='hdmsw201920',
+                                      host='localhost',
+                                      database='smartoffice')
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):

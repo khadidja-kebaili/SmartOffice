@@ -1,5 +1,5 @@
-from bo.BusinessObject import Businessobject as bo
-from TinyTuya import tinytuya
+from server.bo.BusinessObject import Businessobject as bo
+import tinytuya
 
 
 class JalousienBO(bo):
