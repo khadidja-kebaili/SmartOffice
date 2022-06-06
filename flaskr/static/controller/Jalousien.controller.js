@@ -23,7 +23,11 @@ sap.ui.define([
                 var sNewValue = oEvent.getParameter("value");
                 this.byId("getValue").setText(sNewValue);
             },
-            
+            pressnavWeeklyPlan: function (evt) {
+				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+				oRouter.navTo("Wochenplan")
+                console.log('hier bin ich')
+			},
             sendValue: function(oEvent) {
                 console.log("Neuer Wert wurde eingestellt.");
                 sap.ui.core.BusyIndicator.hide(0);

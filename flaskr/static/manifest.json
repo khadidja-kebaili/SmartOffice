@@ -111,6 +111,13 @@
               "target": [
                 "TargetJalousien"
               ]
+            },
+            {
+              "name": "Wochenplan",
+              "pattern": "Wochenplan",
+              "target": [
+                "TargetWochenplan"
+              ]
             }
       ],
       "targets": {
@@ -134,6 +141,13 @@
               "clearControlAggregation": false,
               "viewId": "jalousien",
               "viewName": "Jalousien"
+            },
+            "TargetWochenplan": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "weekly_plan",
+              "viewName": "weekly_plan"
             }
       }
     },
