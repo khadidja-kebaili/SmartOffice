@@ -8,7 +8,7 @@ sap.ui.define([
         "use strict";
 
         var self;
-        return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.weekly_plan", {
+        return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Weeklyplan", {
             onInit: function () {
                 var timepicker = document.querySelector('#TimeFlexbox');
                 let time = [

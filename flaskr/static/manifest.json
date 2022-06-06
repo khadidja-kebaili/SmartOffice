@@ -113,8 +113,8 @@
               ]
             },
             {
-              "name": "Wochenplan",
-              "pattern": "Wochenplan",
+              "name": "wochenplan",
+              "pattern": "wochenplan",
               "target": [
                 "TargetWochenplan"
               ]
@@ -146,8 +146,8 @@
               "viewType": "XML",
               "transition": "slide",
               "clearControlAggregation": false,
-              "viewId": "weekly_plan",
-              "viewName": "weekly_plan"
+              "viewId": "weeklyplan",
+              "viewName": "Weeklyplan"
             }
       }
     },

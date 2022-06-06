@@ -25,8 +25,7 @@ sap.ui.define([
             },
             pressnavWeeklyPlan: function (evt) {
 				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-				oRouter.navTo("Wochenplan")
-                console.log('hier bin ich')
+				oRouter.navTo("wochenplan")
 			},
             sendValue: function(oEvent) {
                 console.log("Neuer Wert wurde eingestellt.");
