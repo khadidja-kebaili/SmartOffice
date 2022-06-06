@@ -41,6 +41,11 @@
             <f:content>
             <layout:VerticalLayout id="verticallayoutcontent" width="100%">
                 <Text id="textThermo" text="Aktuelle Temperatur"/>
+                <StepInput
+                    id="CurrentValue"
+                    value="20"
+                    width="130px"
+                />
 
 
             </layout:VerticalLayout>
