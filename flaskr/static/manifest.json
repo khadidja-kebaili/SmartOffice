@@ -111,7 +111,21 @@
               "target": [
                 "TargetJalousien"
               ]
-            }
+            },
+          {
+            "name": "thermoMain",
+            "pattern": "thermoMain",
+            "target": [
+              "TargetThermoMain"
+            ]
+          },
+          {
+            "name": "thermoLounge",
+            "pattern": "thermoLounge",
+            "target": [
+              "TargetThermoLounge"
+            ]
+          }
       ],
       "targets": {
         "TargetSmartOffice": {
@@ -134,7 +148,21 @@
               "clearControlAggregation": false,
               "viewId": "jalousien",
               "viewName": "Jalousien"
-            }
+            },
+          "TargetThermoMain": {
+            "viewType": "XML",
+            "transition": "slide",
+            "clearControlAggregation": false,
+            "viewId": "thermoMain",
+            "viewName": "ThermoMain"
+          },
+          "TargetThermoLounge": {
+            "viewType": "XML",
+            "transition": "slide",
+            "clearControlAggregation": false,
+            "viewId": "thermoLounge",
+            "viewName": "ThermoLounge"
+          }
       }
     },
     "rootView": {

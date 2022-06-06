@@ -4,7 +4,7 @@
 			<Button id="b1" icon="sap-icon://save" tooltip="Save" press="onPress"/>
 		</headerContent>
 		<content>
-			<GenericTile id="gt1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" press="pressnav">
+			<GenericTile id="gt1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" press="goToThermoMain">
                 <TileContent id="tc1">
                         <Text id="t1" text="Thermostate verwalten"/>
                 </TileContent>

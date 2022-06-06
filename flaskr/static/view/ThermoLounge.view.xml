@@ -1,0 +1,59 @@
+<mvc:View
+	xmlns:core="sap.ui.core"
+    controllerName="com.quanto.solutions.ui.smartoffice.controller.ThermoLounge"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:layout="sap.ui.layout"
+    height="100%"
+>
+	<f:DynamicPage id="dpJalousien" headerExpanded="{/headerExpanded}" toggleHeaderOnTitleClick="{/titleClickable}" showFooter="true">
+		
+        <!-- DynamicPage Title -->
+			<f:title>
+				<f:DynamicPageTitle id="dptitle">
+					<f:heading>
+						<Title id="maintitle" text="Thermostate"/>
+					</f:heading>
+					
+					<f:expandedContent>
+						<Label id="expandedc" text="Konfiguration der Thermostate bei Quanto Solutions"/>
+					</f:expandedContent>
+					<f:snappedContent>
+						<Label id="snappedc" text="Konfiguration der Thermostate bei Quanto Solutions"/>
+					</f:snappedContent>
+					<f:snappedTitleOnMobile>
+						<Title id="snappedmobile" text="Konfiguration der Thermostate bei Quanto Solutions"/>
+					</f:snappedTitleOnMobile>
+				</f:DynamicPageTitle>
+			</f:title>
+
+		<!-- DynamicPage Header -->
+            <f:header>
+				<f:DynamicPageHeader id="dpheader" pinnable="false">
+					<layout:VerticalLayout id="verticallayoutheader" >
+                        <core:Icon id="iconsettings" src="sap-icon://action-settings" class="size3"> </core:Icon>
+					</layout:VerticalLayout>
+				</f:DynamicPageHeader>
+		    </f:header>
+
+        <!-- Page Content -->
+            <f:content>
+            <layout:VerticalLayout id="verticallayoutcontent" width="100%">
+                <Text id="textThermo" text="Aktuelle Temperatur"/>
+
+
+            </layout:VerticalLayout>
+            </f:content>
+
+        <!-- DynamicPage Footer -->
+		    <f:footer>
+				<OverflowToolbar id="toolbarjalousien" class="sapUiMediumMarginTop">
+                    <ToolbarSpacer id="tbs1"/>
+                    <Button id="buttonMinTemp" text="Min. Temp." />
+                    <Button id="buttonWopl" text="Wochenplan" />
+                    <ToolbarSpacer id="tbs2"/>
+                </OverflowToolbar>
+			</f:footer>
+        </f:DynamicPage>
+</mvc:View>
