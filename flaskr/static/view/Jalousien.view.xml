@@ -5,7 +5,7 @@
 		xmlns:f="sap.f"
 		xmlns:layout="sap.ui.layout"
 		height="100%">
-	<f:DynamicPage id="dpJalousien" headerExpanded="{/headerExpanded}" toggleHeaderOnTitleClick="{/titleClickable}" showFooter="true">
+	<f:DynamicPage id="dpJalousien" headerExpanded="{/headerExpanded}" toggleHeaderOnTitleClick="{/titleClickable}" showNavBack="true" showFooter="true">
 		
         <!-- DynamicPage Title -->
 			<f:title>

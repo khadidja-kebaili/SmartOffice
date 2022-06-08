@@ -1,5 +1,5 @@
 <mvc:View xmlns:core="sap.ui.core"
-        controllerName="com.quanto.solutions.ui.smartoffice.controller.Weeklyplan"
+        controllerName="com.quanto.solutions.ui.smartoffice.controller.WeeklyplanThermo"
         xmlns:mvc="sap.ui.core.mvc"
 		xmlns="sap.m"
 		xmlns:f="sap.f"
@@ -9,7 +9,7 @@
      <Shell id="shell">
         <App id="app">
             <pages>
-                <Page id="page" title="Wochenplan erstellen - Jalousien">
+                <Page id="page" title="Wochenplan erstellen - Thermostate">
                     <content>
                     <FlexBox id="WochentageContainer" width="100%" alignItems="Center" class="sapUiLargeMarginTop" justifyContent="Center" direction="Column">
                         <Label text="Wähle den Wochentag aus"/>
@@ -35,14 +35,15 @@
                                 valueFormat="HH:mm"
                                 displayFormat="HH:mm"
                                 change="handleChange"/>
-                            <Slider id="slider" value="{/InputValue}" width="300%"
-                                min="0" max="100"
-                                showAdvancedTooltip="true"
-                                showHandleTooltip="false"
-                                inputsAsTooltips="true"
-                                class="sapUiSmallMarginBottom" 
-                                liveChange=".sendValue"/>
-                            </FlexBox>
+                            <StepInput
+                                value="20,00"
+                                min="15"
+                                max="30"
+                                width="30%"
+                                step="1"
+                                editable="true"
+                                change="onChange"/>
+                                </FlexBox>
                             <FlexBox width="100%"  alignItems="Center" justifyContent="Center" direction="Row" class="sapUiLargeMarginBegin">
                         	<TimePicker
                                 class="sapUiLargeMarginBegin"
@@ -52,13 +53,14 @@
                                 valueFormat="HH:mm"
                                 displayFormat="HH:mm"
                                 change="handleChange"/>
-                            <Slider id="slider2" value="{/InputValue}" width="300%"
-                                min="0" max="100"
-                                showAdvancedTooltip="true"
-                                showHandleTooltip="false"
-                                inputsAsTooltips="true"
-                                class="sapUiSmallMarginBottom" 
-                                liveChange=".sendValue"/>
+                            <StepInput
+                                value="20,00"
+                                min="15"
+                                max="30"
+                                width="30%"
+                                step="1"
+                                editable="true"
+                                change="onChange"/>
                                 </FlexBox>
                                 <Button   icon="sap-icon://add" type="Transparent" press="onPress" ariaLabelledBy="editButtonLabel"/>
                         </FlexBox>

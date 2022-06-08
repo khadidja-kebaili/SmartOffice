@@ -1,28 +1,19 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="com.quanto.solutions.ui.smartoffice.controller.SmartOffice" displayBlock="true" height="100%">
-    <Page id="p1" title="Smart Office" class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer" showNavButton="true">
-		<headerContent>
-			<Button id="b1" icon="sap-icon://save" tooltip="Save" press="onPress"/>
-		</headerContent>
+    <Page id="p1" title="Smart Office" class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer" showNavButton="false">
+		
 		<content>
-			<GenericTile id="gt1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" press="goToThermoMain">
-                <TileContent id="tc1">
-                        <Text id="t1" text="Thermostate verwalten"/>
-                </TileContent>
+			<GenericTile id="gt1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Thermostate" subheader="Einstellungen" press="goToThermoMain">
+                <TileContent id="tc1"/>
             </GenericTile>
             <GenericTile id="gt2" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Jalousien" subheader="Einstellungen" press="pressnav">
                 <TileContent id="tc2"/>
             </GenericTile>
-            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Test1" subheader="Test2" press="pressnav">
-                <TileContent>
-                    <NumericContent value="1" icon="sap-icon://multiple-line-chart" />
-                </TileContent>
-            </GenericTile>
-            <GenericTile id="gt3" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Reporting" press="pressnav">
+            <GenericTile id="gt3" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Reporting" press="pressnavtoReporting">
                 <TileContent id="tc3">
                     <ImageContent id="image1" src="sap-icon://area-chart"/>
                 </TileContent>
             </GenericTile>
-		<Button id="testbutton" text="testbutton" press="press('Test')"/>
+		<!--<Button id="testbutton" text="testbutton" press="press('Test')"/> -->
 		</content>
 	</Page>
 </mvc:View>

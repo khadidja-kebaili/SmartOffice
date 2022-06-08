@@ -120,6 +120,13 @@
               ]
             },
             {
+              "name": "wochenplanthermo",
+              "pattern": "wochenplanthermo",
+              "target": [
+                "TargetWochenplanThermo"
+              ]
+            },
+            {
               "name": "thermoMain",
               "pattern": "thermoMain",
               "target": [
@@ -131,6 +138,13 @@
               "pattern": "thermoLounge",
               "target": [
                 "TargetThermoLounge"
+              ]
+            },
+            {
+              "name": "reporting",
+              "pattern": "reporting",
+              "target": [
+                "TargetReporting"
               ]
             }
       ],
@@ -163,6 +177,13 @@
               "viewId": "weeklyplan",
               "viewName": "Weeklyplan"
             },
+            "TargetWochenplanThermo": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "weeklyplanthermo",
+              "viewName": "WeeklyplanThermo"
+            },
             "TargetThermoMain": {
               "viewType": "XML",
               "transition": "slide",
@@ -176,6 +197,13 @@
               "clearControlAggregation": false,
               "viewId": "thermoLounge",
               "viewName": "ThermoLounge"
+            },
+            "TargetReporting": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "reporting",
+              "viewName": "Reporting"
             }
       }
     },

@@ -59,6 +59,10 @@ sap.ui.define([
 				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 				oRouter.navTo("thermoMain")
 			},
+			pressnavtoReporting: function(oEvent) {
+				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+				oRouter.navTo("reporting")
+			},
 		});
 	});
 

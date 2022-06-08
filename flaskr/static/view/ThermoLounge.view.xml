@@ -56,7 +56,7 @@
 				<OverflowToolbar id="toolbarjalousien" class="sapUiMediumMarginTop">
                     <ToolbarSpacer id="tbs1"/>
                     <Button id="buttonMinTemp" text="Min. Temp." />
-                    <Button id="buttonWopl" text="Wochenplan" />
+                    <Button id="buttonWopl" text="Wochenplan" press="pressnavWeeklyPlanThermo"/>
                     <ToolbarSpacer id="tbs2"/>
                 </OverflowToolbar>
 			</f:footer>
