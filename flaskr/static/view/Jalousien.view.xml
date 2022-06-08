@@ -48,6 +48,7 @@
                     liveChange=".sendValue"/>
                 <Text id="getValue" />
 
+				<!--
 				<List
 					id="attachmentsList"
 					itemPress="masterListItemSelected"
@@ -67,7 +68,7 @@
 							</HBox>
 						</HBox>
 					</CustomListItem>
-				</List>
+				</List>-->
 
             </layout:VerticalLayout>
             </f:content>
