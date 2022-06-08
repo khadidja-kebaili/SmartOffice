@@ -179,7 +179,7 @@ class DeviceAdministration(object):
 
     def get_last_status(self):
         status = self.get_all_status()
-        return status[-1].get_percentage()
+        return status[-1]
 
     def in_between_times(self, timeframe, start, end):
         if timeframe >= start and timeframe <= end:
@@ -236,12 +236,6 @@ class DeviceAdministration(object):
         """Den gegebenen Kunden speichern."""
         with ThermostatMapper() as mapper:
             mapper.update(thermostat)
-
-    def delete_thermostat(self, thermostat):
-        """Den gegebenen Kunden löschen."""
-        with ThermostatMapper() as mapper:
-            thermostat = self.get_thermostat(thermostat)
-            mapper.delete(thermostat)
 
     def set_temperature(self, temp):
         conn = http.client.HTTPSConnection(

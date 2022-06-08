@@ -37,6 +37,30 @@ def Test():
 
     return jsonify(odata)
 
+@app.route('/LastStatusJalousien', methods=["GET"])
+#hier ist die get_Status Methode
+def LastStatusJalousien():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    last_status = adm.get_last_status()
+
+    odata['d']['results'].append({
+        'date': last_status.get_date(),
+        'percentage': last_status.get_percentage()
+    })
+
+    return jsonify(odata)
+
 
 @app.route('/Jalousien', methods=["POST"])
 def Jalousien():
@@ -85,3 +109,4 @@ def Status():
         })
 
     return odata
+
