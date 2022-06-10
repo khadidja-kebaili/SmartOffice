@@ -5,6 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/backend/server" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/backend/static" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/flaskr" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/flaskr/server" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.8" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -184,7 +184,7 @@ class DeviceAdministration(object):
     def in_between_times(self, timeframe, start, end):
         if timeframe >= start and timeframe <= end:
             return True
-        else:  # over midnight e.g., 23:30-04:15
+        else:
             return False
 
     def get_all_stats_by_timeperiod(self, start, end):
@@ -201,7 +201,13 @@ class DeviceAdministration(object):
         return interval
 
     def set_weekly_plan_jal(self, start, ende):
-        pass
+        monday = 1
+        tuesday = 2
+        wednesday = 3
+        thursday = 4
+        friday = 5
+
+
 
     """
     Thermostat-spezifische Methoden
