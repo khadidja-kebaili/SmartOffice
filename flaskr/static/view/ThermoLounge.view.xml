@@ -42,11 +42,16 @@
             <layout:VerticalLayout id="verticallayoutcontent" width="100%">
                 <Text id="textThermo" text="Aktuelle Temperatur"/>
                 <StepInput
-                    id="CurrentValue"
+                    id="CurrentTemp"
                     value="20"
                     width="130px"
                 />
-
+                <Text id="textMinTemp" text="Mindesttemperatur"/>
+                <StepInput
+                    id="MinTemp"
+                    value="18"
+                    width="130px"
+                />
 
             </layout:VerticalLayout>
             </f:content>
@@ -55,8 +60,8 @@
 		    <f:footer>
 				<OverflowToolbar id="toolbarjalousien" class="sapUiMediumMarginTop">
                     <ToolbarSpacer id="tbs1"/>
-                    <Button id="buttonMinTemp" text="Min. Temp." />
-                    <Button id="buttonWopl" text="Wochenplan" press="pressnavWeeklyPlanThermo"/>
+                    <!-- <Button id="buttonMinTemp" text="Min. Temp." /> -->
+                    <Button id="buttonWopl" text="Wochenplan" />
                     <ToolbarSpacer id="tbs2"/>
                 </OverflowToolbar>
 			</f:footer>
