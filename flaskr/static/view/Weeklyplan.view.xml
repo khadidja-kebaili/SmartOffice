@@ -1,3 +1,4 @@
+
 <mvc:View xmlns:core="sap.ui.core"
         controllerName="com.quanto.solutions.ui.smartoffice.controller.Weeklyplan"
         xmlns:mvc="sap.ui.core.mvc"
@@ -11,57 +12,66 @@
             <pages>
                 <Page id="page" title="Wochenplan erstellen - Jalousien">
                     <content>
-                    <FlexBox id="WochentageContainer" width="100%" alignItems="Center" class="sapUiLargeMarginTop" justifyContent="Center" direction="Column">
-                        <Label text="Wähle den Wochentag aus"/>
-			<SegmentedButton width="115%" id="SB1" selectionChange="onSelectionChange">
-				<items>
-					<SegmentedButtonItem text="Mo" />
-					<SegmentedButtonItem text="Di" />
-					<SegmentedButtonItem text="Mi" />
-					<SegmentedButtonItem text="Do" />
-					<SegmentedButtonItem text="Fr" />
-				</items>
-			</SegmentedButton>
-            <Text id="selectedItemPreview"/>
-            </FlexBox>
-                        <FlexBox id="TimeStepContainer" width="100%" class="sapUiLargeMarginTop" alignItems="Center" justifyContent="Center" direction="Column" >
-                         <Label text="Erstelle einen Plan für den ausgewählten Wochentag"/>
-                         <FlexBox id="TimeStep" width="100%"  alignItems="Center" justifyContent="Center" direction="Row" class="sapUiLargeMarginBegin" >
-                        	<TimePicker
-                                class="sapUiLargeMarginBegin"
-                                id="TP1"
-                                width="70%"
-                                value="08:00"
-                                valueFormat="HH:mm"
-                                displayFormat="HH:mm"
-                                change="handleChange"/>
-                            <Slider id="slider" value="{/InputValue}" width="300%"
-                                min="0" max="100"
-                                showAdvancedTooltip="true"
-                                showHandleTooltip="false"
-                                inputsAsTooltips="true"
-                                class="sapUiSmallMarginBottom" 
-                                liveChange=".sendValue"/>
-                            </FlexBox>
-                            <FlexBox width="100%"  alignItems="Center" justifyContent="Center" direction="Row" class="sapUiLargeMarginBegin">
-                        	<TimePicker
-                                class="sapUiLargeMarginBegin"
-                                id="TP2"
-                                width="70%"
-                                value="08:00"
-                                valueFormat="HH:mm"
-                                displayFormat="HH:mm"
-                                change="handleChange"/>
-                            <Slider id="slider2" value="{/InputValue}" width="300%"
-                                min="0" max="100"
-                                showAdvancedTooltip="true"
-                                showHandleTooltip="false"
-                                inputsAsTooltips="true"
-                                class="sapUiSmallMarginBottom" 
-                                liveChange=".sendValue"/>
-                                </FlexBox>
-                                <Button   icon="sap-icon://add" type="Transparent" press="onPress" ariaLabelledBy="editButtonLabel"/>
-                        </FlexBox>
+                    <Table id="tbl" items="{/data}">
+                                <columns>
+                                    <Column />
+                                    <Column>
+                                        <Text text="Startzeit" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="Endzeit" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="C°" />
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <HBox>
+                                                <core:Icon src="sap-icon://add"    visible="{path: 'createNew', formatter: '.enableControl'}" press="addEntry" />
+                                                <core:Icon src="sap-icon://save"   visible="{path: 'saveNew',   formatter: '.enableControl'}" press="saveEntry" />
+                                                <core:Icon src="sap-icon://delete" visible="{path: 'removeNew', formatter: '.enableControl'}" press="removeEntry" />
+                                            </HBox>
+                                            <HBox>
+                                            <Text  text="{startzeit}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
+                                               <TimePicker
+                                                class="sapUiLargeMarginBegin"
+                                                id="TP1"
+                                                width="70%"
+                                                value="{startzeit}"
+                                                valueFormat="HH:mm"
+                                                displayFormat="HH:mm"
+                                                change="handleChange"
+                                                visible="{path: 'saveNew', formatter: '.enableControl'}"/>
+                                            </HBox>
+                                            <HBox>
+                                                <Text  text="{endzeit}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
+                                               <TimePicker
+                                                class="sapUiLargeMarginBegin"
+                                                id="TP2"
+                                                width="70%"
+                                                value="{endzeit}"
+                                                valueFormat="HH:mm"
+                                                displayFormat="HH:mm"
+                                                change="handleChange"
+                                                visible="{path: 'saveNew', formatter: '.enableControl'}"/>
+                                            </HBox>
+                                            <HBox>
+                                                <Text  text="{wert}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
+                                                <Slider id="slider" value="{/InputValue}" width="300%"
+                                                min="0" max="100"
+                                                showAdvancedTooltip="true"
+                                                showHandleTooltip="false"
+                                                inputsAsTooltips="true"
+                                                class="sapUiSmallMarginBottom" 
+                                                liveChange=".sendValue"
+                                                visible="{path: 'saveNew', formatter: '.enableControl'}"/>
+                                            </HBox>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
                     </content>
                 </Page>
             </pages>
