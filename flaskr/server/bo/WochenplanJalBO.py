@@ -33,6 +33,30 @@ class WeeklyPlanJalBO(Businessobject):
         self._standard = new_dict
         return self._standard
 
+    def get_temp_for_a_weekday(self, num):
+        temp = []
+        if self._triggered is False:
+            for elem in self._standard[num]:
+                for i in elem:
+                    temp.append(elem[i])
+        else:
+            for elem in self._customized[num]:
+                for i in elem:
+                    temp.append(elem[i])
+        return temp
+
+    def get_time_for_a_weekday(self, num):
+        times = []
+        if self._triggered is False:
+            for elem in self._standard[num]:
+                for i in elem:
+                    times.append(i[-5:])
+        else:
+            for elem in self._customized[num]:
+                for i in elem:
+                    times.append(i[-5:])
+        return times
+
     def set_customized_weekly_plan(self, temperature, time):
         new_dict = self._standard
         transformed = datetime.strptime(time, '%Y-%m-%d %H:%M:%S')
@@ -60,6 +84,9 @@ class WeeklyPlanJalBO(Businessobject):
     def get_trigger_date(self):
         return self._time_of_trigger
 
+    def get_trigger_status(self):
+        return self._triggered
+
     def reset_trigger(self):
         if self._time_of_trigger is None:
             print('Trigger not switched on')
@@ -81,15 +108,3 @@ class WeeklyPlanJalBO(Businessobject):
             print('triggered')
             return self._customized
 
-ex = WeeklyPlanJalBO()
-ex.set_standard_weekly_plan(240, '2022-06-10 08:00:00')
-ex.set_standard_weekly_plan(245, '2022-06-10 09:00:00')
-ex.set_standard_weekly_plan(230, '2022-06-10 11:00:00')
-ex.set_standard_weekly_plan(220, '2022-06-10 13:00:00')
-ex.set_standard_weekly_plan(210, '2022-06-10 14:00:00')
-ex.set_standard_weekly_plan(200, '2022-06-09 15:00:00')
-ex.set_standard_weekly_plan(240, '2022-06-09 08:00:00')
-ex.set_standard_weekly_plan(245, '2022-06-09 09:00:00')
-ex.set_standard_weekly_plan(230, '2022-06-08 11:00:00')
-ex.set_standard_weekly_plan(220, '2022-06-08 13:00:00')
-ex.set_standard_weekly_plan(210, '2022-06-08 14:00:00')
