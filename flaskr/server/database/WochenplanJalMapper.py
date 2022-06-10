@@ -1,46 +1,45 @@
 from .Mapper import Mapper
-from server.bo.WochenplanThermoBO import WeeklyPlanThermoBO
+from server.bo.WochenplanJalBO import WeeklyPlanJalBO
 
-class WeeklyPlanThermoMapper(Mapper):
+class WeeklyPlanJalMapper(Mapper):
 
     def __init__(self):
         super().__init__()
 
-    def insert(self, thermostat):
+    def insert(self, weeklyplanjal):
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM thermostate ")
+        cursor.execute("SELECT MAX(id) AS maxid FROM weeklyplanjal ")
         tuples = cursor.fetchall()
         for (maxid) in tuples:
             if len(maxid) == 1:
-                thermostat.set_id(1)
+                weeklyplanjal.set_id(1)
             else:
-                thermostat.set_id(int(maxid[0]) + 1)
+                weeklyplanjal.set_id(int(maxid[0]) + 1)
 
-        command = "INSERT INTO thermostate (id, ain) VALUES (%s, %s)"
+        command = "INSERT INTO weeklyplanjal (id, ain) VALUES (%s, %s)"
         data = (
-            thermostat.get_id(),
-            thermostat.get_ain(),
-            thermostat.get_sid()
+            weeklyplanjal.get_id(),
+            weeklyplanjal.get_current_valid_weekly_plan(),
         )
 
         cursor.execute(command, data)
 
         self._cnx.commit()
         cursor.close()
-        return thermostat
+        return weeklyplanjal
 
     def find_all(self):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, ain FROM thermostate"
+        command = "SELECT id, 1, 2, 3, 4, 5 FROM weeklyplanjal"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id) in tuples:
-            thermostat = ThermostatBO()
-            thermostat.set_id(id)
-            result.append(thermostat)
+            weeklyplanjal = WeeklyPlanJalBO
+            weeklyplanjal.set_id(id)
+            result.append(weeklyplanjal)
 
         self._cnx.commit()
         cursor.close()
@@ -51,7 +50,7 @@ class WeeklyPlanThermoMapper(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT ain FROM thermostate WHERE ain={}".format(
+        command = "SELECT ain FROM weeklyplanjal WHERE ain={}".format(
             ain)
         cursor.execute(command)
         tuples = cursor.fetchall()
@@ -76,7 +75,7 @@ class WeeklyPlanThermoMapper(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT ain  FROM thermostate WHERE id={}".format(
+        command = "SELECT ain  FROM weeklyplanjal WHERE id={}".format(
             id)
         cursor.execute(command)
         tuples = cursor.fetchall()
@@ -100,7 +99,7 @@ class WeeklyPlanThermoMapper(Mapper):
     def update(self, thermostat):
         cursor = self._cnx.cursor()
 
-        command = "UPDATE thermostate " + \
+        command = "UPDATE weeklyplanjal " + \
             "SET ain=%s WHERE id=%s"
         data = (thermostat.get_ain())
         cursor.execute(command, data)
@@ -113,7 +112,7 @@ class WeeklyPlanThermoMapper(Mapper):
     def delete(self, thermostat):
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM thermostate WHERE id={}".format(
+        command = "DELETE FROM weeklyplanjal WHERE id={}".format(
             thermostat.get_id())
         cursor.execute(command)
 
