@@ -8,62 +8,7 @@ sap.ui.define([
         "use strict";
 
         var self;
-        return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Weeklyplan", {
-            onInit : function() {
-               
-
-              },
-
-              addEmptyObject : function() {
-                var oModel = this.getView().getModel();
-                var aData  = oModel.getProperty("/data");
-
-                var emptyObject = { createNew: true};
-
-                aData.push(emptyObject);
-                oModel.setProperty("/data", aData);
-              },
-
-              enableControl : function(value) {
-                return !!value;
-              },
-
-              disableControl : function(value) {
-                return !value;
-              },
-
-              addEntry : function(oEvent) {
-                var path = oEvent.getSource().getBindingContext().getPath();
-                var obj = {
-                  startzeit: null,
-                  endzeit: null, 
-                  wert: null,
-                  createNew: false,
-                  removeNew: false,
-                  saveNew: true
-                };
-
-                var oModel = this.getView().getModel();
-
-                oModel.setProperty(path, obj);
-              },
-
-              saveEntry : function(oEvent) {
-                var path = oEvent.getSource().getBindingContext().getPath();
-                var obj = oEvent.getSource().getBindingContext().getObject();
-
-                obj.saveNew = false;
-                obj.removeNew = true;
-
-                var oModel = this.getView().getModel();
-
-                oModel.setProperty(path, obj);
-
-                this.addEmptyObject();
-              },
-            onSelectionChange: function (oEvent) {
-                MessageToast.show("Ausgewählter Wochentag:" + oEvent.getParameter("item").getText() );
-                var dummyData = [{"id": 1, "day":"Mo", "startzeit":"8:00","endzeit":"10:00","wert":23},
+        var dummyData = [{"id": 1, "day":"Mo", "startzeit":"8:00","endzeit":"10:00","wert":23},
                 {"id": 2, "day":"Mo", "startzeit":"10:00","endzeit":"12:00","wert":23.2},
                 {"id": 3, "day":"Di","startzeit":"12:00","endzeit":"14:00","wert":19},
                 {"id": 4, "day":"Mi","startzeit":"13:00","endzeit":"14:00","wert":23},
@@ -92,6 +37,65 @@ sap.ui.define([
                     fridayData.push(eintrag)
                 }
                 })
+        return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Weeklyplan", {
+            onInit : function() {
+              },
+
+              addEmptyObject : function() {
+                var oModel = this.getView().getModel();
+                var aData  = oModel.getProperty("/data");
+
+                var emptyObject = { createNew: true};
+
+                aData.push(emptyObject);
+                oModel.setProperty("/data", aData);
+              },
+
+              enableControl : function(value) {
+                return !!value;
+              },
+
+              disableControl : function(value) {
+                return !value;
+              },
+
+              addEntry : function(oEvent) {
+                var path = oEvent.getSource().getBindingContext().getPath();
+                var oSegmentedButton = this.byId('SB1');
+                var oSelectedItemId = oSegmentedButton.getSelectedItem();
+                var oSelectedItem = Element.registry.get(oSelectedItemId);
+                var obj = {
+                  startzeit: null,
+                  endzeit: null, 
+                  wert: null,
+                  createNew: false,
+                  removeNew: false,
+                  saveNew: true,
+                  day: oSelectedItem.getText()
+                };
+
+                var oModel = this.getView().getModel();
+
+                oModel.setProperty(path, obj);
+              },
+
+              saveEntry : function(oEvent) {
+                var path = oEvent.getSource().getBindingContext().getPath();
+                var obj = oEvent.getSource().getBindingContext().getObject();
+                
+                obj.saveNew = false;
+                obj.removeNew = true;
+
+                var oModel = this.getView().getModel();
+
+                oModel.setProperty(path, obj);
+
+                this.addEmptyObject();
+                console.log('object',obj)
+              },
+            onSelectionChange: function (oEvent) {
+                MessageToast.show("Ausgewählter Wochentag:" + oEvent.getParameter("item").getText() );
+                
                 
                 var selectedDay = oEvent.getParameter("item").getText()
                 if(selectedDay == "Mo"){
