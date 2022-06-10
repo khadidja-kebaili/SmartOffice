@@ -10,13 +10,8 @@ sap.ui.define([
         var self;
         return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Weeklyplan", {
             onInit : function() {
-                var dummyData = [{"startzeit":"8:00","endzeit":"10:00","wert":23},{"startzeit":"10:00","endzeit":"12:00","wert":23.2},{"startzeit":"12:00","endzeit":"14:00","wert":19}]
+               
 
-                var oModel = new sap.ui.model.json.JSONModel({data : dummyData});
-
-                this.getView().setModel(oModel);
-
-                this.addEmptyObject();
               },
 
               addEmptyObject : function() {
@@ -67,17 +62,63 @@ sap.ui.define([
                 this.addEmptyObject();
               },
             onSelectionChange: function (oEvent) {
-                var oSegmentedButton = this.byId('SB1'),
-                    oSelectedItemId = oSegmentedButton.getSelectedItem(),
-                    oSelectedItem = Element.registry.get(oSelectedItemId),
-                    oTextControl = this.byId('selectedItemPreview');
-
-                //the selected item could be found via the "item" parameter of "selectionChange" event
                 MessageToast.show("Ausgewählter Wochentag:" + oEvent.getParameter("item").getText() );
+                var dummyData = [{"id": 1, "day":"Mo", "startzeit":"8:00","endzeit":"10:00","wert":23},
+                {"id": 2, "day":"Mo", "startzeit":"10:00","endzeit":"12:00","wert":23.2},
+                {"id": 3, "day":"Di","startzeit":"12:00","endzeit":"14:00","wert":19},
+                {"id": 4, "day":"Mi","startzeit":"13:00","endzeit":"14:00","wert":23},
+                {"id": 5, "day":"Do","startzeit":"14:00","endzeit":"15:00","wert":44},
+                {"id": 6, "day":"Fr","startzeit":"15:00","endzeit":"19:00","wert":23}, ]
+                var mondayData = []
+                var tuesdayData = []
+                var wednesdayData = []
+                var thursdayData = []
+                var fridayData = []
 
-                //the selected item could also be found via the "selectItem" association not only when "selectionChange" but when needed
-                oTextControl.setText("Ausgewählter Wochentag:" + oSelectedItem.getText());
-                console.log('Ausgewählter Wochentag:', oSelectedItem.getText())
+                dummyData.map(function(eintrag, index) {
+                if(eintrag.day == "Mo"){
+                    mondayData.push(eintrag)
+                }
+                if(eintrag.day == "Di"){
+                    tuesdayData.push(eintrag)
+                }
+                if(eintrag.day == "Mi"){
+                    wednesdayData.push(eintrag)
+                }
+                if(eintrag.day == "Do"){
+                    thursdayData.push(eintrag)
+                }
+                if(eintrag.day == "Fr"){
+                    fridayData.push(eintrag)
+                }
+                })
+                
+                var selectedDay = oEvent.getParameter("item").getText()
+                if(selectedDay == "Mo"){
+                    var oModel = new sap.ui.model.json.JSONModel({data : mondayData});
+                    this.getView().setModel(oModel);
+                    this.addEmptyObject();
+                }
+                if(selectedDay == "Di"){
+                    var oModel = new sap.ui.model.json.JSONModel({data : tuesdayData});
+                    this.getView().setModel(oModel);
+                    this.addEmptyObject();
+                }
+                if(selectedDay == "Mi"){
+                    var oModel = new sap.ui.model.json.JSONModel({data : wednesdayData});
+                    this.getView().setModel(oModel);
+                    this.addEmptyObject();
+                }
+                if(selectedDay == "Do"){
+                    var oModel = new sap.ui.model.json.JSONModel({data : thursdayData});
+                    this.getView().setModel(oModel);
+                    this.addEmptyObject();
+                }
+                if(selectedDay == "Fr"){
+                    var oModel = new sap.ui.model.json.JSONModel({data : fridayData});
+                    this.getView().setModel(oModel);
+                    this.addEmptyObject();
+                }
             },
             onPress: function () {
                 var FlexBox=this.byId('TimeStepContainer')
