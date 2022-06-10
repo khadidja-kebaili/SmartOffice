@@ -10,7 +10,7 @@ sap.ui.define([
         var self;
         return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Weeklyplan", {
             onInit : function() {
-                var dummyData = [{"startzeit":"8:00","endzeit":"10:00","wert":"23"},{"startzeit":"10:00","endzeit":"12:00","wert":"20"},{"startzeit":"12:00","endzeit":"14:00","wert":"18"}]
+                var dummyData = [{"startzeit":"8:00","endzeit":"10:00","wert":23},{"startzeit":"10:00","endzeit":"12:00","wert":23.2},{"startzeit":"12:00","endzeit":"14:00","wert":19}]
 
                 var oModel = new sap.ui.model.json.JSONModel({data : dummyData});
 
