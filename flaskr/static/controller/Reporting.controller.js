@@ -1,15 +1,20 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller"
+    "../controller/SmartOffice.controller",
+    "sap/ui/model/json/JSONModel",
+    "sap/m/MessageToast"
 ],
     /**
-     * @param {typeof sap.ui.core.mvc.Controller} Controller
+     * @param {typeof sap.ui.core.mvc.SmartOfficeController} SmartOfficeController
      */
-    function (Controller) {
-        "use strict";
+    function (SmartOfficeController, JSONModel, MessageToast) {
+    "use strict";
 
-        return Controller.extend("com.hdm.ui.smartoffice.controller.Reporting", {
+        return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Jalousien",{
             onInit: function () {
-
+                this.oModelSettings = new JSONModel;
+                this.getView().setModel(this.oModelSettings, "settings");
+                this.getView().setModel(sap.ui.getCore().getModel("TestModel"), "TestModel");
+                sap.ui.core.BusyIndicator.hide(0);
             }
-        });
     });
+});

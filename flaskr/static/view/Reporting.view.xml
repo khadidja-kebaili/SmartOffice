@@ -9,97 +9,84 @@
     xmlns:mc="sap.suite.ui.microchart"
     xmlns:layout="sap.ui.layout"
     xmlns:viz="sap.viz.ui5.controls"
-    height="100%"
->
+    height="100%">
+    
     <Shell id="shell">
         <App id="app">
             <pages>
             
                 <Page 
-                id="page" 
-                title="Reporting zur Energie- und Raumnutzung"
-                class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer"
-                showNavButton="true" >
+                    id="page" 
+                    title="Reporting zur Energie- und Raumnutzung"
+                    class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer"
+                    showNavButton="true" >
 
-                <!-- Share Button nicht notwendig!?
-                <headerContent>
-                    <Button icon="sap-icon://action" tooltip="Share" />
-                </headerContent>
-                -->
+            <!-- Seitentext Information-->
+            <content>
+                <VBox>                    
+                    <Text text="Diese Seite enthält Berichte zur Energie- und Raummnutzung des DECT-Thermostates und dem WLAN-Jalousienmodel." />
+                </VBox>
+            </content>
 
-                <!-- Search Button folgt, könnte ganz nützlich sein-->
-                <subHeader>
-                    <OverflowToolbar>
-                        <SearchField />
-                    </OverflowToolbar>
-                </subHeader>
+            <!-- Dect-Thermostat Card Control Header folgt-->
+            <f:Card class="sapUiMediumMargin" width="300px">
+                <f:header>
+                    <card:Header title="Echtzeit Soll-Ist Vergleich" subtitle=" Dect-Thermostat" />
+                </f:header>
 
-                <!-- Seitentext Information-->
-                <content>
-                    <VBox>                    
-                        <Text text="Diese Seite enthält Berichte zur Energie- und Raummnutzung des DECT-Thermostates und dem WLAN-Jalousienmodel." />
-                    </VBox>
-                </content>
+            <!-- Dect-Thermostat Card Control Content folgt, !muss angepasst werden!-->
+                <f:content>
+                    <List
+                        showSeparators="None"
+                        items="{TestModel>/results}">
+                        <CustomListItem  type="Active">
+                            <HBox alignItems="Center" justifyContent="SpaceBetween">
+                                <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+                                    <Title level="H3" text="Ist-Wert" />
 
-                <!-- Dect-Thermostat Card Control Header folgt-->
-                <f:Card class="sapUiMediumMargin" width="300px">
-                    <f:header>
-                        <card:Header title="Echtzeit Soll-Ist Vergleich" subtitle=" Dect-Thermostat" />
-                    </f:header>
+                                    <Label text="Date:" />
+									<Text class="titleText" text="{TestModel>date}" />
 
-                <!-- Dect-Thermostat Card Control Content folgt, !muss angepasst werden!-->
-                    <f:content>
-                        <List
-                            showSeparators="None"
-                            items="{
-                                path: 'products>/productItems'
-                            }">
-                            <CustomListItem>
-                                <HBox alignItems="Center" justifyContent="SpaceBetween">
-                                    <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
-                                        <Title level="H3" text="{products>title}" />
-                                        <Text text="{products>subtitle}" />
-                                    </VBox>
-                                    <ObjectStatus
-                                        class="sapUiTinyMargin sapUiSmallMarginEnd"
-                                        text="{products>revenue}"
-                                        state="{products>statusSchema}" />
-                                </HBox>
-                            </CustomListItem>
-                        </List>
-                    </f:content>
-                </f:Card>
+                                    <Label text="Percentage:" />
+									<Text class="titleText" text="{TestModel>percentage}" />
+                                </VBox>
+                                <ObjectStatus
+                                    class="sapUiTinyMargin sapUiSmallMarginEnd"
+                                    text="{TestModel>/name}"
+                                    state="{products>statusSchema}" />
+                            </HBox>
+                        </CustomListItem>
+                    </List>
+                </f:content>
+            </f:Card>
 
-                <!-- WLAN-Jalousienmodul Card Control Header folgt-->
-                <f:Card class="sapUiMediumMargin" width="300px">
-                    <f:header>
-                        <card:Header title="Echtzeit Soll-Ist Vergleich" subtitle=" WLAN-Jalousienmodul" />
-                    </f:header>
+            <!-- WLAN-Jalousienmodul Card Control Header folgt-->
+            <f:Card class="sapUiMediumMargin" width="300px">
+                <f:header>
+                    <card:Header title="Echtzeit Soll-Ist Vergleich" subtitle=" WLAN-Jalousienmodul" />
+                </f:header>
 
-                <!-- WLAN-Jalousienmodul Card Control Content folgt, !muss angepasst werden!-->
-                    <f:content>
-                        <List
-                            showSeparators="None"
-                            items="{
-                                path: 'products>/productItems'
-                            }">
-                            <CustomListItem>
-                                <HBox alignItems="Center" justifyContent="SpaceBetween">
-                                    <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
-                                        <Title level="H3" text="{products>title}" />
-                                        <Text text="{products>subtitle}" />
-                                    </VBox>
-                                    <ObjectStatus
-                                        class="sapUiTinyMargin sapUiSmallMarginEnd"
-                                        text="{products>revenue}"
-                                        state="{products>statusSchema}" />
-                                </HBox>
-                            </CustomListItem>
-                        </List>
-                    </f:content>
-                </f:Card>
+            <!-- WLAN-Jalousienmodul Card Control Content folgt, !muss angepasst werden!-->
+                <f:content>
+                    <List
+                        showSeparators="None"
+                        items="{TestModel>/results}">
+                        <CustomListItem>
+                            <HBox alignItems="Center" justifyContent="SpaceBetween">
+                                <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+                                    <Title level="H3" text="Ist-Wert" />
+                                </VBox>
+                                <ObjectStatus
+                                    class="sapUiTinyMargin sapUiSmallMarginEnd"
+                                    text="{TestModel>/name}"
+                                    state="{products>statusSchema}" />
+                            </HBox>
+                        </CustomListItem>
+                    </List>
+                </f:content>
+            </f:Card>
 
-            <!-- Multiple Line Chart für DECT-Thermostat muss noch angepasst werden-->
+            <!-- Multiple Line Chart für DECT-Thermostat muss noch angepasst werden
                 <Panel
                         headerText="Temperaturverlauf vom DECT-Thermostat">
                     <layout:Grid
@@ -141,7 +128,7 @@
                             </mc:LineMicroChart>
                         </layout:VerticalLayout>
                     </layout:Grid>
-                </Panel>
+                </Panel>-->
 
                 <footer>
                     <OverflowToolbar>
