@@ -1,5 +1,6 @@
 from server.bo.JalosuienStatusBO import JalousienStatusBO
 from server.database.Mapper import Mapper
+from datetime import datetime
 
 
 class JalousienStatusMapper(Mapper):
@@ -12,7 +13,6 @@ class JalousienStatusMapper(Mapper):
 
     def __init__(self):
         super().__init__()
-
 
     def insert(self, status):
         """Einfügen eines Account-Objekts in die Datenbank.
@@ -33,8 +33,9 @@ class JalousienStatusMapper(Mapper):
             else:
                 status.set_id(1)
 
-        command = "INSERT INTO jalousienstatus (id, percentage, status, jalousieid) VALUES (%s,%s,%s,%s)"
-        data = (status.get_id(), status.get_percentage(), status.get_status(), status.get_device())
+        command = "INSERT INTO jalousienstatus (id, percentage, status, jalousieid, date) VALUES (%s,%s,%s,%s,%s)"
+        data = (status.get_id(), status.get_percentage(),
+                status.get_status(), status.get_device(), status.get_date())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -49,15 +50,17 @@ class JalousienStatusMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT id, percentage, status, jalousieid from jalousienstatus")
+        cursor.execute(
+            "SELECT id, percentage, status, jalousieid, date from jalousienstatus")
         tuples = cursor.fetchall()
 
-        for (id, percentage, status, jalousieid) in tuples:
+        for (id, percentage, status, jalousieid, date) in tuples:
             jalousie = JalousienStatusBO()
             jalousie.set_id(id)
             jalousie.set_percentage(percentage),
             jalousie.set_status(status)
             jalousie.set_device(jalousieid)
+            jalousie.set_date(date)
             result.append(jalousie)
 
         self._cnx.commit()
@@ -74,23 +77,24 @@ class JalousienStatusMapper(Mapper):
         """
         result = None
         cursor = self._cnx.cursor()
-        command = "SELECT id, percentage, status, jalousieid FROM jalousienstatus WHERE id={} ORDER BY id".format(id)
+        command = "SELECT id, percentage, status, jalousieid, date FROM jalousienstatus WHERE id={} ORDER BY id".format(
+            id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, percentage, status, jalousieid) in tuples:
+        for (id, percentage, status, jalousieid, date) in tuples:
             jalousie = JalousienStatusBO()
             jalousie.set_id(id)
             jalousie.set_percentage(percentage)
             jalousie.set_status(status)
             jalousie.set_device(jalousieid)
+            jalousie.set_date(date)
             result = jalousie
 
         self._cnx.commit()
         cursor.close()
 
         return result
-
 
     def update(self, status):
         """Wiederholtes Schreiben eines Objekts in die Datenbank.
@@ -113,7 +117,8 @@ class JalousienStatusMapper(Mapper):
         """
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM jalousienstatus WHERE id={}".format(status.get_id())
+        command = "DELETE FROM jalousienstatus WHERE id={}".format(
+            status.get_id())
         cursor.execute(command)
 
         self._cnx.commit()
