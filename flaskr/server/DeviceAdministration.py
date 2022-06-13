@@ -4,10 +4,13 @@ from server.bo.Thermostat import ThermostatBO
 from server.database.ThermostatMapper import ThermostatMapper
 from server.bo.JalosuienStatusBO import JalousienStatusBO
 from server.database.JalousienStatusMapper import JalousienStatusMapper
+from server.bo.WochenplanJalBO import WeeklyPlanJalBO
+from server.database.WochenplanJalMapper import WeeklyPlanJalMapper
 from server.AuthGen import get_sid, get_login_state, send_response, calculate_md5_response
 import time
 import tinytuya
 import http.client
+from datetime import datetime
 
 
 class DeviceAdministration(object):
@@ -114,6 +117,8 @@ class DeviceAdministration(object):
                     time.sleep(10)
                     status.set_status(str(dev.status()))
                     status.set_device(id)
+                    date = datetime.now()
+                    status.set_date(date)
                     dev_stat = dev.status()
         new_list = []
         for key in dev_stat:
@@ -136,6 +141,8 @@ class DeviceAdministration(object):
                     time.sleep(10)
                     status.set_status(str(dev.status()))
                     status.set_device(id)
+                    date = datetime.now()
+                    status.set_date(date)
                     dev_stat = dev.status()
         new_list = []
         for key in dev_stat:
@@ -149,6 +156,8 @@ class DeviceAdministration(object):
         status = JalousienStatusBO()
         status.set_percentage(percentage)
         perc = status.get_percentage()
+        date = datetime.now()
+        status.set_date(date)
         jalousies.append(self.get_all_jalousies())
         for elem in jalousies:
             for x in elem:
@@ -156,7 +165,6 @@ class DeviceAdministration(object):
                     x.set_device()
                     dev = x.get_device()
                     dev.set_value(2, perc)
-                    time.sleep(1)
                     status.set_status(str(dev.status()))
                     status.set_device(id)
         with JalousienStatusMapper() as mapper:
@@ -170,6 +178,39 @@ class DeviceAdministration(object):
         status = self.get_status_of_jalousie_by_id(id)
         with JalousienStatusMapper() as mapper:
             mapper.delete(status)
+
+    def get_last_status(self):
+        status = self.get_all_status()
+        return status[-1]
+
+    def in_between_times(self, timeframe, start, end):
+        if timeframe >= start and timeframe <= end:
+            return True
+        else:
+            return False
+
+    def get_all_stats_by_timeperiod(self, start, end):
+        enddate = datetime.now().fromisoformat(str(end))
+        startdate = datetime.now().fromisoformat(str(start))
+        stats = self.get_all_status()
+        interval = []
+        for elem in stats:
+            if self.in_between_times(elem.get_date(), startdate, enddate) == True:
+                print(elem.get_date())
+                interval.append(elem)
+            else:
+                pass
+        return interval
+
+    def set_weekly_plan_jal(self, start, ende):
+        monday = 1
+        tuesday = 2
+        wednesday = 3
+        thursday = 4
+        friday = 5
+
+
+
     """
     Thermostat-spezifische Methoden
     """
@@ -178,12 +219,12 @@ class DeviceAdministration(object):
         sid = get_sid(box_url, user_name, password)
         return sid
 
-    def add_thermostat(self, ain, box_url, user_name, password):
+    '''    def add_thermostat(self, ain, box_url, user_name, password):
         """Einen Kunden anlegen."""
         thermostat = ThermostatBO()
         thermostat.set_ain(ain)
         with ThermostatMapper() as mapper:
-            return mapper.insert(thermostat)
+            return mapper.insert(thermostat)'''
 
     def get_thermostat_by_ain(self, ain):
         """Alle Kunden mit übergebenem Nachnamen auslesen."""
@@ -195,20 +236,14 @@ class DeviceAdministration(object):
         with ThermostatMapper() as mapper:
             return mapper.find_by_key(id)
 
-    def get_all_thermostats(self):
+    '''    def get_all_thermostats(self):
         with ThermostatMapper() as mapper:
             return mapper.find_all()
 
     def save_thermostat(self, thermostat):
         """Den gegebenen Kunden speichern."""
         with ThermostatMapper() as mapper:
-            mapper.update(thermostat)
-
-    def delete_thermostat(self, thermostat):
-        """Den gegebenen Kunden löschen."""
-        with ThermostatMapper() as mapper:
-            thermostat = self.get_thermostat(thermostat)
-            mapper.delete(thermostat)
+            mapper.update(thermostat)'''
 
     def set_temperature(self, temp):
         conn = http.client.HTTPSConnection(
@@ -223,7 +258,8 @@ class DeviceAdministration(object):
                      payload, headers)
         res = conn.getresponse()
         data = res.read()
-        print(data.decode("utf-8"))
+        data = data.decode("utf-8")
+        return data
 
     def get_temperature(self):
         conn = http.client.HTTPSConnection("192.168.2.254", 8254)
@@ -232,9 +268,57 @@ class DeviceAdministration(object):
         sid = self.generate_sid(
             'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
         conn.request("GET",
-                     "/webservices/homeautoswitch.lua?ain=139790057201&switchcmd=gettemperature&sid={}".format(
+                     "/webservices/homeautoswitch.lua?ain=139790057201&switchcmd=gethrktsoll&sid={}".format(
                          sid),
                      payload, headers)
         res = conn.getresponse()
         data = res.read()
-        print(data.decode("utf-8"))
+        data = data.decode("utf-8")
+        return data
+
+    def get_min_temp(self):
+        conn = http.client.HTTPSConnection("192.168.2.254", 8254)
+        payload = ''
+        sid = self.generate_sid(
+            'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        conn.request("GET",
+                     "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=gethkrtsoll".format(sid),
+                     payload, headers)
+        res = conn.getresponse()
+        data = res.read()
+        data = data.decode("utf-8")
+        return data
+
+    def set_min_temp(self, temp):
+        conn = http.client.HTTPSConnection("192.168.2.254", 8254)
+        payload = ''
+        sid = self.generate_sid(
+            'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        conn.request("GET",
+                     "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param={}".format(sid, temp),
+                     payload, headers)
+        res = conn.getresponse()
+        data = res.read()
+        data = data.decode("utf-8")
+        return data
+
+    def set_standard_plan(self, temp, time):
+        plan = WeeklyPlanJalBO()
+        plan.set_standard_weekly_plan(temp, time)
+        with WeeklyPlanJalMapper() as mapper:
+            return mapper.insert(plan)
+
+    def get_current_plan(self):
+        plan = WeeklyPlanJalBO()
+        plan.get_current_valid_weekly_plan()
+        return plan
+
+da = DeviceAdministration()
+print(da.set_standard_plan(20, '2022-06-14 09:00:00'))
+print(da.get_current_plan())
