@@ -19,8 +19,7 @@ class WeeklyPlanJalMapper(Mapper):
         command = "INSERT INTO weeklyplanjal (id, 1, 2, 3, 4, 5) VALUES (%s, %s, %s, %s, %s, %s)"
         data = (
             weeklyplanjal.get_id(),
-
-        )
+            )
 
         cursor.execute(command, data)
 

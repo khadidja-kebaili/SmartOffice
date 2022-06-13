@@ -146,3 +146,25 @@ def get_temp():
     })
 
     return jsonify(odata)
+
+@app.route('/LastStatusJalousien', methods=["GET"])
+#hier ist die get_Status Methode
+def get_standard_weekly_plan():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    temp = adm.get_temperature()
+    odata['d']['results'].append({
+        'temperature': temp
+    })
+
+    return jsonify(odata)

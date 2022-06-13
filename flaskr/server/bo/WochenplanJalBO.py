@@ -122,3 +122,16 @@ class WeeklyPlanJalBO(Businessobject):
             print('triggered')
             return self._customized
 
+    def __str__(self):
+        return "Monday: {} {}, Tuesday: {} {}, Wednesday: {} {}, Thursday: {} {}, Friday: {} {}".format(
+                                                                                         self.get_perc_for_a_weekday(1),
+                                                                                         self.get_time_for_a_weekday(1),
+                                                                                         self.get_perc_for_a_weekday(2),
+                                                                                         self.get_time_for_a_weekday(2),
+                                                                                         self.get_perc_for_a_weekday(3),
+                                                                                         self.get_time_for_a_weekday(3),
+                                                                                         self.get_perc_for_a_weekday(4),
+                                                                                         self.get_time_for_a_weekday(4),
+                                                                                         self.get_perc_for_a_weekday(5),
+                                                                                         self.get_time_for_a_weekday(5))
+
