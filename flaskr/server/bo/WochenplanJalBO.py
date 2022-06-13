@@ -26,6 +26,9 @@ class WeeklyPlanJalBO(Businessobject):
             5: []
         }
 
+
+    'Man übergibt die Temperatur und einen Zeitpunkt und die Funktion ordnet den Zeitpunkt automatisch einem Wochen-' \
+    'Tag zu, der diesen dann übernimmt.'
     def set_standard_weekly_plan(self, temperature, timeframe):
         new_dict = self._standard
         transformed = datetime.strptime(timeframe, '%Y-%m-%d %H:%M:%S')
@@ -33,7 +36,10 @@ class WeeklyPlanJalBO(Businessobject):
         self._standard = new_dict
         return self._standard
 
-    def get_temp_for_a_weekday(self, num):
+    'Man übergibt als Param die Werte 1 bis einschließlich 5 (Mo - Fr) und erhält alle für den Wochentag eingetragenen' \
+    'Werte. Außerdem checkt er ob der Trigger für die Customaziation geschlatet wurde und gibt je nachdem die Werte' \
+    'aus den einem oder dem anderen Wochenplan zurück.'
+    def get_perc_for_a_weekday(self, num):
         temp = []
         if self._triggered is False:
             for elem in self._standard[num]:
@@ -45,6 +51,9 @@ class WeeklyPlanJalBO(Businessobject):
                     temp.append(elem[i])
         return temp
 
+    'Man übergibt als Param die Werte 1 bis einschließlich 5 (Mo - Fr) und erhält alle für den Wochentag eingetragenen' \
+    'Uhrzeiten. Außerdem checkt er ob der Trigger für die Customaziation geschlatet wurde und gibt je nachdem die Werte' \
+    'aus den einem oder dem anderen Wochenplan zurück.'
     def get_time_for_a_weekday(self, num):
         times = []
         if self._triggered is False:
@@ -57,6 +66,8 @@ class WeeklyPlanJalBO(Businessobject):
                     times.append(i[-5:])
         return times
 
+    'Man übergibt die Temperatur und einen Zeitpunkt und die Funktion ordnet den Zeitpunkt automatisch einem Wochen-' \
+    'Tag zu, der diesen dann übernimmt. Außerdem wird der Trigger eingeschaltet (auf True gesetzt).'
     def set_customized_weekly_plan(self, temperature, time):
         new_dict = self._standard
         transformed = datetime.strptime(time, '%Y-%m-%d %H:%M:%S')
@@ -75,6 +86,7 @@ class WeeklyPlanJalBO(Businessobject):
         end = start + timedelta(days=5)
         self._time_of_trigger = end
 
+    #Hilfsfunktion
     def set_trigger_date(self, date):
         if date is None:
             self._time_of_trigger = None
@@ -87,6 +99,7 @@ class WeeklyPlanJalBO(Businessobject):
     def get_trigger_status(self):
         return self._triggered
 
+    #Blockiert den Server im BAckend, mglw. über Frontend aufrufbar
     def reset_trigger(self):
         if self._time_of_trigger is None:
             print('Trigger not switched on')
@@ -100,6 +113,7 @@ class WeeklyPlanJalBO(Businessobject):
                 self._time_of_trigger = None
                 print('trigger was reset')
 
+    'Gibt entweder den Standard-/ oder den Customized Wochenplan zurück, je nachdem ob der Trigger True oder False ist.'
     def get_current_valid_weekly_plan(self):
         if not self._triggered:
             print('not triggered')

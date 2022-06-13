@@ -217,12 +217,12 @@ class DeviceAdministration(object):
         sid = get_sid(box_url, user_name, password)
         return sid
 
-    def add_thermostat(self, ain, box_url, user_name, password):
+    '''    def add_thermostat(self, ain, box_url, user_name, password):
         """Einen Kunden anlegen."""
         thermostat = ThermostatBO()
         thermostat.set_ain(ain)
         with ThermostatMapper() as mapper:
-            return mapper.insert(thermostat)
+            return mapper.insert(thermostat)'''
 
     def get_thermostat_by_ain(self, ain):
         """Alle Kunden mit übergebenem Nachnamen auslesen."""
@@ -234,14 +234,14 @@ class DeviceAdministration(object):
         with ThermostatMapper() as mapper:
             return mapper.find_by_key(id)
 
-    def get_all_thermostats(self):
+    '''    def get_all_thermostats(self):
         with ThermostatMapper() as mapper:
             return mapper.find_all()
 
     def save_thermostat(self, thermostat):
         """Den gegebenen Kunden speichern."""
         with ThermostatMapper() as mapper:
-            mapper.update(thermostat)
+            mapper.update(thermostat)'''
 
     def set_temperature(self, temp):
         conn = http.client.HTTPSConnection(
@@ -256,7 +256,8 @@ class DeviceAdministration(object):
                      payload, headers)
         res = conn.getresponse()
         data = res.read()
-        print(data.decode("utf-8"))
+        data = data.decode("utf-8")
+        return data
 
     def get_temperature(self):
         conn = http.client.HTTPSConnection("192.168.2.254", 8254)
@@ -265,9 +266,44 @@ class DeviceAdministration(object):
         sid = self.generate_sid(
             'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
         conn.request("GET",
-                     "/webservices/homeautoswitch.lua?ain=139790057201&switchcmd=gettemperature&sid={}".format(
+                     "/webservices/homeautoswitch.lua?ain=139790057201&switchcmd=gethrktsoll&sid={}".format(
                          sid),
                      payload, headers)
         res = conn.getresponse()
         data = res.read()
-        print(data.decode("utf-8"))
+        data = data.decode("utf-8")
+        return data
+
+    def get_thermo_rules(self):
+        conn = http.client.HTTPSConnection("192.168.2.254", 8254)
+        payload = ''
+        sid = self.generate_sid(
+            'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        conn.request("GET",
+                     "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=gethkrtsoll".format(sid),
+                     payload, headers)
+        res = conn.getresponse()
+        data = res.read()
+        data = data.decode("utf-8")
+        return data
+
+    def set_thermo_rules(self):
+        conn = http.client.HTTPSConnection("192.168.2.254", 8254)
+        payload = ''
+        sid = self.generate_sid(
+            'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        conn.request("GET",
+                     "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param=41".format(sid),
+                     payload, headers)
+        res = conn.getresponse()
+        data = res.read()
+        data = data.decode("utf-8")
+        return data
+
+

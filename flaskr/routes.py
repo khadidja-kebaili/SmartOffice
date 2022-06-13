@@ -1,12 +1,8 @@
 from flask import render_template, jsonify
-from flask_restx import Resource, Api, fields
-import time
-from datetime import datetime
 from flaskr import app
 from flask import request
 from flaskr.server.DeviceAdministration import DeviceAdministration
 import time
-from datetime import datetime, timedelta
 
 
 @app.route('/')
@@ -16,7 +12,8 @@ def index():
 
 @app.route('/Test', methods=["GET"])
 #hier ist die get_Status Methode
-def Test():
+#former Test()
+def Status():
     """
     Return a simple odata container with date time information
     :return:
@@ -65,7 +62,7 @@ def LastStatusJalousien():
 
 
 @app.route('/Jalousien', methods=["POST"])
-def Jalousien():
+def set_jal():
     """
     Return a simple odata container with date time information
     :return:
@@ -81,7 +78,7 @@ def Jalousien():
     return data
 
 @app.route('/Status', methods=["GET"])
-def Status():
+def Status_by_Timeperiode():
     """
     Return a simple odata container with date time information
     :return:
@@ -112,3 +109,40 @@ def Status():
 
     return odata
 
+@app.route('/Jalousien', methods=["POST"])
+def set_temp():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    data = request.form["value"]
+    time.sleep(4)
+    adm.set_temperature(data)
+    temp = adm.get_temperature()
+    print('temp: ', temp)
+    return data
+
+@app.route('/LastStatusJalousien', methods=["GET"])
+#hier ist die get_Status Methode
+def get_temp():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    temp = adm.get_temperature()
+    odata['d']['results'].append({
+        'temperature': temp
+    })
+
+    return jsonify(odata)
