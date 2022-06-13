@@ -311,8 +311,6 @@ class DeviceAdministration(object):
     def set_standard_plan(self, temp, time):
         plan = WeeklyPlanJalBO()
         plan.set_standard_weekly_plan(temp, time)
-        with WeeklyPlanJalMapper() as mapper:
-            return mapper.insert(plan)
 
     def get_current_plan(self):
         plan = WeeklyPlanJalBO()
