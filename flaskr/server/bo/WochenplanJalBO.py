@@ -29,10 +29,12 @@ class WeeklyPlanJalBO(Businessobject):
 
     'Man übergibt die Temperatur und einen Zeitpunkt und die Funktion ordnet den Zeitpunkt automatisch einem Wochen-' \
     'Tag zu, der diesen dann übernimmt.'
-    def set_standard_weekly_plan(self, temperature, timeframe):
+    def set_standard_weekly_plan(self, temperature, start_time, end_time):
         new_dict = self._standard
-        transformed = datetime.strptime(timeframe, '%Y-%m-%d %H:%M:%S')
-        new_dict[date.isoweekday(transformed)].append({transformed.strftime('%Y-%m-%d %H:%M'): temperature})
+        transformed_start = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+        transformed_end = datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
+        new_dict[date.isoweekday(transformed_start)].append({'{}-{}'.format(transformed_start.strftime('%Y-%m-%d %H:%M'),
+                                                             transformed_end.strftime('%Y-%m-%d %H:%M')): temperature})
         self._standard = new_dict
         return self._standard
 

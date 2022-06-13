@@ -168,3 +168,41 @@ def get_standard_weekly_plan():
     })
 
     return jsonify(odata)
+
+
+@app.route('/Jalousien', methods=["POST"])
+def set_min_temp():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+    data = request.form["value"]
+    adm.set_min_temp(data)
+    temp = adm.get_min_temp()
+    print('temp: ', temp)
+    return data
+
+@app.route('/LastStatusJalousien', methods=["GET"])
+#hier ist die get_Status Methode
+def get_min_temp():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    temp = adm.get_min_temp()
+    odata['d']['results'].append({
+        'min_temperature': temp
+    })
+
+    return jsonify(odata)
+

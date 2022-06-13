@@ -5,7 +5,7 @@ from server.database.ThermostatMapper import ThermostatMapper
 from server.bo.JalosuienStatusBO import JalousienStatusBO
 from server.database.JalousienStatusMapper import JalousienStatusMapper
 from server.bo.WochenplanJalBO import WeeklyPlanJalBO
-from server.database.WochenplanJalMapper import WeeklyPlanJalMapper
+#from server.database.WochenplanJalMapper import WeeklyPlanJalMapper
 from server.AuthGen import get_sid, get_login_state, send_response, calculate_md5_response
 import time
 import tinytuya
@@ -203,12 +203,7 @@ class DeviceAdministration(object):
         return interval
 
     def set_weekly_plan_jal(self, start, ende):
-        monday = 1
-        tuesday = 2
-        wednesday = 3
-        thursday = 4
-        friday = 5
-
+        pass
 
 
     """
@@ -276,7 +271,7 @@ class DeviceAdministration(object):
         data = data.decode("utf-8")
         return data
 
-    def get_thermo_rules(self):
+    def get_min_temp(self):
         conn = http.client.HTTPSConnection("192.168.2.254", 8254)
         payload = ''
         sid = self.generate_sid(
@@ -292,7 +287,7 @@ class DeviceAdministration(object):
         data = data.decode("utf-8")
         return data
 
-    def set_thermo_rules(self):
+    def set_min_temp(self, temp):
         conn = http.client.HTTPSConnection("192.168.2.254", 8254)
         payload = ''
         sid = self.generate_sid(
@@ -301,18 +296,17 @@ class DeviceAdministration(object):
             'Content-Type': 'application/json'
         }
         conn.request("GET",
-                     "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param=41".format(sid),
+                     "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param={}".format(sid, temp),
                      payload, headers)
         res = conn.getresponse()
         data = res.read()
         data = data.decode("utf-8")
         return data
 
-    def set_standard_plan(self, temp, time):
+    def set_standard_plan(self, temp, timestart, timeend):
         plan = WeeklyPlanJalBO()
-        plan.set_standard_weekly_plan(temp, time)
-        with WeeklyPlanJalMapper() as mapper:
-            return mapper.insert(plan)
+        plan.set_standard_weekly_plan(temp, timestart, timeend)
+        return plan
 
     def get_current_plan(self):
         plan = WeeklyPlanJalBO()
@@ -320,5 +314,4 @@ class DeviceAdministration(object):
         return plan
 
 da = DeviceAdministration()
-print(da.set_standard_plan(20, '2022-06-14 09:00:00'))
-print(da.get_current_plan())
+print(da.set_standard_plan(20, '2022-06-14 09:00:00', '2022-06-14 10:00:00'))
