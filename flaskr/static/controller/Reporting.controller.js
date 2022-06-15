@@ -3,13 +3,12 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast"
 ],
-    /**
-     * @param {typeof sap.ui.core.mvc.SmartOfficeController} SmartOfficeController
-     */
     function (SmartOfficeController, JSONModel, MessageToast) {
-    "use strict";
+        "use strict";
 
-        return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Jalousien",{
+        var self;
+
+        return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Reporting",{
             onInit: function () {
                 this.oModelSettings = new JSONModel;
                 this.getView().setModel(this.oModelSettings, "settings");
