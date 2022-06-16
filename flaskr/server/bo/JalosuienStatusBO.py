@@ -1,5 +1,4 @@
-from bo.BusinessObject import Businessobject as bo
-from bo.Jalousien import JalousienBO
+from server.bo.BusinessObject import Businessobject as bo
 
 
 class JalousienStatusBO(bo):
@@ -12,6 +11,7 @@ class JalousienStatusBO(bo):
         self._jalousieid = None
         self._status = ''
         self._percentage = None
+        self._date = None
 
     def set_percentage(self, perc):
         self._percentage = perc
@@ -31,10 +31,16 @@ class JalousienStatusBO(bo):
     def set_device(self, id):
         self._jalousieid = id
 
+    def set_date(self, date):
+        self._date = date
+
+    def get_date(self):
+        return self._date
+
     def __str__(self):
         """Erzeugen einer einfachen textuellen Repräsentation der jeweiligen Kontoinstanz."""
-        return "JalousieStatus: id {}, percentage: {}, status {}, jalousieid {}".format(
-            self.get_id(), self.get_percentage(), self.get_status(), self.get_device())
+        return "JalousieStatus: id {}, percentage: {}, status {}, jalousieid {}, date:{}".format(
+            self.get_id(), self.get_percentage(), self.get_status(), self.get_device(), self.get_date())
 
     @staticmethod
     def from_dict(dictionary=dict()):
@@ -44,4 +50,5 @@ class JalousienStatusBO(bo):
         obj.set_percentage(dictionary["percentage"])
         obj.set_status(dictionary["status"])
         obj.set_device(dictionary["jalousieid"])
+        obj.set_date(dictionary["date"])
         return obj
