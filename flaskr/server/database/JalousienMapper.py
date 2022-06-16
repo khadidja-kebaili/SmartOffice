@@ -1,5 +1,5 @@
-from server.bo.Jalousien import JalousienBO
-from server.database.Mapper import Mapper
+from flaskr.server.bo.Jalousien import JalousienBO
+from flaskr.server.database.Mapper import Mapper
 
 
 class JalousienMapper(Mapper):

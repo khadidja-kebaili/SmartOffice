@@ -1,5 +1,5 @@
-from bo.BusinessObject import Businessobject as bo
-from TinyTuya import tinytuya
+from flaskr.server.bo.BusinessObject import Businessobject as bo
+from flaskr.TinyTuya import tinytuya
 
 
 class JalousienBO(bo):

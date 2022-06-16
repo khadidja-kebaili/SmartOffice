@@ -1,4 +1,4 @@
-from server.bo.BusinessObject import Businessobject as bo
+from flaskr.server.bo.BusinessObject import Businessobject as bo
 '''Dieser Code ist von Quelle: xxx. Er generiert die SID-Authenfizierungsdaten um die Fritzbox über einen HTTP-Request anzusprechen.'''
 import sys
 import hashlib

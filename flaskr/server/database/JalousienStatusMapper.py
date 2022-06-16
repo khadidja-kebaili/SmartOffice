@@ -1,5 +1,5 @@
-from server.bo.JalosuienStatusBO import JalousienStatusBO
-from server.database.Mapper import Mapper
+from flaskr.server.bo.JalosuienStatusBO import JalousienStatusBO
+from flaskr.server.database.Mapper import Mapper
 from datetime import datetime
 
 

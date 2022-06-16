@@ -1,14 +1,14 @@
-from server.bo.Jalousien import JalousienBO
-from server.database.JalousienMapper import JalousienMapper
-from server.bo.Thermostat import ThermostatBO
-from server.database.ThermostatMapper import ThermostatMapper
-from server.bo.JalosuienStatusBO import JalousienStatusBO
-from server.database.JalousienStatusMapper import JalousienStatusMapper
-from server.bo.WochenplanJalBO import WeeklyPlanJalBO
-from server.database.WochenplanJalMapper import WeeklyPlanJalMapper
-from server.AuthGen import get_sid, get_login_state, send_response, calculate_md5_response
+from flaskr.server.bo.Jalousien import JalousienBO
+from flaskr.server.database.JalousienMapper import JalousienMapper
+from flaskr.server.bo.Thermostat import ThermostatBO
+from flaskr.server.database.ThermostatMapper import ThermostatMapper
+from flaskr.server.bo.JalosuienStatusBO import JalousienStatusBO
+from flaskr.server.database.JalousienStatusMapper import JalousienStatusMapper
+"""from flaskr.server.bo.WochenplanJalBO import WeeklyPlanJalBO
+from flaskr.server.database.WochenplanJalMapper import WeeklyPlanJalMapper"""
+from flaskr.server.AuthGen import get_sid, get_login_state, send_response, calculate_md5_response
 import time
-import tinytuya
+import flaskr.TinyTuya
 import http.client
 from datetime import datetime
 
@@ -307,7 +307,7 @@ class DeviceAdministration(object):
         data = res.read()
         data = data.decode("utf-8")
         return data
-
+"""
     def set_standard_plan(self, temp, time):
         plan = WeeklyPlanJalBO()
         plan.set_standard_weekly_plan(temp, time)
@@ -320,3 +320,4 @@ class DeviceAdministration(object):
 da = DeviceAdministration()
 print(da.set_standard_plan(20, '2022-06-14 09:00:00'))
 print(da.get_current_plan())
+"""
