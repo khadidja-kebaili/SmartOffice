@@ -1,0 +1,66 @@
+<mvc:View xmlns:core="sap.ui.core"
+		controllerName="com.quanto.solutions.ui.smartoffice.controller.RegelnJalousien"
+		xmlns:mvc="sap.ui.core.mvc"
+		xmlns="sap.m"
+		xmlns:f="sap.f"
+		xmlns:layout="sap.ui.layout"
+		height="100%">
+	<f:DynamicPage id="dpRegelnJalousien" headerExpanded="{/headerExpanded}" toggleHeaderOnTitleClick="{/titleClickable}" showNavBack="true" showFooter="false">
+		
+        <!-- DynamicPage Title -->
+			<f:title>
+				<f:DynamicPageTitle id="dptitle">
+					<f:heading>
+						<Title id="maintitle" text="Jalousien"/>
+					</f:heading>
+					
+					<f:expandedContent>
+						<Label id="expandedc" text="Regeln für Jalousien"/>
+					</f:expandedContent>
+					<f:snappedContent>
+						<Label id="snappedc" text="Regeln für Jalousien"/>
+					</f:snappedContent>
+					<f:snappedTitleOnMobile>
+						<Title id="snappedmobile" text="Regeln für Jalousien"/>
+					</f:snappedTitleOnMobile>
+				</f:DynamicPageTitle>
+			</f:title>
+
+		<!-- DynamicPage Header 
+            <f:header>
+				<f:DynamicPageHeader id="dpheader" pinnable="false">
+					<layout:VerticalLayout id="verticallayoutheader" >
+                        <core:Icon id="iconsettings" src="sap-icon://action-settings" class="size3"> </core:Icon>
+					</layout:VerticalLayout>
+				</f:DynamicPageHeader>
+		    </f:header>-->
+
+        <!-- Page Content -->
+            <f:content>
+            <layout:VerticalLayout id="verticallayoutcontent" width="100%">
+                <Text id="textjalousien2" text="Ihre bestehenden Regeln:"/>
+
+                <Text id="textjalousien" text="Legen Sie eine neue Regel an:"/>            
+                <Slider id="slider" value="{/InputValue}" width="80%"
+                    min="0" max="100"
+                    showAdvancedTooltip="true"
+                    showHandleTooltip="false"
+                    inputsAsTooltips="true"
+                    class="sapUiSmallMarginBottom" 
+                    liveChange=".sendValue"/>
+
+
+            </layout:VerticalLayout>
+            </f:content>
+
+        <!-- DynamicPage Footer 
+		    <f:footer>
+				<OverflowToolbar id="toolbarjalousien" class="sapUiMediumMarginTop">
+                    <ToolbarSpacer id="tbs1"/>
+                    <Button id="buttonregeln" text="Regeln" />
+                    <Button id="buttonwp" text="Wochenplan" press="pressnavWeeklyPlan"/>
+                    <ToolbarSpacer id="tbs2"/>
+                </OverflowToolbar>
+			</f:footer>-->
+        </f:DynamicPage>
+</mvc:View>
