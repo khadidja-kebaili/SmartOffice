@@ -1,7 +1,7 @@
 from .Mapper import Mapper
-from server.bo.WochenplanThermoBO import WeeklyPlanThermoBO
+from server.bo.WochenplanThermoBO import WeeklyPlanTempBO
 
-class WeeklyPlanThermoMapper(Mapper):
+class WeeklyPlanTempMapper(Mapper):
 
     def __init__(self):
         super().__init__()

@@ -8,7 +8,7 @@ class WeeklyPlanJalMapper(Mapper):
 
     def insert(self, weeklyplanjal):
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM weeklyplanjal ")
+        cursor.execute("SELECT MAX(id) AS maxid FROM standardweeklyplanjal ")
         tuples = cursor.fetchall()
         for (maxid) in tuples:
             if len(maxid) == 1:
@@ -16,9 +16,11 @@ class WeeklyPlanJalMapper(Mapper):
             else:
                 weeklyplanjal.set_id(int(maxid[0]) + 1)
 
-        command = "INSERT INTO weeklyplanjal (id, 1, 2, 3, 4, 5) VALUES (%s, %s, %s, %s, %s, %s)"
+        command = "INSERT INTO weeklyplanjal (id, weekday, time, percentage) VALUES (%s, %s, %s, %s)"
         data = (
             weeklyplanjal.get_id(),
+            weeklyplanjal.get_time_for_a_weekday(weekday)
+
             )
 
         cursor.execute(command, data)
