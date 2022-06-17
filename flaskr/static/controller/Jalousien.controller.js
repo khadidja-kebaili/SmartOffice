@@ -26,7 +26,11 @@ sap.ui.define([
             pressnavWeeklyPlan: function (evt) {
 				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 				oRouter.navTo("wochenplan")
-			},
+            },
+            pressnavRegeln: function (evt) {
+				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+				oRouter.navTo("regelnjalousien")
+            },
             sendValue: function(oEvent) {
                 console.log("Neuer Wert wurde eingestellt.");
                 sap.ui.core.BusyIndicator.hide(0);

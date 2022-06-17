@@ -34,7 +34,7 @@
                                         <Text text="Endzeit" />
                                     </Column>
                                     <Column>
-                                        <Text text="C°" />
+                                        <Text text="%" />
                                     </Column>
                                 </columns>
                                 <items>

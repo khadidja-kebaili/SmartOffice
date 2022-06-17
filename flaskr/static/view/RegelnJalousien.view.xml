@@ -5,62 +5,72 @@
 		xmlns:f="sap.f"
 		xmlns:layout="sap.ui.layout"
 		height="100%">
-	<f:DynamicPage id="dpRegelnJalousien" headerExpanded="{/headerExpanded}" toggleHeaderOnTitleClick="{/titleClickable}" showNavBack="true" showFooter="false">
-		
-        <!-- DynamicPage Title -->
-			<f:title>
-				<f:DynamicPageTitle id="dptitle">
-					<f:heading>
-						<Title id="maintitle" text="Jalousien"/>
-					</f:heading>
-					
-					<f:expandedContent>
-						<Label id="expandedc" text="Regeln für Jalousien"/>
-					</f:expandedContent>
-					<f:snappedContent>
-						<Label id="snappedc" text="Regeln für Jalousien"/>
-					</f:snappedContent>
-					<f:snappedTitleOnMobile>
-						<Title id="snappedmobile" text="Regeln für Jalousien"/>
-					</f:snappedTitleOnMobile>
-				</f:DynamicPageTitle>
-			</f:title>
-
-		<!-- DynamicPage Header 
-            <f:header>
-				<f:DynamicPageHeader id="dpheader" pinnable="false">
-					<layout:VerticalLayout id="verticallayoutheader" >
-                        <core:Icon id="iconsettings" src="sap-icon://action-settings" class="size3"> </core:Icon>
-					</layout:VerticalLayout>
-				</f:DynamicPageHeader>
-		    </f:header>-->
-
-        <!-- Page Content -->
-            <f:content>
-            <layout:VerticalLayout id="verticallayoutcontent" width="100%">
-                <Text id="textjalousien2" text="Ihre bestehenden Regeln:"/>
-
-                <Text id="textjalousien" text="Legen Sie eine neue Regel an:"/>            
-                <Slider id="slider" value="{/InputValue}" width="80%"
-                    min="0" max="100"
-                    showAdvancedTooltip="true"
-                    showHandleTooltip="false"
-                    inputsAsTooltips="true"
-                    class="sapUiSmallMarginBottom" 
-                    liveChange=".sendValue"/>
-
-
-            </layout:VerticalLayout>
-            </f:content>
-
-        <!-- DynamicPage Footer 
-		    <f:footer>
-				<OverflowToolbar id="toolbarjalousien" class="sapUiMediumMarginTop">
-                    <ToolbarSpacer id="tbs1"/>
-                    <Button id="buttonregeln" text="Regeln" />
-                    <Button id="buttonwp" text="Wochenplan" press="pressnavWeeklyPlan"/>
-                    <ToolbarSpacer id="tbs2"/>
-                </OverflowToolbar>
-			</f:footer>-->
-        </f:DynamicPage>
+	<Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page id="page" title="Regeln für Jalousien verwalten">
+                    <content>
+                    <Button text="Neue Regel" press="test"/> 
+                    <Table id="tbl" items="{/data}">
+                                <columns>
+                                    <Column />
+                                    <Column>
+                                        <Text text="Startzeit" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="Endzeit" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="%" />
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <HBox>
+                                                <core:Icon src="sap-icon://add"    visible="{path: 'createNew', formatter: '.enableControl'}" press="addEntry" />
+                                                <core:Icon src="sap-icon://save"   visible="{path: 'saveNew',   formatter: '.enableControl'}" press="saveEntry" />
+                                                <core:Icon src="sap-icon://delete" visible="{path: 'removeNew', formatter: '.enableControl'}" press="removeEntry" />
+                                            </HBox>
+                                            <HBox>
+                                            <Text  text="{startzeit}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
+                                               <TimePicker
+                                                id="TP1"
+                                                width="70%"
+                                                value="{startzeit}"
+                                                valueFormat="HH:mm"
+                                                displayFormat="HH:mm"
+                                                change="handleChange"
+                                                visible="{path: 'saveNew', formatter: '.enableControl'}"/>
+                                            </HBox>
+                                            <HBox>
+                                                <Text  text="{endzeit}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
+                                               <TimePicker
+                                                id="TP2"
+                                                width="70%"
+                                                value="{endzeit}"
+                                                valueFormat="HH:mm"
+                                                displayFormat="HH:mm"
+                                                change="handleChange"
+                                                visible="{path: 'saveNew', formatter: '.enableControl'}"/>
+                                            </HBox>
+                                            <HBox>
+                                                <Text  text="{wert}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
+                                                <Slider id="slider" value="{wert}" width="300%"
+                                                min="0" max="100"
+                                                showAdvancedTooltip="true"
+                                                showHandleTooltip="false"
+                                                inputsAsTooltips="true"
+                                                class="sapUiSmallMarginBottom" 
+                                                visible="{path: 'saveNew', formatter: '.enableControl'}"/>
+                                            </HBox>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                    </content>
+                </Page>
+            </pages>
+        </App>
+    </Shell>
 </mvc:View>

@@ -89,10 +89,38 @@ sap.ui.define([
                 var oModel = this.getView().getModel();
 
                 oModel.setProperty(path, obj);
-
+                console.log("Neuer Wert wurde eingestellt.");
+                sap.ui.core.BusyIndicator.hide(0);
+                //var oThis = this;
+                var oData = {
+                    'jalousien_id': 1,
+                    'day': obj.day,
+                    'start': obj.startzeit,
+                    'end': obj.endzeit, 
+                    'value': obj.wert
+                };
+                console.log(oData),
+                //jQuery.ajax({
+                    //url : "/",
+                    //type : "POST",
+                    //dataType : "json",
+                    //async : true,
+                    //data : oData,
+                    //success : function(response){
+                        //MessageToast.show(response.data.message);
+                        //oThis.makeGraph(response.graph);
+                        //sap.ui.core.BusyIndicator.hide();
+                    //},
+                    //error: function(response){
+                        //console.log(response);
+                    //}
+                //});
                 this.addEmptyObject();
                 console.log('object',obj)
               },
+              removeEntry: function () {
+                MessageToast.show("Löschen Eintrag mit ID:")  
+            },
             onSelectionChange: function (oEvent) {
                 MessageToast.show("Ausgewählter Wochentag:" + oEvent.getParameter("item").getText() );
                 
@@ -106,7 +134,6 @@ sap.ui.define([
                 if(selectedDay == "Di"){
                     var oModel = new sap.ui.model.json.JSONModel({data : tuesdayData});
                     this.getView().setModel(oModel);
-                    this.addEmptyObject();
                 }
                 if(selectedDay == "Mi"){
                     var oModel = new sap.ui.model.json.JSONModel({data : wednesdayData});

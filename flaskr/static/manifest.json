@@ -146,6 +146,13 @@
               "target": [
                 "TargetReporting"
               ]
+            },
+            {
+              "name": "regelnjalousien",
+              "pattern": "regelnjalousien",
+              "target": [
+                "TargetRegelnJalousien"
+              ]
             }
       ],
       "targets": {
@@ -204,6 +211,13 @@
               "clearControlAggregation": false,
               "viewId": "reporting",
               "viewName": "Reporting"
+            },
+            "TargetRegelnJalousien": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "regelnjalousien",
+              "viewName": "RegelnJalousien"
             }
       }
     },
