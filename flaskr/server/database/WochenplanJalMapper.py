@@ -3,40 +3,39 @@ from server.bo.WochenplanJalBO import WeeklyPlanJalBO
 
 
 class WeeklyPlanJalMapper(Mapper):
-
     def __init__(self):
         super().__init__()
 
-    def insert(self, weeklyplanjal):
+    def insert(self, entry):
         cursor = self._cnx.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM standard_jal ")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
             if maxid[0] is None:
-                weeklyplanjal.set_id(1)
+                entry.set_id(1)
             else:
                 """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
-                weeklyplanjal.set_id(maxid[0] + 1)
+                entry.set_id(maxid[0] + 1)
 
         command = "INSERT INTO standard_jal (id, weekday, monday_id, tuesday_id, wednesday_id, thursday_id, friday_id) \
                   VALUES (%s, %s, %s, %s, %s, %s, %s)"
         data = (
-            weeklyplanjal.get_id(),
-            weeklyplanjal.get_weekday(),
-            weeklyplanjal.get_monday_id(),
-            weeklyplanjal.get_tuesday_id(),
-            weeklyplanjal.get_wednesday_id(),
-            weeklyplanjal.get_thursday_id(),
-            weeklyplanjal.get_friday_id()
+            entry.get_id(),
+            entry.get_weekday(),
+            entry.get_monday_id(),
+            entry.get_tuesday_id(),
+            entry.get_wednesday_id(),
+            entry.get_thursday_id(),
+            entry.get_friday_id()
         )
 
         cursor.execute(command, data)
 
         self._cnx.commit()
         cursor.close()
-        return weeklyplanjal
+        return entry
 
     def find_all(self):
 
@@ -47,15 +46,15 @@ class WeeklyPlanJalMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (id, weekday, monday_id, tuesday_id, wednesday_id, thursday_id, friday_id) in tuples:
-            weeklyplanjal = WeeklyPlanJalBO()
-            weeklyplanjal.set_id(id)
-            weeklyplanjal.set_weekday(weekday),
-            weeklyplanjal.set_monday_id(monday_id),
-            weeklyplanjal.set_tuesday_id(tuesday_id),
-            weeklyplanjal.set_wednesday_id(wednesday_id),
-            weeklyplanjal.set_thursday_id(thursday_id),
-            weeklyplanjal.set_friday_id(friday_id)
-            result.append(weeklyplanjal)
+            entry = WeeklyPlanJalBO()
+            entry.set_id(id)
+            entry.set_weekday(weekday),
+            entry.set_monday_id(monday_id),
+            entry.set_tuesday_id(tuesday_id),
+            entry.set_wednesday_id(wednesday_id),
+            entry.set_thursday_id(thursday_id),
+            entry.set_friday_id(friday_id)
+            result.append(entry)
 
         self._cnx.commit()
         cursor.close()
@@ -70,15 +69,15 @@ class WeeklyPlanJalMapper(Mapper):
 
         try:
             (id, weekday, monday_id, tuesday_id, wednesday_id, thursday_id, friday_id) = tuples[0]
-            weeklyplanjal = WeeklyPlanJalBO()
-            weeklyplanjal.set_id(id)
-            weeklyplanjal.set_weekday(weekday),
-            weeklyplanjal.set_monday_id(monday_id),
-            weeklyplanjal.set_tuesday_id(tuesday_id),
-            weeklyplanjal.set_wednesday_id(wednesday_id),
-            weeklyplanjal.set_thursday_id(thursday_id),
-            weeklyplanjal.set_friday_id(friday_id)
-            result = weeklyplanjal
+            entry = WeeklyPlanJalBO()
+            entry.set_id(id)
+            entry.set_weekday(weekday),
+            entry.set_monday_id(monday_id),
+            entry.set_tuesday_id(tuesday_id),
+            entry.set_wednesday_id(wednesday_id),
+            entry.set_thursday_id(thursday_id),
+            entry.set_friday_id(friday_id)
+            result = entry
 
         except IndexError:
             """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
@@ -98,47 +97,46 @@ class WeeklyPlanJalMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (id, weekday, monday_id, tuesday_id, wednesday_id, thursday_id, friday_id) in tuples:
-            weeklyplanjal = WeeklyPlanJalBO()
-            weeklyplanjal.set_id(id)
-            weeklyplanjal.set_weekday(weekday),
-            weeklyplanjal.set_monday_id(monday_id),
-            weeklyplanjal.set_tuesday_id(tuesday_id),
-            weeklyplanjal.set_wednesday_id(wednesday_id),
-            weeklyplanjal.set_thursday_id(thursday_id),
-            weeklyplanjal.set_friday_id(friday_id)
-            result.append(weeklyplanjal)
+            entry = WeeklyPlanJalBO()
+            entry.set_id(id)
+            entry.set_weekday(weekday),
+            entry.set_monday_id(monday_id),
+            entry.set_tuesday_id(tuesday_id),
+            entry.set_wednesday_id(wednesday_id),
+            entry.set_thursday_id(thursday_id),
+            entry.set_friday_id(friday_id)
+            result.append(entry)
 
         self._cnx.commit()
         cursor.close()
 
         return result
 
-
-    def update(self, weeklyplanjal):
+    def update(self, entry):
         cursor = self._cnx.cursor()
 
         command = "UPDATE weeklyplanjal " + \
                   "SET weekday=%s, monday_id=%s, tuesday_id=%s, wednesday_id=%s, thursday_id=%s, friday_id=%s WHERE id=%s"
-        data = (weeklyplanjal.get_id(),
-                weeklyplanjal.get_weekday(),
-                weeklyplanjal.get_monday_id(),
-                weeklyplanjal.get_tuesday_id(),
-                weeklyplanjal.get_wednesday_id(),
-                weeklyplanjal.get_thursday_id(),
-                weeklyplanjal.get_friday_id())
+        data = (entry.get_id(),
+                entry.get_weekday(),
+                entry.get_monday_id(),
+                entry.get_tuesday_id(),
+                entry.get_wednesday_id(),
+                entry.get_thursday_id(),
+                entry.get_friday_id())
         cursor.execute(command, data)
 
         self._cnx.commit()
         cursor.close()
 
-        return weeklyplanjal
+        return entry
 
-    def delete(self, weeklyplanjal):
+    def delete(self, entry):
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM standard_jal WHERE id={}".format(
-            weeklyplanjal.get_id())
+        command = "DELETE FROM standard_jal WHERE id={}".format(entry.get_id())
         cursor.execute(command)
 
         self._cnx.commit()
         cursor.close()
+
