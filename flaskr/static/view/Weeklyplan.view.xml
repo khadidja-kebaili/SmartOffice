@@ -79,7 +79,7 @@
                                     </ColumnListItem>
                                 </items>
                             </Table>
-                            <Button text="Neuer Eintrag" class="sapUiLargeMarginTop"
+                            <Button text="Neuer Eintrag" class="sapUiSmallMarginTop"
 						press="addEmptyObject"
 						ariaDescribedBy="defaultButtonDescription genericButtonDescription">
 				</Button>
