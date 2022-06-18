@@ -69,14 +69,12 @@
                                             </HBox>
                                             <HBox>
                                                 <Text  text="{wert}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
-                                                <Slider id="slider" value="{wert}" width="300%"
-                                                min="0" max="100"
-                                                showAdvancedTooltip="true"
-                                                showHandleTooltip="false"
-                                                inputsAsTooltips="true"
-                                                class="sapUiSmallMarginBottom" 
-                                                liveChange=".sendValue"
-                                                visible="{path: 'saveNew', formatter: '.enableControl'}"/>
+                                                <Input id="inputWert"
+			                                    value="{wert}"
+                                                valueLiveUpdate="{/ValueLiveUpdate}"
+			                                    placeholder="1-100"
+                                                visible="{path: 'saveNew', formatter: '.enableControl'}"
+		                                        />
                                             </HBox>
                                         </cells>
                                     </ColumnListItem>

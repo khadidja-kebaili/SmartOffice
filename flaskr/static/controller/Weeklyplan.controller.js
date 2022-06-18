@@ -85,7 +85,6 @@ sap.ui.define([
               saveEntry : function(oEvent) {
                 var path = oEvent.getSource().getBindingContext().getPath();
                 var obj = oEvent.getSource().getBindingContext().getObject();
-                
                 obj.saveNew = false;
                 obj.removeNew = true;
 
@@ -95,12 +94,13 @@ sap.ui.define([
                 console.log("Neuer Wert wurde eingestellt.");
                 sap.ui.core.BusyIndicator.hide(0);
                 //var oThis = this;
+                console.log('objSave', obj, "path", path, "obj.", )
                 var oData = {
                     'jalousien_id': 1,
                     'day': obj.day,
                     'start': obj.startzeit,
                     'end': obj.endzeit, 
-                    'value': obj.wert
+                    'wert': obj.wert
                 };
                 console.log(oData)
                 //jQuery.ajax({
@@ -152,24 +152,6 @@ sap.ui.define([
                     this.getView().setModel(oModel);
                 }
             },
-            onPress: function () {
-                var FlexBox=this.byId('TimeStepContainer')
-                FlexBox.addItem(Button)
-            },
-            handleChange: function (oEvent) {
-				var oText = this.byId("T1"),
-					oTP = oEvent.getSource(),
-					sValue = oEvent.getParameter("value"),
-					bValid = oEvent.getParameter("valid");
-				this._iEvent++;
-				oText.setText("'change' Event #" + this._iEvent + " from TimePicker '" + oTP.getId() + "': " + sValue + (bValid ? ' (valid)' : ' (invalid)'));
-
-				if (bValid) {
-					oTP.setValueState(ValueState.None);
-				} else {
-					oTP.setValueState(ValueState.Error);
-				}
-			}
 
 		});
 
