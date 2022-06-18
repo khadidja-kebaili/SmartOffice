@@ -43,7 +43,7 @@
                                             <HBox>
                                                 <core:Icon src="sap-icon://add"    visible="{path: 'createNew', formatter: '.enableControl'}" press="addEntry" />
                                                 <core:Icon src="sap-icon://save"   visible="{path: 'saveNew',   formatter: '.enableControl'}" press="saveEntry" />
-                                                <core:Icon src="sap-icon://delete" visible="{path: 'removeNew', formatter: '.enableControl'}" press="removeEntry" />
+                                                <core:Icon src="sap-icon://delete" visible="{path: 'removeNew'}" press="removeEntry" />
                                             </HBox>
                                             <HBox>
                                             <Text  text="{startzeit}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
@@ -82,6 +82,10 @@
                                     </ColumnListItem>
                                 </items>
                             </Table>
+                            <Button text="Neuer Eintrag" class="sapUiLargeMarginTop"
+						press="addEmptyObject"
+						ariaDescribedBy="defaultButtonDescription genericButtonDescription">
+				</Button>
                     </content>
                 </Page>
             </pages>

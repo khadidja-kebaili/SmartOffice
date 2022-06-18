@@ -39,6 +39,8 @@ sap.ui.define([
                 })
         return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Weeklyplan", {
             onInit : function() {
+                    var oModel = new sap.ui.model.json.JSONModel({data : mondayData});
+                    this.getView().setModel(oModel);
               },
 
               addEmptyObject : function() {
@@ -49,6 +51,7 @@ sap.ui.define([
 
                 aData.push(emptyObject);
                 oModel.setProperty("/data", aData);
+                this.addEntry();
               },
 
               enableControl : function(value) {
@@ -99,7 +102,7 @@ sap.ui.define([
                     'end': obj.endzeit, 
                     'value': obj.wert
                 };
-                console.log(oData),
+                console.log(oData)
                 //jQuery.ajax({
                     //url : "/",
                     //type : "POST",
@@ -115,11 +118,13 @@ sap.ui.define([
                         //console.log(response);
                     //}
                 //});
-                this.addEmptyObject();
-                console.log('object',obj)
+
               },
-              removeEntry: function () {
-                MessageToast.show("Löschen Eintrag mit ID:")  
+              removeEntry: function (oEvent) {
+                var path = oEvent.getSource().getBindingContext().getPath();
+                var obj = oEvent.getSource().getBindingContext().getObject();
+                console.log('objDelte', obj)
+                MessageToast.show("Löschen Eintrag mit ID:" + obj.id)  
             },
             onSelectionChange: function (oEvent) {
                 MessageToast.show("Ausgewählter Wochentag:" + oEvent.getParameter("item").getText() );
@@ -129,7 +134,6 @@ sap.ui.define([
                 if(selectedDay == "Mo"){
                     var oModel = new sap.ui.model.json.JSONModel({data : mondayData});
                     this.getView().setModel(oModel);
-                    this.addEmptyObject();
                 }
                 if(selectedDay == "Di"){
                     var oModel = new sap.ui.model.json.JSONModel({data : tuesdayData});
@@ -138,17 +142,14 @@ sap.ui.define([
                 if(selectedDay == "Mi"){
                     var oModel = new sap.ui.model.json.JSONModel({data : wednesdayData});
                     this.getView().setModel(oModel);
-                    this.addEmptyObject();
                 }
                 if(selectedDay == "Do"){
                     var oModel = new sap.ui.model.json.JSONModel({data : thursdayData});
                     this.getView().setModel(oModel);
-                    this.addEmptyObject();
                 }
                 if(selectedDay == "Fr"){
                     var oModel = new sap.ui.model.json.JSONModel({data : fridayData});
                     this.getView().setModel(oModel);
-                    this.addEmptyObject();
                 }
             },
             onPress: function () {
