@@ -69,9 +69,8 @@
                                             </HBox>
                                             <HBox>
                                                 <Text  text="{wert}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
-                                                <Input id="inputWert"
-			                                    value="{wert}"
-                                                valueLiveUpdate="{/ValueLiveUpdate}"
+                                                <Input id="inputWert" value="{wert}"
+                                                type="Number"
 			                                    placeholder="1-100"
                                                 visible="{path: 'saveNew', formatter: '.enableControl'}"
 		                                        />
