@@ -11,11 +11,14 @@ class RulesMapper(Mapper):
         cursor = self._cnx.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM rules ")
         tuples = cursor.fetchall()
+
         for (maxid) in tuples:
-            if len(maxid) == 1:
+            if maxid[0] is None:
                 rule.set_id(1)
             else:
-                rule.set_id(int(maxid[0]) + 1)
+                """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
+                davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
+                rule.set_id(maxid[0] + 1)
 
         command = "INSERT INTO rules (id, type, min, max, start, end) VALUES (%s, %s, %s, %s, %s, %s)"
         data = (
@@ -57,10 +60,10 @@ class RulesMapper(Mapper):
         return result
 
     def find_by_type(self, type):
-        result = None
+        result = []
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, type, min, max, start, end FROM rules WHERE type={}".format(type)
+        command = "SELECT id, type, min, max, start, end FROM rules WHERE type='{}'".format(type)
         cursor.execute(command)
         tuples = cursor.fetchall()
 

@@ -112,6 +112,7 @@ class MondayMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
+
         for (id, type, start_time, end_time, value) in tuples:
             monday = Monday()
             monday.set_id(id)
@@ -128,11 +129,11 @@ class MondayMapper(Mapper):
 
     def find_latest_jal_entry(self):
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM monday")
+        cursor.execute("SELECT MAX(id) AS maxid FROM monday WHERE type='J'")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            command = "SELECT * FROM monday WHERE id={} and type='J'".format(maxid[0])
+            command = "SELECT * FROM monday WHERE id={}".format(maxid[0])
             cursor.execute(command)
             tuples = cursor.fetchall()
 
@@ -158,11 +159,11 @@ class MondayMapper(Mapper):
 
     def find_latest_temp_entry(self):
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM monday")
+        cursor.execute("SELECT MAX(id) AS maxid FROM monday WHERE type='T'")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            command = "SELECT * FROM friday WHERE id={} and type='T'".format(maxid[0])
+            command = "SELECT * FROM monday WHERE id={}".format(maxid[0])
             cursor.execute(command)
             tuples = cursor.fetchall()
 

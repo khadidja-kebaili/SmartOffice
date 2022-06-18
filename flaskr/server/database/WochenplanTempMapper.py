@@ -110,11 +110,11 @@ class WeeklyPlanTempMapper(Mapper):
 
         return weeklyplanjal
 
-    def delete(self, weeklyplanjal):
+    def delete(self, entry):
         cursor = self._cnx.cursor()
 
         command = "DELETE FROM standard_jal WHERE id={}".format(
-            weeklyplanjal.get_id())
+            entry.get_id())
         cursor.execute(command)
 
         self._cnx.commit()

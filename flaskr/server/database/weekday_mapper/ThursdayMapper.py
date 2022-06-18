@@ -154,35 +154,35 @@ class ThursdayMapper(Mapper):
 
             return result
 
-        def find_latest_temp_entry(self):
-            cursor = self._cnx.cursor()
-            cursor.execute("SELECT MAX(id) AS maxid FROM thursday")
+    def find_latest_temp_entry(self):
+        cursor = self._cnx.cursor()
+        cursor.execute("SELECT MAX(id) AS maxid FROM thursday")
+        tuples = cursor.fetchall()
+
+        for (maxid) in tuples:
+            command = "SELECT * FROM thursday WHERE id={} and type='T'".format(maxid[0])
+            cursor.execute(command)
             tuples = cursor.fetchall()
 
-            for (maxid) in tuples:
-                command = "SELECT * FROM friday WHERE id={} and type='T'".format(maxid[0])
-                cursor.execute(command)
-                tuples = cursor.fetchall()
+            try:
+                (id, type, start_time, end_time, value) = tuples[0]
+                thursday = Thursday()
+                thursday.set_id(id)
+                thursday.set_type(type)
+                thursday.set_start_time(start_time)
+                thursday.set_end_time(end_time)
+                thursday.set_value(value)
+                result = thursday
 
-                try:
-                    (id, type, start_time, end_time, value) = tuples[0]
-                    thursday = Thursday()
-                    thursday.set_id(id)
-                    thursday.set_type(type)
-                    thursday.set_start_time(start_time)
-                    thursday.set_end_time(end_time)
-                    thursday.set_value(value)
-                    result = thursday
+            except IndexError:
+                """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
+                keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
+                result = None
 
-                except IndexError:
-                    """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-                    keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-                    result = None
+            self._cnx.commit()
+            cursor.close()
 
-                self._cnx.commit()
-                cursor.close()
-
-                return result
+            return result
 
     def update(self, thursday):
         cursor = self._cnx.cursor()

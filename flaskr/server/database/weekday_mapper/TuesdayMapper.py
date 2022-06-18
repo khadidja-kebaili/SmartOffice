@@ -160,7 +160,7 @@ class TuesdayMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            command = "SELECT * FROM friday WHERE id={} and type='T'".format(maxid[0])
+            command = "SELECT * FROM tuesday WHERE id={} and type='T'".format(maxid[0])
             cursor.execute(command)
             tuples = cursor.fetchall()
 

@@ -160,7 +160,7 @@ class WednesdayMapper(Mapper):
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            command = "SELECT * FROM friday WHERE id={} and type='T'".format(maxid[0])
+            command = "SELECT * FROM wednesday WHERE id={} and type='T'".format(maxid[0])
             cursor.execute(command)
             tuples = cursor.fetchall()
 
@@ -183,7 +183,6 @@ class WednesdayMapper(Mapper):
             cursor.close()
 
             return result
-
     def update(self, wednesday):
         cursor = self._cnx.cursor()
 

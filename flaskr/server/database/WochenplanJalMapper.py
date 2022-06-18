@@ -90,6 +90,30 @@ class WeeklyPlanJalMapper(Mapper):
 
         return result
 
+    def find_by_weekday(self, weekday):
+        result = []
+        cursor = self._cnx.cursor()
+        command = "SELECT * FROM standard_jal WHERE weekday={}".format(weekday)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        for (id, weekday, monday_id, tuesday_id, wednesday_id, thursday_id, friday_id) in tuples:
+            weeklyplanjal = WeeklyPlanJalBO()
+            weeklyplanjal.set_id(id)
+            weeklyplanjal.set_weekday(weekday),
+            weeklyplanjal.set_monday_id(monday_id),
+            weeklyplanjal.set_tuesday_id(tuesday_id),
+            weeklyplanjal.set_wednesday_id(wednesday_id),
+            weeklyplanjal.set_thursday_id(thursday_id),
+            weeklyplanjal.set_friday_id(friday_id)
+            result.append(weeklyplanjal)
+
+        self._cnx.commit()
+        cursor.close()
+
+        return result
+
+
     def update(self, weeklyplanjal):
         cursor = self._cnx.cursor()
 
