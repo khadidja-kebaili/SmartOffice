@@ -2,7 +2,7 @@ sap.ui.define([
     "../controller/SmartOffice.controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast"
-],
+    ],
     function (SmartOfficeController, JSONModel, MessageToast) {
         "use strict";
 
@@ -42,5 +42,8 @@ sap.ui.define([
                     },
                     error: function(response){
                         console.log(response);
+                    }
+                });
+            },
+        });
     });
-});
