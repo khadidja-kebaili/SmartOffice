@@ -1,53 +1,53 @@
 from database.Mapper import Mapper
-from server.bo.WochenplanJalBO import WeeklyPlanJalBO
+from server.bo.WochenplanThermoBO import WeeklyPlanTempBO
 
 
-class WeeklyPlanJalMapper(Mapper):
+class WeeklyPlanTempMapper(Mapper):
 
     def __init__(self):
         super().__init__()
 
-    def insert(self, weeklyplanjal):
+    def insert(self, weeklyplantemp):
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM standard_jal ")
+        cursor.execute("SELECT MAX(id) AS maxid FROM standard_temp ")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
             if maxid[0] is None:
-                weeklyplanjal.set_id(1)
+                weeklyplantemp.set_id(1)
             else:
                 """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
-                weeklyplanjal.set_id(maxid[0] + 1)
+                weeklyplantemp.set_id(maxid[0] + 1)
 
-        command = "INSERT INTO standard_jal (id, weekday, monday_id, tuesday_id, wednesday_id, thursday_id, friday_id) \
+        command = "INSERT INTO standard_temp (id, weekday, monday_id, tuesday_id, wednesday_id, thursday_id, friday_id) \
                   VALUES (%s, %s, %s, %s, %s, %s, %s)"
         data = (
-            weeklyplanjal.get_id(),
-            weeklyplanjal.get_weekday(),
-            weeklyplanjal.get_monday_id(),
-            weeklyplanjal.get_tuesday_id(),
-            weeklyplanjal.get_wednesday_id(),
-            weeklyplanjal.get_thursday_id(),
-            weeklyplanjal.get_friday_id()
+            weeklyplantemp.get_id(),
+            weeklyplantemp.get_weekday(),
+            weeklyplantemp.get_monday_id(),
+            weeklyplantemp.get_tuesday_id(),
+            weeklyplantemp.get_wednesday_id(),
+            weeklyplantemp.get_thursday_id(),
+            weeklyplantemp.get_friday_id()
         )
 
         cursor.execute(command, data)
 
         self._cnx.commit()
         cursor.close()
-        return weeklyplanjal
+        return weeklyplantemp
 
     def find_all(self):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM standard_jal"
+        command = "SELECT * FROM standard_temp"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id, weekday, monday_id, tuesday_id, wednesday_id, thursday_id, friday_id) in tuples:
-            weeklyplanjal = WeeklyPlanJalBO()
+            weeklyplanjal = WeeklyPlanTempBO()
             weeklyplanjal.set_id(id)
             weeklyplanjal.set_weekday(weekday),
             weeklyplanjal.set_monday_id(monday_id),
@@ -64,13 +64,13 @@ class WeeklyPlanJalMapper(Mapper):
 
     def find_by_key(self, key):
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM standard_jal WHERE id={}".format(key)
+        command = "SELECT * FROM standard_temp WHERE id={}".format(key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
             (id, weekday, monday_id, tuesday_id, wednesday_id, thursday_id, friday_id) = tuples[0]
-            weeklyplanjal = WeeklyPlanJalBO()
+            weeklyplanjal = WeeklyPlanTempBO()
             weeklyplanjal.set_id(id)
             weeklyplanjal.set_weekday(weekday),
             weeklyplanjal.set_monday_id(monday_id),
@@ -93,8 +93,9 @@ class WeeklyPlanJalMapper(Mapper):
     def update(self, weeklyplanjal):
         cursor = self._cnx.cursor()
 
-        command = "UPDATE weeklyplanjal " + \
-                  "SET weekday=%s, monday_id=%s, tuesday_id=%s, wednesday_id=%s, thursday_id=%s, friday_id=%s WHERE id=%s"
+        command = "UPDATE standard_temp" + \
+                  "SET weekday=%s, monday_id=%s, tuesday_id=%s, wednesday_id=%s, thursday_id=%s, friday_id=%s WHERE " \
+                  "id=%s "
         data = (weeklyplanjal.get_id(),
                 weeklyplanjal.get_weekday(),
                 weeklyplanjal.get_monday_id(),

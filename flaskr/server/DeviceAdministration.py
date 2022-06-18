@@ -5,10 +5,21 @@ from server.database.ThermostatMapper import ThermostatMapper
 from server.bo.JalosuienStatusBO import JalousienStatusBO
 from server.database.JalousienStatusMapper import JalousienStatusMapper
 from server.bo.WochenplanJalBO import WeeklyPlanJalBO
-#from server.database.WochenplanJalMapper import WeeklyPlanJalMapper
-from server.AuthGen import get_sid, get_login_state, send_response, calculate_md5_response
+from server.database.WochenplanJalMapper import WeeklyPlanJalMapper
+from server.bo.WochenplanThermoBO import WeeklyPlanTempBO
+from server.database.WochenplanTempMapper import WeeklyPlanTempMapper
+from server.bo.weekdays_jal.MondayBO import Monday
+from server.bo.weekdays_jal.TuesdayBO import Tuesday
+from server.bo.weekdays_jal.WednesdayBO import Wednesday
+from server.bo.weekdays_jal.ThursdayBO import Thursday
+from server.bo.weekdays_jal.FridayBO import Friday
+from server.database.weekday_mapper.MondayMapper import MondayMapper
+from server.database.weekday_mapper.TuesdayMapper import TuesdayMapper
+from server.database.weekday_mapper.WednesdayMapper import WednesdayMapper
+from server.database.weekday_mapper.ThursdayMapper import ThursdayMapper
+from server.database.weekday_mapper.FridayMapper import FridayMapper
+from server.AuthGen import get_sid
 import time
-import tinytuya
 import http.client
 from datetime import datetime
 
@@ -195,7 +206,7 @@ class DeviceAdministration(object):
         stats = self.get_all_status()
         interval = []
         for elem in stats:
-            if self.in_between_times(elem.get_date(), startdate, enddate) == True:
+            if self.in_between_times(elem.get_date(), startdate, enddate):
                 print(elem.get_date())
                 interval.append(elem)
             else:
@@ -303,15 +314,362 @@ class DeviceAdministration(object):
         data = data.decode("utf-8")
         return data
 
-    def set_standard_plan(self, temp, timestart, timeend):
-        plan = WeeklyPlanJalBO()
-        plan.set_standard_weekly_plan(temp, timestart, timeend)
-        return plan
+####################################################################################
+    '''Für Statistik Soll , Ist (Durchschnitt der Stunden nehmen)'''
+    #dateofLastChange -> Lösche alle Einträge, die nicht von heute sind.
+    #Lösche alle Einträge bei denen es Überlappung gibt
+    #Er macht einen Check und wenn die neue Zeit sich mit einem anderen Timeintervall überlappt, wird der alte gelöscht.
 
-    def get_current_plan(self):
-        plan = WeeklyPlanJalBO()
-        plan.get_current_valid_weekly_plan()
-        return plan
+    def set_jal_standard_entry_monday(self, start, end, perc):
+        monday = Monday()
+        monday.set_type('J')
+        monday.set_start_time(start)
+        monday.set_end_time(end)
+        monday.set_value(perc)
+        with MondayMapper() as mapper:
+            mapper.insert(monday)
+        standard_entry = WeeklyPlanJalBO()
+        last_entry = self.get_latest_jal_standard_entry_monday()
+        standard_entry.set_monday_id(last_entry.get_id())
+        with WeeklyPlanJalMapper() as mapper:
+            return mapper.insert(standard_entry)
 
-da = DeviceAdministration()
-print(da.set_standard_plan(20, '2022-06-14 09:00:00', '2022-06-14 10:00:00'))
+    def get_all_jal_standard_entries_monday(self):
+        with MondayMapper() as mapper:
+            return mapper.find_all_jal_entries()
+
+    def get_latest_jal_standard_entry_monday(self):
+        with MondayMapper() as mapper:
+            return mapper.find_latest_jal_entry()
+
+    def set_jal_standard_entry_tuesday(self, start, end, perc):
+        tuesday = Tuesday()
+        tuesday.set_type('J')
+        tuesday.set_start_time(start)
+        tuesday.set_end_time(end)
+        tuesday.set_value(perc)
+        with TuesdayMapper() as mapper:
+            mapper.insert(tuesday)
+        standard_entry = WeeklyPlanJalBO()
+        last_entry = self.get_latest_jal_standard_entry_tuesday()
+        standard_entry.set_tuesday_id(last_entry.get_id())
+        with WeeklyPlanJalMapper() as mapper:
+            return mapper.insert(standard_entry)
+
+    def get_all_jal_standard_entries_tuesday(self):
+        with TuesdayMapper() as mapper:
+            return mapper.find_all_jal_entries()
+
+    def get_latest_jal_standard_entry_tuesday(self):
+        with TuesdayMapper() as mapper:
+            return mapper.find_latest_jal_entry()
+
+    def set_jal_standard_entry_wednesday(self, start, end, perc):
+        wednesday = Wednesday()
+        wednesday.set_type('J')
+        wednesday.set_start_time(start)
+        wednesday.set_end_time(end)
+        wednesday.set_value(perc)
+        with WednesdayMapper() as mapper:
+            mapper.insert(wednesday)
+        standard_entry = WeeklyPlanJalBO()
+        last_entry = self.get_latest_jal_standard_entry_wednesday()
+        standard_entry.set_wednesday_id(last_entry.get_id())
+        with WeeklyPlanJalMapper() as mapper:
+            return mapper.insert(standard_entry)
+
+    def get_all_jal_standard_entries_wednesday(self):
+        with WednesdayMapper() as mapper:
+            return mapper.find_all_jal_entries()
+
+    def get_latest_jal_standard_entry_wednesday(self):
+        with WednesdayMapper() as mapper:
+            return mapper.find_latest_jal_entry()
+
+    def set_jal_standard_entry_thursday(self, start, end, perc):
+        thursday = Thursday()
+        thursday.set_type('J')
+        thursday.set_start_time(start)
+        thursday.set_end_time(end)
+        thursday.set_value(perc)
+        with ThursdayMapper() as mapper:
+            mapper.insert(thursday)
+        standard_entry = WeeklyPlanJalBO()
+        last_entry = self.get_latest_jal_standard_entry_thursday()
+        standard_entry.set_thursday_id(last_entry.get_id())
+        with WeeklyPlanJalMapper() as mapper:
+            return mapper.insert(standard_entry)
+
+    def get_all_jal_standard_entries_thursday(self):
+        with ThursdayMapper() as mapper:
+            return mapper.find_all_jal_entries()
+
+    def get_latest_jal_standard_entry_thursday(self):
+        with ThursdayMapper() as mapper:
+            return mapper.find_latest_jal_entry()
+
+    def set_jal_standard_entry_friday(self, start, end, perc):
+        friday = Friday()
+        friday.set_type('J')
+        friday.set_start_time(start)
+        friday.set_end_time(end)
+        friday.set_value(perc)
+        with FridayMapper() as mapper:
+            mapper.insert(friday)
+        standard_entry = WeeklyPlanJalBO()
+        last_entry = self.get_latest_jal_standard_entry_friday()
+        standard_entry.set_friday_id(last_entry.get_id())
+        with WeeklyPlanJalMapper() as mapper:
+            return mapper.insert(standard_entry)
+
+    def get_all_jal_standard_entries_friday(self):
+        with FridayMapper() as mapper:
+            return mapper.find_all_jal_entries()
+
+    def get_latest_jal_standard_entry_friday(self):
+        with FridayMapper() as mapper:
+            return mapper.find_latest_jal_entry()
+
+    def set_temp_standard_entry_monday(self, start, end, temp):
+        monday = Monday()
+        monday.set_type('T')
+        monday.set_start_time(start)
+        monday.set_end_time(end)
+        monday.set_value(temp)
+        with MondayMapper() as mapper:
+            mapper.insert(monday)
+        standard_entry = WeeklyPlanTempBO()
+        last_entry = self.get_latest_temp_standard_entry_monday()
+        standard_entry.set_monday_id(last_entry.get_id())
+        with WeeklyPlanTempMapper() as mapper:
+            return mapper.insert(standard_entry)
+
+    def get_all_temp_standard_entries_monday(self):
+        with MondayMapper() as mapper:
+            return mapper.find_all_temp_entries()
+
+    def get_latest_temp_standard_entry_monday(self):
+        with MondayMapper() as mapper:
+            return mapper.find_latest_temp_entry()
+
+    def set_temp_standard_entry_tuesday(self, start, end, temp):
+        tuesday = Tuesday()
+        tuesday.set_type('T')
+        tuesday.set_start_time(start)
+        tuesday.set_end_time(end)
+        tuesday.set_value(temp)
+        with TuesdayMapper() as mapper:
+            mapper.insert(tuesday)
+        standard_entry = WeeklyPlanTempBO()
+        last_entry = self.get_latest_temp_standard_entry_tuesday()
+        standard_entry.set_tuesday_id(last_entry.get_id())
+        with WeeklyPlanTempMapper() as mapper:
+            return mapper.insert(standard_entry)
+
+    def get_all_temp_standard_entries_tuesday(self):
+        with TuesdayMapper() as mapper:
+            return mapper.find_all_temp_entries()
+
+    def get_latest_temp_standard_entry_tuesday(self):
+        with TuesdayMapper() as mapper:
+            return mapper.find_latest_temp_entry()
+
+    def set_temp_standard_entry_wednesday(self, start, end, temp):
+        wednesday = Wednesday()
+        wednesday.set_type('T')
+        wednesday.set_start_time(start)
+        wednesday.set_end_time(end)
+        wednesday.set_value(temp)
+        with WednesdayMapper() as mapper:
+            mapper.insert(wednesday)
+        standard_entry = WeeklyPlanTempBO()
+        last_entry = self.get_latest_temp_standard_entry_wednesday()
+        standard_entry.set_wednesday_id(last_entry.get_id())
+        with WeeklyPlanTempMapper() as mapper:
+            return mapper.insert(standard_entry)
+
+    def get_all_temp_standard_entries_wednesday(self):
+        with WednesdayMapper() as mapper:
+            return mapper.find_all_temp_entries()
+
+    def get_latest_temp_standard_entry_wednesday(self):
+        with WednesdayMapper() as mapper:
+            return mapper.find_latest_temp_entry()
+
+    def set_temp_standard_entry_thursday(self, start, end, temp):
+        thursday = Thursday()
+        thursday.set_type('T')
+        thursday.set_start_time(start)
+        thursday.set_end_time(end)
+        thursday.set_value(temp)
+        with ThursdayMapper() as mapper:
+            mapper.insert(thursday)
+        standard_entry = WeeklyPlanTempBO()
+        last_entry = self.get_latest_temp_standard_entry_thursday()
+        standard_entry.set_thursday_id(last_entry.get_id())
+        with WeeklyPlanTempMapper() as mapper:
+            return mapper.insert(standard_entry)
+
+    def get_all_temp_standard_entries_thursday(self):
+        with ThursdayMapper() as mapper:
+            return mapper.find_all_temp_entries()
+
+    def get_latest_temp_standard_entry_thursday(self):
+        with ThursdayMapper() as mapper:
+            return mapper.find_latest_temp_entry()
+
+    def set_temp_standard_entry_friday(self, start, end, temp):
+        friday = Friday()
+        friday.set_type('T')
+        friday.set_start_time(start)
+        friday.set_end_time(end)
+        friday.set_value(temp)
+        with FridayMapper() as mapper:
+            mapper.insert(friday)
+        standard_entry = WeeklyPlanTempBO()
+        last_entry = self.get_latest_temp_standard_entry_friday()
+        standard_entry.set_friday_id(last_entry.get_id())
+        with WeeklyPlanTempMapper() as mapper:
+            return mapper.insert(standard_entry)
+
+    def get_all_temp_standard_entries_friday(self):
+        with FridayMapper() as mapper:
+            return mapper.find_all_temp_entries()
+
+    def get_latest_temp_standard_entry_friday(self):
+        with FridayMapper() as mapper:
+            return mapper.find_latest_temp_entry()
+
+
+    ##### Customized Entries ######
+
+    '''def set_jal_customized_entry_monday(self, start, end, perc):
+        monday = Monday()
+        monday.set_type('J')
+        monday.set_start_time(start)
+        monday.set_end_time(end)
+        monday.set_value(perc)
+        with MondayMapper() as mapper:
+            return mapper.insert(monday)
+
+    def get_all_jal_customized_entries_monday(self):
+        with MondayMapper() as mapper:
+            return mapper.find_all()
+
+    def set_jal_customized_entry_tuesday(self, start, end, perc):
+        tuesday = Tuesday()
+        tuesday.set_type('J')
+        tuesday.set_start_time(start)
+        tuesday.set_end_time(end)
+        tuesday.set_value(perc)
+        with TuesdayMapper() as mapper:
+            return mapper.insert(tuesday)
+
+    def get_all_jal_customized_entries_tuesday(self):
+        with TuesdayMapper() as mapper:
+            return mapper.find_all()
+
+    def set_jal_customized_entry_wednesday(self, start, end, perc):
+        wednesday = Wednesday()
+        wednesday.set_type('J')
+        wednesday.set_start_time(start)
+        wednesday.set_end_time(end)
+        wednesday.set_value(perc)
+        with WednesdayMapper() as mapper:
+            return mapper.insert(wednesday)
+
+    def get_all_jal_customized_entries_wednesday(self):
+        with WednesdayMapper() as mapper:
+            return mapper.find_all()
+
+    def set_jal_customized_entry_thursday(self, start, end, perc):
+        thursday = Thursday()
+        thursday.set_type('J')
+        thursday.set_start_time(start)
+        thursday.set_end_time(end)
+        thursday.set_value(perc)
+        with ThursdayMapper() as mapper:
+            return mapper.insert(thursday)
+
+    def get_all_jal_customized_entries_thursday(self):
+        with ThursdayMapper() as mapper:
+            return mapper.find_all()
+
+    def set_jal_customized_entry_friday(self, start, end, perc):
+        friday = Friday()
+        friday.set_type('J')
+        friday.set_start_time(start)
+        friday.set_end_time(end)
+        friday.set_value(perc)
+        with FridayMapper() as mapper:
+            return mapper.insert(friday)
+
+    def get_all_jal_customized_entries_friday(self):
+        with FridayMapper() as mapper:
+            return mapper.find_all()
+
+    def set_temp_customized_entry_monday(self, start, end, temp):
+        monday = Monday()
+        monday.set_type('T')
+        monday.set_start_time(start)
+        monday.set_end_time(end)
+        monday.set_value(temp)
+        with MondayMapper() as mapper:
+            return mapper.insert(monday)
+
+    def get_all_temp_customized_entries_monday(self):
+        with MondayMapper() as mapper:
+            return mapper.find_all()
+
+    def set_temp_customized_entry_tuesday(self, start, end, temp):
+        tuesday = Tuesday()
+        tuesday.set_type('T')
+        tuesday.set_start_time(start)
+        tuesday.set_end_time(end)
+        tuesday.set_value(temp)
+        with TuesdayMapper() as mapper:
+            return mapper.insert(tuesday)
+
+    def get_all_temp_customized_entries_tuesday(self):
+        with TuesdayMapper() as mapper:
+            return mapper.find_all()
+
+    def set_temp_customized_entry_wednesday(self, start, end, temp):
+        wednesday = Wednesday()
+        wednesday.set_type('T')
+        wednesday.set_start_time(start)
+        wednesday.set_end_time(end)
+        wednesday.set_value(temp)
+        with WednesdayMapper() as mapper:
+            return mapper.insert(wednesday)
+
+    def get_all_temp_customized_entries_wednesday(self):
+        with WednesdayMapper() as mapper:
+            return mapper.find_all()
+
+    def set_temp_customized_entry_thursday(self, start, end, temp):
+        thursday = Thursday()
+        thursday.set_type('T')
+        thursday.set_start_time(start)
+        thursday.set_end_time(end)
+        thursday.set_value(temp)
+        with ThursdayMapper() as mapper:
+            return mapper.insert(thursday)
+
+    def get_all_temp_customized_entries_thursday(self):
+        with ThursdayMapper() as mapper:
+            return mapper.find_all()
+
+    def set_temp_customized_entry_friday(self, start, end, temp):
+        friday = Friday()
+        friday.set_type('T')
+        friday.set_start_time(start)
+        friday.set_end_time(end)
+        friday.set_value(temp)
+        with FridayMapper() as mapper:
+            return mapper.insert(friday)
+
+    def get_all_temp_customized_entries_friday(self):
+        with FridayMapper() as mapper:
+            return mapper.find_all()'''
+

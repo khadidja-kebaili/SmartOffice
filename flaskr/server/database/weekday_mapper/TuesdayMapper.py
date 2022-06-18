@@ -1,55 +1,54 @@
 from server.database.Mapper import Mapper
-from server.bo.weekdays_jal.MondayBO import Monday
+from server.bo.weekdays_jal.TuesdayBO import Tuesday
 
-
-class MondayMapper(Mapper):
+class TuesdayMapper(Mapper):
 
     def __init__(self):
         super().__init__()
 
-    def insert(self, monday):
+    def insert(self, tuesday):
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM monday")
+        cursor.execute("SELECT MAX(id) AS maxid FROM tuesday")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
             if maxid[0] is None:
-                monday.set_id(1)
+                tuesday.set_id(1)
             else:
                 """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
-                monday.set_id(maxid[0] + 1)
+                tuesday.set_id(maxid[0]+1)
 
-        command = "INSERT INTO monday (id, type, start_time, end_time, value) VALUES (%s, %s, %s, %s, %s)"
+        command = "INSERT INTO tuesday (id, type, start_time, end_time, value) VALUES (%s, %s, %s, %s, %s)"
         data = (
-            monday.get_id(),
-            monday.get_type(),
-            monday.get_start_time(),
-            monday.get_end_time(),
-            monday.get_value()
-        )
+            tuesday.get_id(),
+            tuesday.get_type(),
+            tuesday.get_start_time(),
+            tuesday.get_end_time(),
+            tuesday.get_value()
+            )
 
         cursor.execute(command, data)
 
         self._cnx.commit()
         cursor.close()
-        return monday
+        return tuesday
 
     def find_all(self):
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM monday"
+        command = "SELECT * FROM tuesday"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id, type, start_time, end_time, value) in tuples:
-            monday = Monday()
-            monday.set_id(id)
-            monday.set_type(type)
-            monday.set_start_time(start_time)
-            monday.set_end_time(end_time)
-            monday.set_value(value)
-            result.append(monday)
+            tuesday = Tuesday()
+            tuesday.set_id(id)
+            tuesday.set_type(type)
+            tuesday.set_start_time(start_time)
+            tuesday.set_end_time(end_time)
+            tuesday.set_value(value)
+            result.append(tuesday)
 
         self._cnx.commit()
         cursor.close()
@@ -59,19 +58,19 @@ class MondayMapper(Mapper):
     def find_by_key(self, key):
         result = None
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM monday WHERE id={}".format(key)
+        command = "SELECT * FROM tuesday WHERE id={}".format(key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
             (id, type, start_time, end_time, value) = tuples[0]
-            monday = Monday()
-            monday.set_id(id)
-            monday.set_type(type)
-            monday.set_start_time(start_time)
-            monday.set_end_time(end_time)
-            monday.set_value(value)
-            result = monday
+            tuesday = Tuesday()
+            tuesday.set_id(id)
+            tuesday.set_type(type)
+            tuesday.set_start_time(start_time)
+            tuesday.set_end_time(end_time)
+            tuesday.set_value(value)
+            result = tuesday
 
         except IndexError:
             """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
@@ -83,22 +82,21 @@ class MondayMapper(Mapper):
 
         return result
 
-
     def find_all_jal_entries(self):
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM monday WHERE type='J'"
+        command = "SELECT * FROM tuesday WHERE type='J'"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id, type, start_time, end_time, value) in tuples:
-            monday = Monday()
-            monday.set_id(id)
-            monday.set_type(type)
-            monday.set_start_time(start_time)
-            monday.set_end_time(end_time)
-            monday.set_value(value)
-            result.append(monday)
+            tuesday = Tuesday()
+            tuesday.set_id(id)
+            tuesday.set_type(type)
+            tuesday.set_start_time(start_time)
+            tuesday.set_end_time(end_time)
+            tuesday.set_value(value)
+            result.append(tuesday)
 
         self._cnx.commit()
         cursor.close()
@@ -108,18 +106,18 @@ class MondayMapper(Mapper):
     def find_all_temp_entries(self):
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT * FROM monday WHERE type='T'"
+        command = "SELECT * FROM tuesday WHERE type='T'"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         for (id, type, start_time, end_time, value) in tuples:
-            monday = Monday()
-            monday.set_id(id)
-            monday.set_type(type)
-            monday.set_start_time(start_time)
-            monday.set_end_time(end_time)
-            monday.set_value(value)
-            result.append(monday)
+            tuesday = Tuesday()
+            tuesday.set_id(id)
+            tuesday.set_type(type)
+            tuesday.set_start_time(start_time)
+            tuesday.set_end_time(end_time)
+            tuesday.set_value(value)
+            result.append(tuesday)
 
         self._cnx.commit()
         cursor.close()
@@ -128,23 +126,23 @@ class MondayMapper(Mapper):
 
     def find_latest_jal_entry(self):
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM monday")
+        cursor.execute("SELECT MAX(id) AS maxid FROM tuesday")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
-            command = "SELECT * FROM monday WHERE id={} and type='J'".format(maxid[0])
+            command = "SELECT * FROM tuesday WHERE id={} and type='J'".format(maxid[0])
             cursor.execute(command)
             tuples = cursor.fetchall()
 
             try:
                 (id, type, start_time, end_time, value) = tuples[0]
-                monday = Monday()
-                monday.set_id(id)
-                monday.set_type(type)
-                monday.set_start_time(start_time)
-                monday.set_end_time(end_time)
-                monday.set_value(value)
-                result = monday
+                tuesday = Tuesday()
+                tuesday.set_id(id)
+                tuesday.set_type(type)
+                tuesday.set_start_time(start_time)
+                tuesday.set_end_time(end_time)
+                tuesday.set_value(value)
+                result = tuesday
 
             except IndexError:
                 """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
@@ -158,7 +156,7 @@ class MondayMapper(Mapper):
 
     def find_latest_temp_entry(self):
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT MAX(id) AS maxid FROM monday")
+        cursor.execute("SELECT MAX(id) AS maxid FROM tuesday")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
@@ -168,13 +166,13 @@ class MondayMapper(Mapper):
 
             try:
                 (id, type, start_time, end_time, value) = tuples[0]
-                monday = Monday()
-                monday.set_id(id)
-                monday.set_type(type)
-                monday.set_start_time(start_time)
-                monday.set_end_time(end_time)
-                monday.set_value(value)
-                result = monday
+                tuesday = Tuesday()
+                tuesday.set_id(id)
+                tuesday.set_type(type)
+                tuesday.set_start_time(start_time)
+                tuesday.set_end_time(end_time)
+                tuesday.set_value(value)
+                result = tuesday
 
             except IndexError:
                 """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
@@ -186,25 +184,26 @@ class MondayMapper(Mapper):
 
             return result
 
-    def update(self, monday):
+    def update(self, tuesday):
         cursor = self._cnx.cursor()
 
-        command = "UPDATE monday " + \
-                  "SET value=%s, start_time=%s, end_time=%s WHERE id=%s and type=%s"
-        data = (monday.get_value(), monday.get_start_time(), monday.get_end_time(), monday.get_id(), monday.get_type())
+        command = "UPDATE tuesday " + \
+            "SET value=%s, start_time=%s, end_time=%s WHERE id=%s and type=%s"
+        data = (tuesday.get_value(), tuesday.get_start_time(), tuesday.get_end_time(), tuesday.get_id(), tuesday.get_type())
         cursor.execute(command, data)
 
         self._cnx.commit()
         cursor.close()
 
-        return monday
+        return tuesday
 
-    def delete(self, monday):
+    def delete(self, tuesday):
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM monday WHERE id={} and type=%s".format(
-            monday.get_id(), monday.get_type())
+        command = "DELETE FROM tuesday WHERE id={} and type=%s".format(
+            tuesday.get_id(), tuesday.get_type())
         cursor.execute(command)
 
         self._cnx.commit()
         cursor.close()
+

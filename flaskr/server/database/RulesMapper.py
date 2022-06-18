@@ -1,6 +1,7 @@
 from database.Mapper import Mapper
 from bo.RulesBO import RulesBO
 
+
 class RulesMapper(Mapper):
 
     def __init__(self):
@@ -16,10 +17,14 @@ class RulesMapper(Mapper):
             else:
                 rule.set_id(int(maxid[0]) + 1)
 
-        command = "INSERT INTO rules (id, ain) VALUES (%s, %s)"
+        command = "INSERT INTO rules (id, type, min, max, start, end) VALUES (%s, %s, %s, %s, %s, %s)"
         data = (
-            rule.get_max_temperature(),
-            rule.get_min_temperature(),
+            rule.get_id(),
+            rule.get_type(),
+            rule.get_min(),
+            rule.get_max(),
+            rule.get_start_time(),
+            rule.get_end_time()
         )
 
         cursor.execute(command, data)
@@ -32,13 +37,18 @@ class RulesMapper(Mapper):
 
         result = []
         cursor = self._cnx.cursor()
-        command = "SELECT id, ain FROM rules"
+        command = "SELECT id, type, min, max, start, end FROM rules"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id) in tuples:
-            rule = RuleBO()
+        for (id, type, min, max, start, end) in tuples:
+            rule = RulesBO()
             rule.set_id(id)
+            rule.set_type(type)
+            rule.set_min(min)
+            rule.set_max(max)
+            rule.set_start_time(start)
+            rule.set_end_time(end)
             result.append(rule)
 
         self._cnx.commit()
@@ -46,25 +56,23 @@ class RulesMapper(Mapper):
 
         return result
 
-    def find_by_ain(self, ain):
+    def find_by_type(self, type):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT ain FROM rules WHERE ain={}".format(
-            ain)
+        command = "SELECT id, type, min, max, start, end FROM rules WHERE type={}".format(type)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
-            (ain) = tuples[0]
-            rule = RuleBO()
-            rule.set_ain(ain)
-            result = rule
-
-        except IndexError:
-            """Der IndexError wird oben beim Zugriff auf tuples[0] auftreten, wenn der vorherige SELECT-Aufruf
-            keine Tupel liefert, sondern tuples = cursor.fetchall() eine leere Sequenz zurück gibt."""
-            result = None
+        for (id, type, min, max, start, end) in tuples:
+            rule = RulesBO()
+            rule.set_id(id)
+            rule.set_type(type)
+            rule.set_min(min)
+            rule.set_max(max)
+            rule.set_start_time(start)
+            rule.set_end_time(end)
+            result.append(rule)
 
         self._cnx.commit()
         cursor.close()
@@ -75,15 +83,20 @@ class RulesMapper(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT ain  FROM rules WHERE id={}".format(
+        command = "SELECT id, type, min, max, start, end  FROM rules WHERE id={}".format(
             id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id) = tuples[0]
-            rule = RuleBO()
+            (id, type, min, max, start, end) = tuples[0]
+            rule = RulesBO()
             rule.set_id(id)
+            rule.set_type(type)
+            rule.set_min(min)
+            rule.set_max(max)
+            rule.set_start_time(start)
+            rule.set_end_time(end)
             result = rule
 
         except IndexError:
@@ -100,8 +113,13 @@ class RulesMapper(Mapper):
         cursor = self._cnx.cursor()
 
         command = "UPDATE rules " + \
-            "SET ain=%s WHERE id=%s"
-        data = (rule.get_ain())
+                  "SET min=%s, max=%s, start=%s, end=%s WHERE id=%s"
+        data = (rule.get_id(),
+                rule.get_type(),
+                rule.get_min(),
+                rule.get_max(),
+                rule.get_start_time(),
+                rule.get_end_time())
         cursor.execute(command, data)
 
         self._cnx.commit()

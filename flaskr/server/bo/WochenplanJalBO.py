@@ -52,4 +52,3 @@ class WeeklyPlanJalBO(Businessobject):
         return "id: {}, weekday: {}, monday_id: {}, tuesday_id: {}, wednesday_id: {}, thursday_id: {}, friday_id: {}".format(
             self.get_id(), self.get_weekday(), self.get_monday_id(), self.get_tuesday_id(), self.get_wednesday_id(),
             self.get_thursday_id(), self.get_friday_id())
-
