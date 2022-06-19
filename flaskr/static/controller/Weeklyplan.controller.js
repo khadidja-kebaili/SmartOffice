@@ -35,31 +35,19 @@ sap.ui.define([
                     var data = result.d.results
                     
                     data.map(function(eintrag, index) {
-                      if(eintrag.day == "Mo"){
-                          mondayData.push(eintrag)
-                      }
-                      if(eintrag.day == "Di"){
-                          tuesdayData.push(eintrag)
-                      }
-                      if(eintrag.day == "Mi"){
-                          wednesdayData.push(eintrag)
-                      }
-                      if(eintrag.day == "Do"){
-                          thursdayData.push(eintrag)
-                      }
-                      if(eintrag.day == "Fr"){
-                          fridayData.push(eintrag)
-                      }
-                      })       
+                      
+                      mondayData.push(eintrag)
+                      })     
+                    console.log(mondayData)  
                     var oModel = new sap.ui.model.json.JSONModel({data: mondayData});
                     self.getView().setModel(oModel);
                 })
             },
             
             getData: function () {
-              console.log('Get data für Wochenplan Jalousien')
+              console.log('Get data für Wochenplan Jalousien MONTAG')
               return jQuery.ajax({
-                url: "/WochenplanJalousien",
+                url: "/GetStandardJalousienMonday",
                 type: "GET"
               });
             },
@@ -117,28 +105,28 @@ sap.ui.define([
                 //var oThis = this;
                 console.log('objSave', obj, "path", path, "obj.", )
                 var oData = {
-                    'jalousien_id': 1,
-                    'day': obj.day,
                     'start': obj.startzeit,
                     'end': obj.endzeit, 
-                    'wert': obj.wert
+                    'value': parseInt(obj.wert)
                 };
                 console.log(oData)
-                //jQuery.ajax({
-                    //url : "/",
-                    //type : "POST",
-                    //dataType : "json",
-                    //async : true,
-                    //data : oData,
-                    //success : function(response){
-                        //MessageToast.show(response.data.message);
-                        //oThis.makeGraph(response.graph);
-                        //sap.ui.core.BusyIndicator.hide();
-                    //},
-                    //error: function(response){
-                        //console.log(response);
-                    //}
-                //});
+                console.log(obj.wert)
+                console.log(parseInt(obj.wert))
+                jQuery.ajax({
+                    url : "/SetJalousienStandardMonday",
+                    type : "POST",
+                    dataType : "json",
+                    async : true,
+                    data : oData,
+                    success : function(response){
+                        MessageToast.show(response.data.message);
+      
+                        sap.ui.core.BusyIndicator.hide();
+                    },
+                    error: function(response){
+                        console.log(response);
+                    }
+                });
 
               },
               removeEntry: function (oEvent) {

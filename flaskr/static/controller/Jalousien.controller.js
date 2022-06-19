@@ -9,6 +9,7 @@ sap.ui.define([
     var self;
     return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Jalousien", {
         onInit: function () {
+            self = this;
             this.oModelSettings = new JSONModel({
                 maxIterations: 200,
                 maxTime: 500,
@@ -18,8 +19,24 @@ sap.ui.define([
             this.getView().setModel(this.oModelSettings, "settings");
             this.getView().setModel(sap.ui.getCore().getModel("TestModel"), "TestModel");
             sap.ui.core.BusyIndicator.hide(0);
-
+            let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.getRoute("jalousien").attachMatched(this._onRouteMatched, this);
         },
+        _onRouteMatched : function (oEvent){
+            this.getStatus().done(function(result) {
+            
+                console.log(result.d.results[0])  
+                var currentvalue = result.d.results[0]
+                self.byId("sliderrealtime").setValue(currentvalue)       
+            })
+        },
+        getStatus: function() {
+            return jQuery.ajax({
+                url: "/LastStatusJalousien",
+                type: "GET"
+              });
+        },
+
         onLiveChange: function (oEvent) {
             var sNewValue = oEvent.getParameter("value");
             this.byId("getValue").setText(sNewValue);

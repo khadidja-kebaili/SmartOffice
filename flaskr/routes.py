@@ -55,10 +55,7 @@ def LastStatusJalousien():
 
     last_status = adm.get_last_status()
 
-    odata['d']['results'].append({
-        'date': last_status.get_date(),
-        'percentage': last_status.get_percentage()
-    })
+    odata['d']['results'].append(last_status.get_percentage())
 
     return jsonify(odata)
 
@@ -73,11 +70,13 @@ def set_jal():
     adm = DeviceAdministration()
 
     data = request.form["value"]
+    data = int(data)
     time.sleep(4)
     adm.set_status_to_percentage_by_id(1, data)
     jal = adm.get_last_status()
     print('Jal: ', jal)
-    return data
+    x = "Hi"
+    return x
 
 
 @app.route('/Status', methods=["GET"])
@@ -158,22 +157,29 @@ def get_entries_jal_monday():
     Return a simple odata container with date time information
     :return:
     """
-    adm = DeviceAdministration()
+    #adm = DeviceAdministration()
 
     odata = {
         'd': {
-            'results': []
+            'results': [
+                {
+                    "id": 1,
+                    "startzeit": "14:00:00",
+                    "endzeit": "15:00:00",
+                    "wert": 70
+                }
+            ]
         }
     }
 
-    entries = adm.get_all_jal_standard_entries_monday()
-    for elem in entries:
-        odata['d']['results'].append({
-            'id': elem.get_id(),
-            'start': elem.get_start_time(),
-            'end': elem.get_end_time(),
-            'value': elem.get_value()
-        })
+    #entries = adm.get_all_jal_standard_entries_monday()
+    #for elem in entries:
+        #odata['d']['results'].append({
+            #'id': elem.get_id(),
+            #'start': elem.get_start_time(),
+            #'end': elem.get_end_time(),
+            #'value': elem.get_value()
+        #})
 
     return jsonify(odata)
 
@@ -294,9 +300,11 @@ def set_jal_standard_monday():
     start = request.form["start"]
     end = request.form["end"]
     value = request.form["value"]
+    value = int(value)
     time.sleep(4)
+    x = "hi"
     adm.set_jal_standard_entry_monday(start, end, value)
-    return start, end, value
+    return x
 
 
 @app.route('/SetJalousienStandardTuesday', methods=["POST"])
