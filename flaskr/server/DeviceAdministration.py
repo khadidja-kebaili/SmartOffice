@@ -791,7 +791,7 @@ class DeviceAdministration(object):
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
                     message = 'Die No_Access Zeit ist eingetroffen'
                     return message
-            elif elem.get_min() is not None and elem.get_max() is not None and  temp > elem.get_max() or temp < elem.get_min():
+            elif temp > elem.get_max() or temp < elem.get_min():
                 message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(), 'Maxtemp:', elem.get_max()
                 return message
             else:
@@ -907,6 +907,18 @@ class DeviceAdministration(object):
     def get_rule_by_id(self, id):
         with RulesMapper() as mapper:
             return mapper.find_by_key(id)
+
+    def get_min_temp(self):
+        rules = self.get_all_temp_rules()
+        for elem in rules:
+            if elem.get_max() is None and elem.get_min() is not None and elem.get_start_time() is None:
+                return elem.get_min()
+
+    def get_max_temp(self):
+        rules = self.get_all_temp_rules()
+        for elem in rules:
+            if elem.get_min() is None and elem.get_max() is not None and elem.get_start_time() is None:
+                return elem.get_max()
 
 
     def overlapping(self, new_start, new_end, old_start, old_end):
