@@ -45,7 +45,7 @@
                                                 id="TP1"
                                                 width="70%"
                                                 value="{startzeit}"
-                                                valueFormat="HH:mm"
+                                                valueFormat="HH:mm:ss"
                                                 displayFormat="HH:mm"
                                                 change="handleChange"
                                                 visible="{path: 'saveNew', formatter: '.enableControl'}"/>
@@ -56,7 +56,7 @@
                                                 id="TP2"
                                                 width="70%"
                                                 value="{endzeit}"
-                                                valueFormat="HH:mm"
+                                                valueFormat="HH:mm:ss"
                                                 displayFormat="HH:mm"
                                                 change="handleChange"
                                                 visible="{path: 'saveNew', formatter: '.enableControl'}"/>

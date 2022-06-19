@@ -610,6 +610,8 @@ class DeviceAdministration(object):
     def set_temp_standard_entry_monday(self, start, end, temp):
         trigger = False
         rules = self.get_all_temp_rules()
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
@@ -657,9 +659,15 @@ class DeviceAdministration(object):
         with MondayMapper() as mapper:
             return mapper.delete(entry)
 
+    def delete_jal_monday_ById(self, id):
+        with MondayMapper() as mapper:
+            return mapper.delete_byId(id)
+
     def set_temp_standard_entry_tuesday(self, start, end, temp):
         trigger = False
         rules = self.get_all_temp_rules()
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
@@ -711,6 +719,8 @@ class DeviceAdministration(object):
     def set_temp_standard_entry_wednesday(self, start, end, temp):
         trigger = False
         rules = self.get_all_temp_rules()
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
@@ -762,6 +772,8 @@ class DeviceAdministration(object):
     def set_temp_standard_entry_thursday(self, start, end, temp):
         trigger = False
         rules = self.get_all_temp_rules()
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
@@ -813,6 +825,8 @@ class DeviceAdministration(object):
     def set_temp_standard_entry_friday(self, start, end, temp):
         trigger = False
         rules = self.get_all_temp_rules()
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):

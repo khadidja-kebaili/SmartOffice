@@ -85,7 +85,8 @@ sap.ui.define([
               addEmptyObject : function() {
                 var oModel = this.getView().getModel();
                 var aData  = oModel.getProperty("/data");
-
+                console.log(oModel)
+                console.log(aData)
                 var emptyObject = { createNew: true, removeNew: false};
 
                 aData.push(emptyObject);
@@ -205,6 +206,24 @@ sap.ui.define([
                 var obj = oEvent.getSource().getBindingContext().getObject();
                 console.log('objDelte', obj)
                 MessageToast.show("Löschen Eintrag mit ID:" + obj.id)  
+                var oData = {
+                  'id_entry': obj.id,
+                  'test': 1
+                  };
+                console.log(oData)
+                 //jQuery.ajax({
+                    //url : "/DeleteStandardJalousienMonday",
+                    //type : "POST",
+                    //dataType : "json",
+                    //data: oData,
+                    //success : function(response){
+                       // MessageToast.show(response.data.message);
+                       // sap.ui.core.BusyIndicator.hide();
+                    //},
+                    //error: function(response){
+                    //    console.log(response);
+                    //}
+                //});
             },
             onSelectionChange: function (oEvent) {
                 //MessageToast.show("Ausgewählter Wochentag:" + oEvent.getParameter("item").getText() );

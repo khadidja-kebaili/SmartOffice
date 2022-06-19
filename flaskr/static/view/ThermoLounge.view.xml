@@ -7,63 +7,44 @@
     xmlns:layout="sap.ui.layout"
     height="100%"
 >
-	<f:DynamicPage id="dpJalousien" headerExpanded="{/headerExpanded}" toggleHeaderOnTitleClick="{/titleClickable}" showFooter="true">
-		
-        <!-- DynamicPage Title -->
-			<f:title>
-				<f:DynamicPageTitle id="dptitle">
-					<f:heading>
-						<Title id="maintitle" text="Thermostate"/>
-					</f:heading>
-					
-					<f:expandedContent>
-						<Label id="expandedc" text="Konfiguration der Thermostate bei Quanto Solutions"/>
-					</f:expandedContent>
-					<f:snappedContent>
-						<Label id="snappedc" text="Konfiguration der Thermostate bei Quanto Solutions"/>
-					</f:snappedContent>
-					<f:snappedTitleOnMobile>
-						<Title id="snappedmobile" text="Konfiguration der Thermostate bei Quanto Solutions"/>
-					</f:snappedTitleOnMobile>
-				</f:DynamicPageTitle>
-			</f:title>
-
-		<!-- DynamicPage Header -->
-            <f:header>
-				<f:DynamicPageHeader id="dpheader" pinnable="false">
-					<layout:VerticalLayout id="verticallayoutheader" >
-                        <core:Icon id="iconsettings" src="sap-icon://action-settings" class="size3"> </core:Icon>
-					</layout:VerticalLayout>
-				</f:DynamicPageHeader>
-		    </f:header>
-
-        <!-- Page Content -->
-            <f:content>
-            <layout:VerticalLayout id="verticallayoutcontent" width="100%">
-                <Text id="textThermo" text="Aktuelle Temperatur"/>
-                <StepInput
-                    id="CurrentTemp"
-                    value="20"
-                    width="130px"
-                />
-                <Text id="textMinTemp" text="Mindesttemperatur"/>
-                <StepInput
-                    id="MinTemp"
-                    value="18"
-                    width="130px"
-                />
-
-            </layout:VerticalLayout>
-            </f:content>
+	<Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page id="page" title="Thermostate" titleAlignment="Center" showNavButton="true" navButtonPress="onNavBack">
+                    <content> 
+                        <layout:VerticalLayout id="verticallayoutcontent" width="100%" alignItems="Center">
+                        <VBox alignItems="Center" width="100%">
+                            <Text id="textThermo" text="Aktuelle Temperatur" class="sapUiMediumMarginTop sapUiSmallMarginBottom" />
+                            <StepInput
+                                id="CurrentTemp"
+                                value="20"
+                                width="100%"
+                                textAlign="Center"
+                            />
+                        </VBox>
+                        <VBox alignItems="Center" width="100%">
+                            <Text id="textMinTemp" text="Mindesttemperatur" class="sapUiMediumMarginTop sapUiSmallMarginBottom"/>
+                            <StepInput
+                                id="MinTemp"
+                                value="18"
+                                width="100%"
+                                textAlign="Center"
+                            />
+                        </VBox>
+                        </layout:VerticalLayout>
+                        </content>
 
         <!-- DynamicPage Footer -->
-		    <f:footer>
+		    <footer>
 				<OverflowToolbar id="toolbarjalousien" class="sapUiMediumMarginTop">
                     <ToolbarSpacer id="tbs1"/>
                     <!-- <Button id="buttonMinTemp" text="Min. Temp." /> -->
                     <Button id="buttonWopl" text="Wochenplan" press="pressnavWeeklyPlanThermo"/>
                     <ToolbarSpacer id="tbs2"/>
                 </OverflowToolbar>
-			</f:footer>
-        </f:DynamicPage>
+			</footer>
+        </Page>
+        </pages>
+        </App>
+    </Shell>
 </mvc:View>
