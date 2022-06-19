@@ -1,5 +1,5 @@
-from database.Mapper import Mapper
-from bo.RulesBO import RulesBO
+from flaskr.server.database.Mapper import Mapper
+from flaskr.server.bo.RulesBO import RulesBO
 
 
 class RulesMapper(Mapper):

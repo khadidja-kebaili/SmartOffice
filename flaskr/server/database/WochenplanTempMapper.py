@@ -1,5 +1,5 @@
-from database.Mapper import Mapper
-from server.bo.WochenplanThermoBO import WeeklyPlanTempBO
+from flaskr.server.database.Mapper import Mapper
+from flaskr.server.bo.WochenplanThermoBO import WeeklyPlanTempBO
 
 
 class WeeklyPlanTempMapper(Mapper):

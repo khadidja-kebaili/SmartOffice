@@ -1,4 +1,4 @@
-from server.bo.BusinessObject import Businessobject as bo
+from flaskr.server.bo.BusinessObject import Businessobject as bo
 
 
 class JalousienStatusBO(bo):

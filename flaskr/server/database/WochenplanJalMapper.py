@@ -1,5 +1,5 @@
-from database.Mapper import Mapper
-from server.bo.WochenplanJalBO import WeeklyPlanJalBO
+from flaskr.server.database.Mapper import Mapper
+from flaskr.server.bo.WochenplanJalBO import WeeklyPlanJalBO
 
 
 class WeeklyPlanJalMapper(Mapper):
