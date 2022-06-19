@@ -1,4 +1,4 @@
-from server.bo.weekdays_jal.WeekdayBO import Weekday
+from flaskr.server.bo.weekdays_jal.WeekdayBO import Weekday
 
 
 class Wednesday(Weekday):

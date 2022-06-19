@@ -1,4 +1,4 @@
-from bo.BusinessObject import Businessobject
+from flaskr.server.bo.BusinessObject import Businessobject
 
 
 class RulesBO(Businessobject):

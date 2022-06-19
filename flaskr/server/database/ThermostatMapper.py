@@ -1,5 +1,5 @@
-from server.database.Mapper import Mapper
-from ..bo.Thermostat import ThermostatBO
+from flaskr.server.database.Mapper import Mapper
+from flaskr.server.bo.Thermostat import ThermostatBO
 
 
 class ThermostatMapper(Mapper):

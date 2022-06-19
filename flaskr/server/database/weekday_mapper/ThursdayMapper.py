@@ -1,5 +1,5 @@
-from server.database.Mapper import Mapper
-from server.bo.weekdays_jal.ThursdayBO import Thursday
+from flaskr.server.database.Mapper import Mapper
+from flaskr.server.bo.weekdays_jal.ThursdayBO import Thursday
 
 class ThursdayMapper(Mapper):
 
