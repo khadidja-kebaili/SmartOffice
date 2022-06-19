@@ -27,18 +27,50 @@ sap.ui.define([
             },
 
             _onRouteMatched : function (oEvent){
-                this.getStatus().done(function(result) {
+
+                //Jal
+                this.getActualValueJal().done(function(result) {
 
                     console.log(result.d.results[0])
-                    var wert = result.d.results[0]
-                    self.byId("testtext").setText(wert)
+                    var actualValueJal = result.d.results[0]
+                    self.byId("actualvaluejalid").setText(actualValueJal)
                 })
+                /*this.getSupposedValueJal().done(function(result)
+
+                    console.log(result.d.results[0])
+                    var supposedValueJal = result.d.results[0]
+                    self.byId("supposedvaluejalid").setText(supposedValueJal)
+                })*/
+
+                //Temp
+                /*this.getActualValueTemp().done(function(result) {
+
+                    console.log(result.d.results[0])
+                    var actualValueTemp = result.d.results[0]
+                    self.byId("actualvaluetempid").setText(actualValueTemp)
+                })*/
+                /*this.getSupposedValueTemp().done(function(result)
+
+                    console.log(result.d.results[0])
+                    var supposedValueTemp = result.d.results[0]
+                    self.byId("supposedvaluetempid").setText(supposedValueTemp)
+                })*/
             },
-            getStatus: function() {
+
+            //Jal
+            getActualValueJal: function() {
             return jQuery.ajax({
                 url: "/LastStatusJalousien",
                 type: "GET"
               });
+
             },
+
+            /*getSupposedValueJal: function() {
+            return jQuery.ajax({
+                url: "",
+                type: "GET"
+              });
+            },*/
         });
     });
