@@ -4,50 +4,71 @@ sap.ui.define([
     "sap/m/MessageToast",
     'sap/ui/core/Element',
     'sap/ui/core/Core',
-], function(SmartOfficeController, JSONModel, MessageToast, Element) {
+    "sap/ui/core/routing/History"
+], function(SmartOfficeController, JSONModel, MessageToast, Element, Core, History) {
         "use strict";
 
         var self;
-        var dummyData = [{"id": 1, "day":"Mo", "startzeit":"8:00","endzeit":"10:00","wert":23},
-                {"id": 2, "day":"Mo", "startzeit":"10:00","endzeit":"12:00","wert":23.2},
-                {"id": 3, "day":"Di","startzeit":"12:00","endzeit":"14:00","wert":19},
-                {"id": 4, "day":"Mi","startzeit":"13:00","endzeit":"14:00","wert":23},
-                {"id": 5, "day":"Do","startzeit":"14:00","endzeit":"15:00","wert":44},
-                {"id": 6, "day":"Fr","startzeit":"15:00","endzeit":"19:00","wert":23}, ]
-                var mondayData = []
-                var tuesdayData = []
-                var wednesdayData = []
-                var thursdayData = []
-                var fridayData = []
+        var mondayData = []
+        var tuesdayData = []
+        var wednesdayData = []
+        var thursdayData = []
+        var fridayData = []
 
-                dummyData.map(function(eintrag, index) {
-                if(eintrag.day == "Mo"){
-                    mondayData.push(eintrag)
-                }
-                if(eintrag.day == "Di"){
-                    tuesdayData.push(eintrag)
-                }
-                if(eintrag.day == "Mi"){
-                    wednesdayData.push(eintrag)
-                }
-                if(eintrag.day == "Do"){
-                    thursdayData.push(eintrag)
-                }
-                if(eintrag.day == "Fr"){
-                    fridayData.push(eintrag)
-                }
-                })
         return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Weeklyplan", {
             onInit : function() {
-                    var oModel = new sap.ui.model.json.JSONModel({data : mondayData});
+                    self = this;
+                    var oModel = new sap.ui.model.json.JSONModel({"id": null, "day": null, "startzeit":null,"endzeit":null,"wert":null});
                     this.getView().setModel(oModel);
+                    let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                    oRouter.getRoute("wochenplan").attachMatched(this._onRouteMatched, this);
               },
+              
+            _onRouteMatched : function (oEvent){
+                mondayData.length = 0
+                tuesdayData.length = 0
+                wednesdayData.length = 0
+                thursdayData.length = 0
+                fridayData.length = 0
+                this.getData().done(function(result) {
+                    
+                    var data = result.d.results
+                    
+                    data.map(function(eintrag, index) {
+                      if(eintrag.day == "Mo"){
+                          mondayData.push(eintrag)
+                      }
+                      if(eintrag.day == "Di"){
+                          tuesdayData.push(eintrag)
+                      }
+                      if(eintrag.day == "Mi"){
+                          wednesdayData.push(eintrag)
+                      }
+                      if(eintrag.day == "Do"){
+                          thursdayData.push(eintrag)
+                      }
+                      if(eintrag.day == "Fr"){
+                          fridayData.push(eintrag)
+                      }
+                      })       
+                    var oModel = new sap.ui.model.json.JSONModel({data: mondayData});
+                    self.getView().setModel(oModel);
+                })
+            },
+            
+            getData: function () {
+              console.log('Get data für Wochenplan Jalousien')
+              return jQuery.ajax({
+                url: "/WochenplanJalousien",
+                type: "GET"
+              });
+            },
 
               addEmptyObject : function() {
                 var oModel = this.getView().getModel();
                 var aData  = oModel.getProperty("/data");
 
-                var emptyObject = { createNew: true};
+                var emptyObject = { createNew: true, removeNew: false};
 
                 aData.push(emptyObject);
                 oModel.setProperty("/data", aData);
@@ -127,9 +148,8 @@ sap.ui.define([
                 MessageToast.show("Löschen Eintrag mit ID:" + obj.id)  
             },
             onSelectionChange: function (oEvent) {
-                MessageToast.show("Ausgewählter Wochentag:" + oEvent.getParameter("item").getText() );
-                
-                
+                //MessageToast.show("Ausgewählter Wochentag:" + oEvent.getParameter("item").getText() );
+              
                 var selectedDay = oEvent.getParameter("item").getText()
                 if(selectedDay == "Mo"){
                     var oModel = new sap.ui.model.json.JSONModel({data : mondayData});
@@ -152,8 +172,21 @@ sap.ui.define([
                     this.getView().setModel(oModel);
                 }
             },
+            onNavBack: function(){
+
+              var oHistory = History.getInstance();
+              var sPreviousHash = oHistory.getPreviousHash();
+
+              if (sPreviousHash !== undefined) {
+                window.history.go(-1);
+              } else {
+                var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                oRouter.navTo("/", {}, true);
+              }
+            }
+            
 
 		});
 
-        });
+});
         

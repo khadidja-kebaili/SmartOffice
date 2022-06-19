@@ -1,8 +1,9 @@
 sap.ui.define([
     "../controller/SmartOffice.controller",
     "sap/ui/model/json/JSONModel",
-    "sap/m/MessageToast"
-], function(SmartOfficeController, JSONModel, MessageToast) {
+    "sap/m/MessageToast",
+    "sap/ui/core/routing/History"
+], function(SmartOfficeController, JSONModel, MessageToast, History) {
         "use strict";
 
         var self;
@@ -55,5 +56,17 @@ sap.ui.define([
                     }
                 });
             },
+            onNavBack: function(){
+
+              var oHistory = History.getInstance();
+              var sPreviousHash = oHistory.getPreviousHash();
+
+              if (sPreviousHash !== undefined) {
+                window.history.go(-1);
+              } else {
+                var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                oRouter.navTo("/", {}, true);
+              }
+            }
         });
     });

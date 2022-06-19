@@ -4,7 +4,8 @@ sap.ui.define([
     "sap/m/MessageToast",
     'sap/ui/core/Element',
     'sap/ui/core/Core',
-], function(SmartOfficeController, JSONModel, MessageToast, Element) {
+    "sap/ui/core/routing/History"
+], function(SmartOfficeController, JSONModel, MessageToast, Element, Core, History) {
         "use strict";
 
         var self;
@@ -47,7 +48,7 @@ sap.ui.define([
                     var oModel = new sap.ui.model.json.JSONModel({data: datatest2});
                     self.getView().setModel(oModel);
                     self.addEmptyObject();
-                    console.log("Jetzt bin ich am Ende")
+                    //console.log("Jetzt bin ich am Ende")
                 })
 
                 //var oModel = new sap.ui.model.json.JSONModel({data: datatest2});
@@ -176,7 +177,19 @@ sap.ui.define([
 				} else {
 					oTP.setValueState(ValueState.Error);
 				}
-			}
+			},
+            onNavBack: function(){
+
+              var oHistory = History.getInstance();
+              var sPreviousHash = oHistory.getPreviousHash();
+
+              if (sPreviousHash !== undefined) {
+                window.history.go(-1);
+              } else {
+                var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                oRouter.navTo("/", {}, true);
+              }
+            }
 
 		});
 
