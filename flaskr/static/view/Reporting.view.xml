@@ -68,7 +68,7 @@
 
             <!-- WLAN-Jalousienmodul Card Control Content folgt, !muss angepasst werden!-->
                 <f:content>
-                    <Button id="testbutton" text="testbutton" press="press('LastStatusJalousien')"/> -->
+                    <Button id="testbutton" text="testbutton" press="press('LastStatusJalousien')"/>
                     <List
                         id="attachmentsList"
                         itemPress="masterListItemSelected"
