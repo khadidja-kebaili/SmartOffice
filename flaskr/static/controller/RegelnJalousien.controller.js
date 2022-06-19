@@ -13,7 +13,7 @@ sap.ui.define([
         return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.RegelnJalousien", {
             onInit : function() {
                 self = this;
-                var oModel = new sap.ui.model.json.JSONModel({"id": null, "startzeit":null,"endzeit":null,"wert":null});
+                var oModel = new sap.ui.model.json.JSONModel({"id": null, "startzeit":null,"endzeit":null,"min":null,"max": null});
                 this.getView().setModel(oModel)
                 let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.getRoute("regelnjalousien").attachMatched(this._onRouteMatched, this);
@@ -24,7 +24,7 @@ sap.ui.define([
                 var oModel = this.getView().getModel();
                 var aData  = oModel.getProperty("/data");
 
-                var emptyObject = { createNew: true};
+                var emptyObject = { createNew: true };
 
                 aData.push(emptyObject);
                 oModel.setProperty("/data", aData);
@@ -37,19 +37,20 @@ sap.ui.define([
                
             },
             _onRouteMatched : function (oEvent){
-                var datatest2 = []
-                this.getData().done(function(result) {
+              this.addEmptyObject()
+                //var datatest2 = []
+                //this.getData().done(function(result) {
                     
-                    var dummyDatat = result.d.results
-                    dummyDatat.map(function(eintrag, index) {
-                        datatest2.push(eintrag)
-                    })
-                    console.log(datatest2)                
-                    var oModel = new sap.ui.model.json.JSONModel({data: datatest2});
-                    self.getView().setModel(oModel);
-                    self.addEmptyObject();
+                    //var dummyDatat = result.d.results
+                    //dummyDatat.map(function(eintrag, index) {
+                        //datatest2.push(eintrag)
+                    //})
+                    //console.log(datatest2)                
+                    //var oModel = new sap.ui.model.json.JSONModel({data: datatest2});
+                    //self.getView().setModel(oModel);
+                    //self.addEmptyObject();
                     //console.log("Jetzt bin ich am Ende")
-                })
+                //})
 
                 //var oModel = new sap.ui.model.json.JSONModel({data: datatest2});
                 //this.getView().setModel(oModel);
@@ -78,7 +79,8 @@ sap.ui.define([
                   id: null,
                   startzeit: null,
                   endzeit: null, 
-                  wert: null,
+                  min: null,
+                  max: null,
                   createNew: false,
                   removeNew: false,
                   saveNew: true,

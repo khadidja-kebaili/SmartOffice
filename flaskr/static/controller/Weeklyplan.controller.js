@@ -30,24 +30,54 @@ sap.ui.define([
                 wednesdayData.length = 0
                 thursdayData.length = 0
                 fridayData.length = 0
-                this.getData().done(function(result) {
-                    
+                this.getData("/GetStandardJalousienMonday").done(function(result) {
                     var data = result.d.results
-                    
                     data.map(function(eintrag, index) {
-                      
                       mondayData.push(eintrag)
                       })     
                     console.log(mondayData)  
                     var oModel = new sap.ui.model.json.JSONModel({data: mondayData});
                     self.getView().setModel(oModel);
+                  
+                })
+                this.getData("/GetStandardJalousienTuesday").done(function(result) {
+                  var data = result.d.results
+                  data.map(function(eintrag, index) {
+                    tuesdayData.push(eintrag)
+                    })     
+                  console.log(mondayData)  
+              
+                })
+                this.getData("/GetStandardJalousienWednesday").done(function(result) {
+                  var data = result.d.results
+                  data.map(function(eintrag, index) {
+                    wednesdayData.push(eintrag)
+                    })     
+                  console.log(mondayData)  
+              
+                })
+                this.getData("/GetStandardJalousienThursday").done(function(result) {
+                  var data = result.d.results
+                  data.map(function(eintrag, index) {
+                    thursdayData.push(eintrag)
+                    })     
+                  console.log(mondayData)  
+              
+                })
+                this.getData("/GetStandardJalousienFriday").done(function(result) {
+                  var data = result.d.results
+                  data.map(function(eintrag, index) {
+                    fridayData.push(eintrag)
+                    })     
+                  console.log(mondayData)  
+              
                 })
             },
             
-            getData: function () {
-              console.log('Get data für Wochenplan Jalousien MONTAG')
+            getData: function (url) {
+              console.log('Get data für Wochenplan Jalousien')
               return jQuery.ajax({
-                url: "/GetStandardJalousienMonday",
+                url: url,
                 type: "GET"
               });
             },
@@ -104,30 +134,71 @@ sap.ui.define([
                 sap.ui.core.BusyIndicator.hide(0);
                 //var oThis = this;
                 console.log('objSave', obj, "path", path, "obj.", )
-                var oData = {
+              
+                if(obj.day == "Mo"){
+                    console.log("Send Monday")
+                    var oData = {
                     'start': obj.startzeit,
                     'end': obj.endzeit, 
                     'value': parseInt(obj.wert)
+                    };
+                    this.sendValues(oData, "/SetJalousienStandardMonday")
+                }
+                if(obj.day == "Di"){
+                  console.log("Send Tuesday")
+                  var oData = {
+                  'start': obj.startzeit,
+                  'end': obj.endzeit, 
+                  'value': parseInt(obj.wert)
+                  };
+                  this.sendValues(oData, "/SetJalousienStandardTuesday")
+                }
+                if(obj.day == "Mi"){
+                  console.log("Send Wednesday")
+                  var oData = {
+                  'start': obj.startzeit,
+                  'end': obj.endzeit, 
+                  'value': parseInt(obj.wert)
+                  };
+                  this.sendValues(oData, "/SetJalousienStandardWednesday")
+              }
+                if(obj.day == "Do"){
+                  console.log("Send Thursday")
+                  var oData = {
+                  'start': obj.startzeit,
+                  'end': obj.endzeit, 
+                  'value': parseInt(obj.wert)
+                  };
+                  this.sendValues(oData, "/SetJalousienStandardThursday")
+              }
+              if(obj.day == "Fr"){
+                console.log("Send Friday")
+                var oData = {
+                'start': obj.startzeit,
+                'end': obj.endzeit, 
+                'value': parseInt(obj.wert)
                 };
-                console.log(oData)
-                console.log(obj.wert)
-                console.log(parseInt(obj.wert))
-                jQuery.ajax({
-                    url : "/SetJalousienStandardMonday",
-                    type : "POST",
-                    dataType : "json",
-                    async : true,
-                    data : oData,
-                    success : function(response){
-                        MessageToast.show(response.data.message);
-      
-                        sap.ui.core.BusyIndicator.hide();
-                    },
-                    error: function(response){
-                        console.log(response);
-                    }
-                });
+                this.sendValues(oData, "/SetJalousienStandardFriday")
+            }
 
+
+              },
+              sendValues: function(oData, url) {
+                jQuery.ajax({
+                  url : url,
+                  type : "POST",
+                  dataType : "json",
+                  async : true,
+                  data : oData,
+                  success : function(response){
+                      MessageToast.show(response.data.message);
+    
+                      sap.ui.core.BusyIndicator.hide();
+                  },
+                  error: function(response){
+                      console.log(response);
+                  }
+              });
               },
               removeEntry: function (oEvent) {
                 var path = oEvent.getSource().getBindingContext().getPath();

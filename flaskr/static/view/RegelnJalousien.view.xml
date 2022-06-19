@@ -25,7 +25,10 @@
                                         <Text text="Endzeit" />
                                     </Column>
                                     <Column>
-                                        <Text text="%" />
+                                        <Text text="Mindest-%" />
+                                    </Column>
+									<Column>
+                                        <Text text="Max.-%" />
                                     </Column>
                                 </columns>
                                 <items>
@@ -59,8 +62,16 @@
                                                 visible="{path: 'saveNew', formatter: '.enableControl'}"/>
                                             </HBox>
                                             <HBox>
-                                                <Text  text="{wert}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
-                                                <Input id="inputWert" value="{wert}"
+                                                <Text  text="{min}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
+                                                <Input id="inputWertMin" value="{min}"
+                                                type="Number"
+			                                    placeholder="1-100"
+                                                visible="{path: 'saveNew', formatter: '.enableControl'}"
+		                                        />
+                                            </HBox>
+											<HBox>
+                                                <Text  text="{max}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
+                                                <Input id="inputWertMax" value="{max}"
                                                 type="Number"
 			                                    placeholder="1-100"
                                                 visible="{path: 'saveNew', formatter: '.enableControl'}"
