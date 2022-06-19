@@ -1,0 +1,78 @@
+<mvc:View xmlns:core="sap.ui.core"
+		controllerName="com.quanto.solutions.ui.smartoffice.controller.RegelnJalousien"
+		xmlns:mvc="sap.ui.core.mvc"
+		xmlns="sap.m"
+		xmlns:f="sap.f"
+		xmlns:layout="sap.ui.layout"
+		height="100%">
+	<Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page id="page" title="Regeln für Jalousien verwalten" titleAlignment="Center" showNavButton="true" navButtonPress="onNavBack">
+                    <content> 
+					<Text text="Hier können Sie Regeln für die Steuerung der Jalousien festlegen. Diese sind nicht abhängig vom Wochentag und gelten immer." textAlign="Center" width="100%" class="sapUiMediumMargin"/>
+                    <!--<Button text="Neuer Eintrag" type="Emphasized" class="sapUiTinyMarginBottom sapUiSmallMarginBegin"
+						press="addEmptyObject"
+						ariaDescribedBy="defaultButtonDescription genericButtonDescription">
+					</Button> -->
+					<Table id="tbl" items="{/data}">
+                                <columns>
+                                    <Column />
+                                    <Column>
+                                        <Text text="Startzeit" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="Endzeit" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="%" />
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <HBox>
+                                                <core:Icon src="sap-icon://add"    visible="{path: 'createNew', formatter: '.enableControl'}" press="addEntry" />
+                                                <core:Icon src="sap-icon://save"   visible="{path: 'saveNew',   formatter: '.enableControl'}" press="saveEntry" />
+                                                <core:Icon src="sap-icon://delete" visible="{path: 'removeNew', formatter: '.enableControl'}" press="removeEntry" />
+                                            </HBox>
+                                            <HBox>
+                                            <Text  text="{startzeit}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
+                                               <TimePicker
+                                                id="TP1"
+                                                width="70%"
+                                                value="{startzeit}"
+                                                valueFormat="HH:mm"
+                                                displayFormat="HH:mm"
+                                                change="handleChange"
+                                                visible="{path: 'saveNew', formatter: '.enableControl'}"/>
+                                            </HBox>
+                                            <HBox>
+                                                <Text  text="{endzeit}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
+                                               <TimePicker
+                                                id="TP2"
+                                                width="70%"
+                                                value="{endzeit}"
+                                                valueFormat="HH:mm"
+                                                displayFormat="HH:mm"
+                                                change="handleChange"
+                                                visible="{path: 'saveNew', formatter: '.enableControl'}"/>
+                                            </HBox>
+                                            <HBox>
+                                                <Text  text="{wert}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
+                                                <Input id="inputWert" value="{wert}"
+                                                type="Number"
+			                                    placeholder="1-100"
+                                                visible="{path: 'saveNew', formatter: '.enableControl'}"
+		                                        />
+                                            </HBox>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                    </content>
+                </Page>
+            </pages>
+        </App>
+    </Shell>
+</mvc:View>

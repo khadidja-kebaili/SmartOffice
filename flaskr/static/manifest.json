@@ -113,10 +113,45 @@
               ]
             },
             {
-              "name": "Wochenplan",
-              "pattern": "Wochenplan",
+              "name": "wochenplan",
+              "pattern": "wochenplan",
               "target": [
                 "TargetWochenplan"
+              ]
+            },
+            {
+              "name": "wochenplanthermo",
+              "pattern": "wochenplanthermo",
+              "target": [
+                "TargetWochenplanThermo"
+              ]
+            },
+            {
+              "name": "thermoMain",
+              "pattern": "thermoMain",
+              "target": [
+                "TargetThermoMain"
+              ]
+            },
+            {
+              "name": "thermoLounge",
+              "pattern": "thermoLounge",
+              "target": [
+                "TargetThermoLounge"
+              ]
+            },
+            {
+              "name": "reporting",
+              "pattern": "reporting",
+              "target": [
+                "TargetReporting"
+              ]
+            },
+            {
+              "name": "regelnjalousien",
+              "pattern": "regelnjalousien",
+              "target": [
+                "TargetRegelnJalousien"
               ]
             }
       ],
@@ -146,8 +181,43 @@
               "viewType": "XML",
               "transition": "slide",
               "clearControlAggregation": false,
-              "viewId": "weekly_plan",
-              "viewName": "weekly_plan"
+              "viewId": "weeklyplan",
+              "viewName": "Weeklyplan"
+            },
+            "TargetWochenplanThermo": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "weeklyplanthermo",
+              "viewName": "WeeklyplanThermo"
+            },
+            "TargetThermoMain": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "thermoMain",
+              "viewName": "ThermoMain"
+            },
+            "TargetThermoLounge": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "thermoLounge",
+              "viewName": "ThermoLounge"
+            },
+            "TargetReporting": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "reporting",
+              "viewName": "Reporting"
+            },
+            "TargetRegelnJalousien": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "regelnjalousien",
+              "viewName": "RegelnJalousien"
             }
       }
     },

@@ -175,8 +175,9 @@ class DeviceAdministration(object):
                 if self.in_between_times(date, elem.get_start_time(), elem.get_end_time()):
                     message = 'Die No_Access Zeit ist eingetroffen'
                     return message
-            elif perc> elem.get_max() or perc < elem.get_min():
-                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(), 'Maxtemp:', elem.get_max()
+            elif perc > elem.get_max() or perc < elem.get_min():
+                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
+                ), 'Maxtemp:', elem.get_max()
                 return message
             else:
                 trigger = True
@@ -215,7 +216,7 @@ class DeviceAdministration(object):
         searched_time = datetime.datetime.strptime(searched_time, '%H:%M:%S')
         searched_time = searched_time.strftime('%H%M%S')
         searched_time = float(searched_time)
-        start= datetime.datetime.strptime(start, '%H:%M:%S')
+        start = datetime.datetime.strptime(start, '%H:%M:%S')
         start = start.strftime('%H%M%S')
         start = float(start)
         end = datetime.datetime.strptime(end, '%H:%M:%S')
@@ -284,7 +285,8 @@ class DeviceAdministration(object):
                     message = 'Die No_Access Zeit ist eingetroffen'
                     return message
             elif temp > elem.get_max() or temp < elem.get_min():
-                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(), 'Maxtemp:', elem.get_max()
+                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
+                ), 'Maxtemp:', elem.get_max()
                 return message
             else:
                 trigger = True
@@ -368,7 +370,8 @@ class DeviceAdministration(object):
                     message = 'Die No_Access Zeit ist eingetroffen'
                     return message
             elif elem.get_min() is not None and elem.get_max() is not None and perc > elem.get_max() or perc < elem.get_min():
-                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(), 'Maxtemp:', elem.get_max()
+                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
+                ), 'Maxtemp:', elem.get_max()
                 return message
             else:
                 trigger = True
@@ -413,7 +416,8 @@ class DeviceAdministration(object):
                     message = 'Die No_Access Zeit ist eingetroffen'
                     return message
             elif elem.get_min() is not None and elem.get_max() is not None and perc > elem.get_max() or perc < elem.get_min():
-                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(), 'Maxtemp:', elem.get_max()
+                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
+                ), 'Maxtemp:', elem.get_max()
                 return message
             else:
                 trigger = True
@@ -458,7 +462,8 @@ class DeviceAdministration(object):
                     message = 'Die No_Access Zeit ist eingetroffen'
                     return message
             elif elem.get_min() is not None and elem.get_max() is not None and perc > elem.get_max() or perc < elem.get_min():
-                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(), 'Maxtemp:', elem.get_max()
+                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
+                ), 'Maxtemp:', elem.get_max()
                 return message
             else:
                 trigger = True
@@ -503,7 +508,8 @@ class DeviceAdministration(object):
                     message = 'Die No_Access Zeit ist eingetroffen'
                     return message
             elif elem.get_min() is not None and elem.get_max() is not None and perc > elem.get_max() or perc < elem.get_min():
-                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(), 'Maxtemp:', elem.get_max()
+                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
+                ), 'Maxtemp:', elem.get_max()
                 return message
             else:
                 trigger = True
@@ -548,7 +554,8 @@ class DeviceAdministration(object):
                     message = 'Die No_Access Zeit ist eingetroffen'
                     return message
             elif elem.get_min() is not None and elem.get_max() is not None and perc > elem.get_max() or perc < elem.get_min():
-                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(), 'Maxtemp:', elem.get_max()
+                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
+                ), 'Maxtemp:', elem.get_max()
                 return message
             else:
                 trigger = True
@@ -593,7 +600,8 @@ class DeviceAdministration(object):
                     message = 'Die No_Access Zeit ist eingetroffen'
                     return message
             elif elem.get_min() is not None and elem.get_max() is not None and temp > elem.get_max() or temp < elem.get_min():
-                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(), 'Maxtemp:', elem.get_max()
+                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
+                ), 'Maxtemp:', elem.get_max()
                 return message
             else:
                 trigger = True
@@ -642,7 +650,8 @@ class DeviceAdministration(object):
                     message = 'Die No_Access Zeit ist eingetroffen'
                     return message
             elif elem.get_min() is not None and elem.get_max() is not None and temp > elem.get_max() or temp < elem.get_min():
-                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(), 'Maxtemp:', elem.get_max()
+                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
+                ), 'Maxtemp:', elem.get_max()
                 return message
             else:
                 trigger = True
@@ -692,7 +701,8 @@ class DeviceAdministration(object):
                     message = 'Die No_Access Zeit ist eingetroffen'
                     return message
             elif elem.get_min() is not None and elem.get_max() is not None and temp > elem.get_max() or temp < elem.get_min():
-                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(), 'Maxtemp:', elem.get_max()
+                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
+                ), 'Maxtemp:', elem.get_max()
                 return message
             else:
                 trigger = True
@@ -742,7 +752,8 @@ class DeviceAdministration(object):
                     message = 'Die No_Access Zeit ist eingetroffen'
                     return message
             elif elem.get_min() is not None and elem.get_max() is not None and temp > elem.get_max() or temp < elem.get_min():
-                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(), 'Maxtemp:', elem.get_max()
+                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
+                ), 'Maxtemp:', elem.get_max()
                 return message
             else:
                 trigger = True
@@ -792,7 +803,8 @@ class DeviceAdministration(object):
                     message = 'Die No_Access Zeit ist eingetroffen'
                     return message
             elif temp > elem.get_max() or temp < elem.get_min():
-                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(), 'Maxtemp:', elem.get_max()
+                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
+                ), 'Maxtemp:', elem.get_max()
                 return message
             else:
                 trigger = True
@@ -867,7 +879,8 @@ class DeviceAdministration(object):
                 print(elem, 'wurde gelöscht.')
                 self.delete_rule(elem)
             else:
-                print('nichts passiert', start, end, elem.get_start_time(), elem.get_end_time())
+                print('nichts passiert', start, end,
+                      elem.get_start_time(), elem.get_end_time())
         with RulesMapper() as mapper:
             return mapper.insert(rule)
 
@@ -888,7 +901,8 @@ class DeviceAdministration(object):
                 print(elem, 'wurde gelöscht.')
                 self.delete_rule(elem)
             else:
-                print('nichts passiert', start, end, elem.get_start_time(), elem.get_end_time())
+                print('nichts passiert', start, end,
+                      elem.get_start_time(), elem.get_end_time())
         with RulesMapper() as mapper:
             return mapper.insert(rule)
 
@@ -920,7 +934,6 @@ class DeviceAdministration(object):
             if elem.get_min() is None and elem.get_max() is not None and elem.get_start_time() is None:
                 return elem.get_max()
 
-
     def overlapping(self, new_start, new_end, old_start, old_end):
         new_start = datetime.datetime.strptime(new_start, '%H:%M:%S').hour
         new_start = float(new_start)
@@ -932,7 +945,7 @@ class DeviceAdministration(object):
         old_end = float(old_end)
         if old_start < new_start < old_end or old_start < new_end < old_end:
             return True
-        elif old_start  == new_start and  new_end  == old_end:
+        elif old_start == new_start and new_end == old_end:
             return True
         else:
             return False
@@ -1069,6 +1082,6 @@ class DeviceAdministration(object):
         with FridayMapper() as mapper:
             return mapper.find_all()'''
 
+
 d = DeviceAdministration()
 print(d.set_temperature(240))
-

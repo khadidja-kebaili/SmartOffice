@@ -5,49 +5,23 @@
 		xmlns:f="sap.f"
 		xmlns:layout="sap.ui.layout"
 		height="100%">
-	<f:DynamicPage id="dpJalousien" headerExpanded="{/headerExpanded}" toggleHeaderOnTitleClick="{/titleClickable}" showFooter="true">
-		
-        <!-- DynamicPage Title -->
-			<f:title>
-				<f:DynamicPageTitle id="dptitle">
-					<f:heading>
-						<Title id="maintitle" text="Jalousien"/>
-					</f:heading>
-					
-					<f:expandedContent>
-						<Label id="expandedc" text="Konfiguration der Jalousien bei Quanto Solutions"/>
-					</f:expandedContent>
-					<f:snappedContent>
-						<Label id="snappedc" text="Konfiguration der Jalousien bei Quanto Solutions"/>
-					</f:snappedContent>
-					<f:snappedTitleOnMobile>
-						<Title id="snappedmobile" text="Konfiguration der Jalousien bei Quanto Solutions"/>
-					</f:snappedTitleOnMobile>
-				</f:DynamicPageTitle>
-			</f:title>
+	<Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page id="page" title="Jalousien" titleAlignment="Center" showNavButton="true" navButtonPress="onNavBack">
+                    <content> 
+						<layout:VerticalLayout id="verticallayoutcontent" width="100%">
+							<Text id="textjalousien" text="Auf wie viel Prozent sollen die Jalousien gesteuert werden?" textAlign="Center" width="100%" class="sapUiMediumMargin"/>            
+							<Slider id="slider" value="{/InputValue}" width="100%"
+								min="0" max="100"
+								showAdvancedTooltip="true"
+								showHandleTooltip="false"
+								inputsAsTooltips="true"
+								class="sapUiSmallMarginBottom" 
+								liveChange=".sendValue"/>
+							<Text id="getValue" />
 
-		<!-- DynamicPage Header -->
-            <f:header>
-				<f:DynamicPageHeader id="dpheader" pinnable="false">
-					<layout:VerticalLayout id="verticallayoutheader" >
-                        <core:Icon id="iconsettings" src="sap-icon://action-settings" class="size3"> </core:Icon>
-					</layout:VerticalLayout>
-				</f:DynamicPageHeader>
-		    </f:header>
-
-        <!-- Page Content -->
-            <f:content>
-            <layout:VerticalLayout id="verticallayoutcontent" width="100%">
-                <Text id="textjalousien" text="Auf wie viel Prozent sollen die Jalousien gesteuert werden?"/>            
-                <Slider id="slider" value="{/InputValue}" width="100%"
-                    min="0" max="100"
-                    showAdvancedTooltip="true"
-                    showHandleTooltip="false"
-                    inputsAsTooltips="true"
-                    class="sapUiSmallMarginBottom" 
-                    liveChange=".sendValue"/>
-                <Text id="getValue" />
-
+				<!--
 				<List
 					id="attachmentsList"
 					itemPress="masterListItemSelected"
@@ -70,19 +44,23 @@
 							</HBox>
 						</HBox>
 					</CustomListItem>
-				</List>
+				</List>-->
 
             </layout:VerticalLayout>
-            </f:content>
+            </content>
+                
 
         <!-- DynamicPage Footer -->
-		    <f:footer>
+		    <footer>
 				<OverflowToolbar id="toolbarjalousien" class="sapUiMediumMarginTop">
                     <ToolbarSpacer id="tbs1"/>
-                    <Button id="buttonregeln" text="Regeln" />
-                    <Button id="buttonwp" text="Wochensadsaplan" press="pressnavWeeklyPlan"/>
+                    <Button id="buttonregeln" text="Regeln" press="pressnavRegeln"/>
+                    <Button id="buttonwp" text="Wochenplan" press="pressnavWeeklyPlan"/>
                     <ToolbarSpacer id="tbs2"/>
                 </OverflowToolbar>
-			</f:footer>
-        </f:DynamicPage>
+			</footer>
+        </Page>
+        </pages>
+        </App>
+    </Shell>
 </mvc:View>

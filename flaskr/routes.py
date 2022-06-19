@@ -152,7 +152,6 @@ def get_temp():
     return jsonify(odata)
 
 
-
 @app.route('/StandardJalousienMonday', methods=["GET"])
 def get_entries_jal_monday():
     """
@@ -201,7 +200,6 @@ def get_entries_jal_tuesday():
             'end': elem.get_end_time(),
             'value': elem.get_value()
         })
-
 
     return jsonify(odata)
 
@@ -284,7 +282,6 @@ def get_entries_jal_friday():
     return jsonify(odata)
 
 
-
 @app.route('/JalousienStandardSetMonday', methods=["POST"])
 def set_jal_standard_monday():
     """
@@ -300,6 +297,7 @@ def set_jal_standard_monday():
     time.sleep(4)
     adm.set_jal_standard_entry_monday(start, end, value)
     return start, end, value
+
 
 @app.route('/JalousienStandardSetTuesday', methods=["POST"])
 def set_jal_standard_tuesday():
@@ -317,6 +315,7 @@ def set_jal_standard_tuesday():
     adm.set_jal_standard_entry_tuesday(start, end, value)
     return start, end, value
 
+
 @app.route('/JalousienStandardSetWednesday', methods=["POST"])
 def set_jal_standard_wednesday():
     """
@@ -333,6 +332,7 @@ def set_jal_standard_wednesday():
     adm.set_jal_standard_entry_wednesday(start, end, value)
     return start, end, value
 
+
 @app.route('/JalousienStandardSetThursday', methods=["POST"])
 def set_jal_standard_thursday():
     """
@@ -348,6 +348,7 @@ def set_jal_standard_thursday():
     time.sleep(4)
     adm.set_jal_standard_entry_thursday(start, end, value)
     return start, end, value
+
 
 @app.route('/JalousienStandardSetFriday', methods=["POST"])
 def set_jal_standard_friday():
@@ -401,6 +402,7 @@ def get_min_temp():
     })
 
     return jsonify(odata)
+
 
 @app.route('/Jalousien', methods=["POST"])
 def set_max_temp():
