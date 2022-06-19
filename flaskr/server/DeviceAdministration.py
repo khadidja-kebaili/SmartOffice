@@ -1081,7 +1081,3 @@ class DeviceAdministration(object):
     def get_all_temp_customized_entries_friday(self):
         with FridayMapper() as mapper:
             return mapper.find_all()'''
-
-
-d = DeviceAdministration()
-print(d.set_temperature(240))

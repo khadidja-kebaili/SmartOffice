@@ -366,6 +366,23 @@ def set_jal_standard_friday():
     adm.set_jal_standard_entry_friday(start, end, value)
     return start, end, value
 
+@app.route('/JalousienRule', methods=["POST"])
+def set_jal_rule():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    start = request.form["start"]
+    end = request.form["end"]
+    min = request.form["min"]
+    max = request.form["max"]
+    time.sleep(4)
+    adm.set_jal_rule(max, min, start, end)
+    return start, end, max, min
+
 
 @app.route('/Jalousien', methods=["POST"])
 def set_min_temp():
@@ -416,3 +433,218 @@ def set_max_temp():
     temp = adm.set_temp_rule(None, data, None, None)
     print('temp: ', temp)
     return data
+@app.route('/StandardThermostatMonday', methods=["GET"])
+def get_entries_temp_monday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    entries = adm.get_all_temp_standard_entries_monday()
+    for elem in entries:
+        odata['d']['results'].append({
+            'id': elem.get_id(),
+            'start': elem.get_start_time(),
+            'end': elem.get_end_time(),
+            'value': elem.get_value()
+        })
+
+    return jsonify(odata)
+
+
+@app.route('/StandardThermostatTuesday', methods=["GET"])
+def get_entries_temp_tuesday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    entries = adm.get_all_temp_standard_entries_tuesday()
+    for elem in entries:
+        odata['d']['results'].append({
+            'id': elem.get_id(),
+            'start': elem.get_start_time(),
+            'end': elem.get_end_time(),
+            'value': elem.get_value()
+        })
+
+    return jsonify(odata)
+
+
+@app.route('/StandardThermostatWednesday', methods=["GET"])
+def get_entries_temp_wednesday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    entries = adm.get_all_temp_standard_entries_wednesday()
+    for elem in entries:
+        odata['d']['results'].append({
+            'id': elem.get_id(),
+            'start': elem.get_start_time(),
+            'end': elem.get_end_time(),
+            'value': elem.get_value()
+        })
+
+    return jsonify(odata)
+
+
+@app.route('/StandardThermostatThursday', methods=["GET"])
+def get_entries_temp_thursday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    entries = adm.get_all_temp_standard_entries_thursday()
+    for elem in entries:
+        odata['d']['results'].append({
+            'id': elem.get_id(),
+            'start': elem.get_start_time(),
+            'end': elem.get_end_time(),
+            'value': elem.get_value()
+        })
+
+    return jsonify(odata)
+
+
+@app.route('/StandardThermostatFriday', methods=["GET"])
+def get_entries_temp_friday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    entries = adm.get_all_temp_standard_entries_friday()
+    for elem in entries:
+        odata['d']['results'].append({
+            'id': elem.get_id(),
+            'start': elem.get_start_time(),
+            'end': elem.get_end_time(),
+            'value': elem.get_value()
+        })
+
+    return jsonify(odata)
+
+
+@app.route('/ThermostatStandardSetMonday', methods=["POST"])
+def set_temp_standard_monday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    start = request.form["start"]
+    end = request.form["end"]
+    value = request.form["value"]
+    time.sleep(4)
+    adm.set_temp_standard_entry_monday(start, end, value)
+    return start, end, value
+
+
+@app.route('/ThermostatStandardSetTuesday', methods=["POST"])
+def set_temp_standard_tuesday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    start = request.form["start"]
+    end = request.form["end"]
+    value = request.form["value"]
+    time.sleep(4)
+    adm.set_temp_standard_entry_tuesday(start, end, value)
+    return start, end, value
+
+
+@app.route('/ThermostatStandardSetWednesday', methods=["POST"])
+def set_temp_standard_wednesday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    start = request.form["start"]
+    end = request.form["end"]
+    value = request.form["value"]
+    time.sleep(4)
+    adm.set_temp_standard_entry_wednesday(start, end, value)
+    return start, end, value
+
+
+@app.route('/ThermostatStandardSetThursday', methods=["POST"])
+def set_temp_standard_thursday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    start = request.form["start"]
+    end = request.form["end"]
+    value = request.form["value"]
+    time.sleep(4)
+    adm.set_temp_standard_entry_thursday(start, end, value)
+    return start, end, value
+
+
+@app.route('/ThermostatStandardSetFriday', methods=["POST"])
+def set_temp_standard_friday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    start = request.form["start"]
+    end = request.form["end"]
+    value = request.form["value"]
+    time.sleep(4)
+    adm.set_temp_standard_entry_friday(start, end, value)
+    return start, end, value
+
+
