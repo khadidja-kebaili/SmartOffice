@@ -39,6 +39,8 @@ sap.ui.define([
                 })
         return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Weeklyplan", {
             onInit : function() {
+                    var oModel = new sap.ui.model.json.JSONModel({data : mondayData});
+                    this.getView().setModel(oModel);
               },
 
               addEmptyObject : function() {
@@ -49,6 +51,7 @@ sap.ui.define([
 
                 aData.push(emptyObject);
                 oModel.setProperty("/data", aData);
+                this.addEntry();
               },
 
               enableControl : function(value) {
@@ -82,7 +85,6 @@ sap.ui.define([
               saveEntry : function(oEvent) {
                 var path = oEvent.getSource().getBindingContext().getPath();
                 var obj = oEvent.getSource().getBindingContext().getObject();
-                
                 obj.saveNew = false;
                 obj.removeNew = true;
 
@@ -92,14 +94,15 @@ sap.ui.define([
                 console.log("Neuer Wert wurde eingestellt.");
                 sap.ui.core.BusyIndicator.hide(0);
                 //var oThis = this;
+                console.log('objSave', obj, "path", path, "obj.", )
                 var oData = {
                     'jalousien_id': 1,
                     'day': obj.day,
                     'start': obj.startzeit,
                     'end': obj.endzeit, 
-                    'value': obj.wert
+                    'wert': obj.wert
                 };
-                console.log(oData),
+                console.log(oData)
                 //jQuery.ajax({
                     //url : "/",
                     //type : "POST",
@@ -115,11 +118,13 @@ sap.ui.define([
                         //console.log(response);
                     //}
                 //});
-                this.addEmptyObject();
-                console.log('object',obj)
+
               },
-              removeEntry: function () {
-                MessageToast.show("Löschen Eintrag mit ID:")  
+              removeEntry: function (oEvent) {
+                var path = oEvent.getSource().getBindingContext().getPath();
+                var obj = oEvent.getSource().getBindingContext().getObject();
+                console.log('objDelte', obj)
+                MessageToast.show("Löschen Eintrag mit ID:" + obj.id)  
             },
             onSelectionChange: function (oEvent) {
                 MessageToast.show("Ausgewählter Wochentag:" + oEvent.getParameter("item").getText() );
@@ -129,7 +134,6 @@ sap.ui.define([
                 if(selectedDay == "Mo"){
                     var oModel = new sap.ui.model.json.JSONModel({data : mondayData});
                     this.getView().setModel(oModel);
-                    this.addEmptyObject();
                 }
                 if(selectedDay == "Di"){
                     var oModel = new sap.ui.model.json.JSONModel({data : tuesdayData});
@@ -138,37 +142,16 @@ sap.ui.define([
                 if(selectedDay == "Mi"){
                     var oModel = new sap.ui.model.json.JSONModel({data : wednesdayData});
                     this.getView().setModel(oModel);
-                    this.addEmptyObject();
                 }
                 if(selectedDay == "Do"){
                     var oModel = new sap.ui.model.json.JSONModel({data : thursdayData});
                     this.getView().setModel(oModel);
-                    this.addEmptyObject();
                 }
                 if(selectedDay == "Fr"){
                     var oModel = new sap.ui.model.json.JSONModel({data : fridayData});
                     this.getView().setModel(oModel);
-                    this.addEmptyObject();
                 }
             },
-            onPress: function () {
-                var FlexBox=this.byId('TimeStepContainer')
-                FlexBox.addItem(Button)
-            },
-            handleChange: function (oEvent) {
-				var oText = this.byId("T1"),
-					oTP = oEvent.getSource(),
-					sValue = oEvent.getParameter("value"),
-					bValid = oEvent.getParameter("valid");
-				this._iEvent++;
-				oText.setText("'change' Event #" + this._iEvent + " from TimePicker '" + oTP.getId() + "': " + sValue + (bValid ? ' (valid)' : ' (invalid)'));
-
-				if (bValid) {
-					oTP.setValueState(ValueState.None);
-				} else {
-					oTP.setValueState(ValueState.Error);
-				}
-			}
 
 		});
 

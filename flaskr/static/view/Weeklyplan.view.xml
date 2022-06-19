@@ -43,7 +43,7 @@
                                             <HBox>
                                                 <core:Icon src="sap-icon://add"    visible="{path: 'createNew', formatter: '.enableControl'}" press="addEntry" />
                                                 <core:Icon src="sap-icon://save"   visible="{path: 'saveNew',   formatter: '.enableControl'}" press="saveEntry" />
-                                                <core:Icon src="sap-icon://delete" visible="{path: 'removeNew', formatter: '.enableControl'}" press="removeEntry" />
+                                                <core:Icon src="sap-icon://delete" visible="{path: 'removeNew'}" press="removeEntry" />
                                             </HBox>
                                             <HBox>
                                             <Text  text="{startzeit}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
@@ -69,19 +69,20 @@
                                             </HBox>
                                             <HBox>
                                                 <Text  text="{wert}" visible="{path: 'saveNew', formatter: '.disableControl'}" />
-                                                <Slider id="slider" value="{wert}" width="300%"
-                                                min="0" max="100"
-                                                showAdvancedTooltip="true"
-                                                showHandleTooltip="false"
-                                                inputsAsTooltips="true"
-                                                class="sapUiSmallMarginBottom" 
-                                                liveChange=".sendValue"
-                                                visible="{path: 'saveNew', formatter: '.enableControl'}"/>
+                                                <Input id="inputWert" value="{wert}"
+                                                type="Number"
+			                                    placeholder="1-100"
+                                                visible="{path: 'saveNew', formatter: '.enableControl'}"
+		                                        />
                                             </HBox>
                                         </cells>
                                     </ColumnListItem>
                                 </items>
                             </Table>
+                            <Button text="Neuer Eintrag" class="sapUiSmallMarginTop"
+						press="addEmptyObject"
+						ariaDescribedBy="defaultButtonDescription genericButtonDescription">
+				</Button>
                     </content>
                 </Page>
             </pages>
