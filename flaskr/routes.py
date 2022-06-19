@@ -416,26 +416,3 @@ def set_max_temp():
     temp = adm.set_temp_rule(None, data, None, None)
     print('temp: ', temp)
     return data
-
-
-@app.route('/LastStatusJalousien', methods=["GET"])
-# hier ist die get_Status Methode
-def get_min_temp():
-    """
-    Return a simple odata container with date time information
-    :return:
-    """
-    adm = DeviceAdministration()
-
-    odata = {
-        'd': {
-            'results': []
-        }
-    }
-
-    temp = adm.get_max_temp()
-    odata['d']['results'].append({
-        'min_temperature': temp
-    })
-
-    return jsonify(odata)
