@@ -14,7 +14,7 @@
                     <content> 
                         <layout:VerticalLayout id="verticallayoutcontent" width="100%" alignItems="Center">
                         <VBox alignItems="Center" width="100%">
-                            <Text id="textThermo" text="Aktuelle Temperatur" class="sapUiMediumMarginTop sapUiSmallMarginBottom" />
+                            <Text id="textThermo" text="Echtzeitsteuerung Temperatur" class="sapUiMediumMarginTop sapUiSmallMarginBottom" />
                             <StepInput
                                 id="CurrentTemp"
                                 value="20"

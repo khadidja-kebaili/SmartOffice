@@ -321,6 +321,7 @@ class DeviceAdministration(object):
         res = conn.getresponse()
         data = res.read()
         data = data.decode("utf-8")
+        print(data)
         return data
 
     '''    def get_min_temp(self):
@@ -404,7 +405,7 @@ class DeviceAdministration(object):
             last_entry = self.get_latest_jal_standard_entry_monday()
             standard_entry.set_monday_id(last_entry.get_id())
             standard_entry.set_weekday(1)
-            with WeeklyPlanTempMapper() as mapper:
+            with WeeklyPlanJalMapper() as mapper:
                 return mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_monday(self):
@@ -452,7 +453,7 @@ class DeviceAdministration(object):
             last_entry = self.get_latest_jal_standard_entry_tuesday()
             standard_entry.set_tuesday_id(last_entry.get_id())
             standard_entry.set_weekday(2)
-            with WeeklyPlanTempMapper() as mapper:
+            with WeeklyPlanJalMapper() as mapper:
                 return mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_tuesday(self):
@@ -500,7 +501,7 @@ class DeviceAdministration(object):
             last_entry = self.get_latest_jal_standard_entry_wednesday()
             standard_entry.set_wednesday_id(last_entry.get_id())
             standard_entry.set_weekday(3)
-            with WeeklyPlanTempMapper() as mapper:
+            with WeeklyPlanJalMapper() as mapper:
                 return mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_wednesday(self):
@@ -548,7 +549,7 @@ class DeviceAdministration(object):
             last_entry = self.get_latest_jal_standard_entry_thursday()
             standard_entry.set_thursday_id(last_entry.get_id())
             standard_entry.set_weekday(4)
-            with WeeklyPlanTempMapper() as mapper:
+            with WeeklyPlanJalMapper() as mapper:
                 return mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_thursday(self):
@@ -596,7 +597,7 @@ class DeviceAdministration(object):
             last_entry = self.get_latest_jal_standard_entry_friday()
             standard_entry.set_friday_id(last_entry.get_id())
             standard_entry.set_weekday(5)
-            with WeeklyPlanTempMapper() as mapper:
+            with WeeklyPlanJalMapper() as mapper:
                 return mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_friday(self):

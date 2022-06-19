@@ -396,7 +396,7 @@ def set_jal_rule():
     min = request.form["min"]
     max = request.form["max"]
     time.sleep(4)
-    adm.set_jal_rule(max, min, start, end)
+    adm.set_jal_rule(min, max, start, end)
     return ' '
 
 @app.route('/GetJalRule', methods=["GET"])
