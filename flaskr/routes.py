@@ -152,27 +152,6 @@ def get_temp():
     return jsonify(odata)
 
 
-@app.route('/LastStatusJalousien', methods=["GET"])
-def get_standard_weekly_plan():
-    """
-    Return a simple odata container with date time information
-    :return:
-    """
-    adm = DeviceAdministration()
-
-    odata = {
-        'd': {
-            'results': []
-        }
-    }
-
-    temp = adm.get_temperature()
-    odata['d']['results'].append({
-        'temperature': temp
-    })
-
-    return jsonify(odata)
-
 
 @app.route('/StandardJalousienMonday', methods=["GET"])
 def get_entries_jal_monday():
@@ -188,10 +167,14 @@ def get_entries_jal_monday():
         }
     }
 
-    temp = adm.get_all_jal_standard_entries_monday()
-    odata['d']['results'].append({
-        'temperature': temp
-    })
+    entries = adm.get_all_jal_standard_entries_monday()
+    for elem in entries:
+        odata['d']['results'].append({
+            'id': elem.get_id(),
+            'start': elem.get_start_time(),
+            'end': elem.get_end_time(),
+            'value': elem.get_value()
+        })
 
     return jsonify(odata)
 
@@ -210,10 +193,15 @@ def get_entries_jal_tuesday():
         }
     }
 
-    temp = adm.get_all_jal_standard_entries_tuesday()
-    odata['d']['results'].append({
-        'temperature': temp
-    })
+    entries = adm.get_all_jal_standard_entries_tuesday()
+    for elem in entries:
+        odata['d']['results'].append({
+            'id': elem.get_id(),
+            'start': elem.get_start_time(),
+            'end': elem.get_end_time(),
+            'value': elem.get_value()
+        })
+
 
     return jsonify(odata)
 
@@ -232,10 +220,14 @@ def get_entries_jal_wednesday():
         }
     }
 
-    temp = adm.get_all_jal_standard_entries_wednesday()
-    odata['d']['results'].append({
-        'temperature': temp
-    })
+    entries = adm.get_all_jal_standard_entries_wednesday()
+    for elem in entries:
+        odata['d']['results'].append({
+            'id': elem.get_id(),
+            'start': elem.get_start_time(),
+            'end': elem.get_end_time(),
+            'value': elem.get_value()
+        })
 
     return jsonify(odata)
 
@@ -254,10 +246,14 @@ def get_entries_jal_thursday():
         }
     }
 
-    temp = adm.get_all_jal_standard_entries_thursday()
-    odata['d']['results'].append({
-        'temperature': temp
-    })
+    entries = adm.get_all_jal_standard_entries_thursday()
+    for elem in entries:
+        odata['d']['results'].append({
+            'id': elem.get_id(),
+            'start': elem.get_start_time(),
+            'end': elem.get_end_time(),
+            'value': elem.get_value()
+        })
 
     return jsonify(odata)
 
@@ -276,10 +272,14 @@ def get_entries_jal_friday():
         }
     }
 
-    temp = adm.get_all_jal_standard_entries_friday()
-    odata['d']['results'].append({
-        'temperature': temp
-    })
+    entries = adm.get_all_jal_standard_entries_friday()
+    for elem in entries:
+        odata['d']['results'].append({
+            'id': elem.get_id(),
+            'start': elem.get_start_time(),
+            'end': elem.get_end_time(),
+            'value': elem.get_value()
+        })
 
     return jsonify(odata)
 
@@ -332,3 +332,26 @@ def set_max_temp():
     temp = adm.set_temp_rule(None, data, None, None)
     print('temp: ', temp)
     return data
+
+
+@app.route('/LastStatusJalousien', methods=["GET"])
+# hier ist die get_Status Methode
+def get_min_temp():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    temp = adm.get_max_temp()
+    odata['d']['results'].append({
+        'min_temperature': temp
+    })
+
+    return jsonify(odata)
