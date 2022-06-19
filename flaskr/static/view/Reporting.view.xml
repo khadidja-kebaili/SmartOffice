@@ -68,8 +68,8 @@
 
             <!-- WLAN-Jalousienmodul Card Control Content folgt, !muss angepasst werden!-->
                 <f:content>
-                    <Button id="testbutton" text="testbutton" press="press('LastStatusJalousien')"/>
-                    <List
+                    <Text id="testtext" text="{InputValue'}" width="100%"/>
+                    <!--<List
                         id="attachmentsList"
                         itemPress="masterListItemSelected"
                         items="{TestModel>/results}"
@@ -88,7 +88,7 @@
                                 </HBox>
                             </HBox>
                         </CustomListItem>
-                    </List>
+                    </List>-->
                 </f:content>
             </f:Card>
 
