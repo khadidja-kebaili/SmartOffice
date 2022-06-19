@@ -19,7 +19,7 @@
                     id="page" 
                     title="Reporting zur Energie- und Raumnutzung"
                     class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer"
-                    showNavButton="true"
+                    showNavButton="true" navButtonPress="onNavBack"
                 >
 
             <!-- Seitentext Information-->
@@ -129,13 +129,6 @@
                         </layout:VerticalLayout>
                     </layout:Grid>
                 </Panel>-->
-
-                <footer>
-                    <OverflowToolbar>
-                        <ToolbarSpacer/>
-                        <Button text="Edit" />
-                    </OverflowToolbar>
-                </footer>
                     
                 </Page>
             </pages>
