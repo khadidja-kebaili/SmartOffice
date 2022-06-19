@@ -113,7 +113,7 @@ def Status_by_Timeperiode():
     return odata
 
 
-@app.route('/Jalousien', methods=["POST"])
+@app.route('/SetTemp', methods=["POST"])
 def set_temp():
     """
     Return a simple odata container with date time information
@@ -130,7 +130,7 @@ def set_temp():
     return data
 
 
-@app.route('/LastStatusJalousien', methods=["GET"])
+@app.route('/GetTemp', methods=["GET"])
 def get_temp():
     """
     Return a simple odata container with date time information
@@ -152,7 +152,7 @@ def get_temp():
     return jsonify(odata)
 
 
-@app.route('/StandardJalousienMonday', methods=["GET"])
+@app.route('/GetStandardJalousienMonday', methods=["GET"])
 def get_entries_jal_monday():
     """
     Return a simple odata container with date time information
@@ -178,7 +178,7 @@ def get_entries_jal_monday():
     return jsonify(odata)
 
 
-@app.route('/StandardJalousienTuesday', methods=["GET"])
+@app.route('/GetStandardJalousienTuesday', methods=["GET"])
 def get_entries_jal_tuesday():
     """
     Return a simple odata container with date time information
@@ -204,7 +204,7 @@ def get_entries_jal_tuesday():
     return jsonify(odata)
 
 
-@app.route('/StandardJalousienWednesday', methods=["GET"])
+@app.route('/GetStandardJalousienWednesday', methods=["GET"])
 def get_entries_jal_wednesday():
     """
     Return a simple odata container with date time information
@@ -230,7 +230,7 @@ def get_entries_jal_wednesday():
     return jsonify(odata)
 
 
-@app.route('/StandardJalousienThursday', methods=["GET"])
+@app.route('/GetStandardJalousienThursday', methods=["GET"])
 def get_entries_jal_thursday():
     """
     Return a simple odata container with date time information
@@ -256,7 +256,7 @@ def get_entries_jal_thursday():
     return jsonify(odata)
 
 
-@app.route('/StandardJalousienFriday', methods=["GET"])
+@app.route('/GetStandardJalousienFriday', methods=["GET"])
 def get_entries_jal_friday():
     """
     Return a simple odata container with date time information
@@ -282,7 +282,7 @@ def get_entries_jal_friday():
     return jsonify(odata)
 
 
-@app.route('/JalousienStandardSetMonday', methods=["POST"])
+@app.route('/SetJalousienStandardMonday', methods=["POST"])
 def set_jal_standard_monday():
     """
     Return a simple odata container with date time information
@@ -299,7 +299,7 @@ def set_jal_standard_monday():
     return start, end, value
 
 
-@app.route('/JalousienStandardSetTuesday', methods=["POST"])
+@app.route('/SetJalousienStandardTuesday', methods=["POST"])
 def set_jal_standard_tuesday():
     """
     Return a simple odata container with date time information
@@ -316,7 +316,7 @@ def set_jal_standard_tuesday():
     return start, end, value
 
 
-@app.route('/JalousienStandardSetWednesday', methods=["POST"])
+@app.route('/SetJalousienStandardWednesday', methods=["POST"])
 def set_jal_standard_wednesday():
     """
     Return a simple odata container with date time information
@@ -333,7 +333,7 @@ def set_jal_standard_wednesday():
     return start, end, value
 
 
-@app.route('/JalousienStandardSetThursday', methods=["POST"])
+@app.route('/SetJalousienStandardThursday', methods=["POST"])
 def set_jal_standard_thursday():
     """
     Return a simple odata container with date time information
@@ -350,7 +350,7 @@ def set_jal_standard_thursday():
     return start, end, value
 
 
-@app.route('/JalousienStandardSetFriday', methods=["POST"])
+@app.route('/SetJalousienStandardFriday', methods=["POST"])
 def set_jal_standard_friday():
     """
     Return a simple odata container with date time information
@@ -366,7 +366,7 @@ def set_jal_standard_friday():
     adm.set_jal_standard_entry_friday(start, end, value)
     return start, end, value
 
-@app.route('/JalousienRule', methods=["POST"])
+@app.route('/SetJalRule', methods=["POST"])
 def set_jal_rule():
     """
     Return a simple odata container with date time information
@@ -384,7 +384,7 @@ def set_jal_rule():
     return start, end, max, min
 
 
-@app.route('/Jalousien', methods=["POST"])
+@app.route('/SetMinTemp', methods=["POST"])
 def set_min_temp():
     """
     Return a simple odata container with date time information
@@ -398,7 +398,7 @@ def set_min_temp():
     return data
 
 
-@app.route('/LastStatusJalousien', methods=["GET"])
+@app.route('/GetMinTemp', methods=["GET"])
 # hier ist die get_Status Methode
 def get_min_temp():
     """
@@ -421,7 +421,7 @@ def get_min_temp():
     return jsonify(odata)
 
 
-@app.route('/Jalousien', methods=["POST"])
+@app.route('/SetMaxTemp', methods=["POST"])
 def set_max_temp():
     """
     Return a simple odata container with date time information
@@ -433,7 +433,9 @@ def set_max_temp():
     temp = adm.set_temp_rule(None, data, None, None)
     print('temp: ', temp)
     return data
-@app.route('/StandardThermostatMonday', methods=["GET"])
+
+
+@app.route('/GetStandardThermostatMonday', methods=["GET"])
 def get_entries_temp_monday():
     """
     Return a simple odata container with date time information
@@ -459,7 +461,7 @@ def get_entries_temp_monday():
     return jsonify(odata)
 
 
-@app.route('/StandardThermostatTuesday', methods=["GET"])
+@app.route('/GetStandardThermostatTuesday', methods=["GET"])
 def get_entries_temp_tuesday():
     """
     Return a simple odata container with date time information
@@ -485,7 +487,7 @@ def get_entries_temp_tuesday():
     return jsonify(odata)
 
 
-@app.route('/StandardThermostatWednesday', methods=["GET"])
+@app.route('/GetStandardThermostatWednesday', methods=["GET"])
 def get_entries_temp_wednesday():
     """
     Return a simple odata container with date time information
@@ -511,7 +513,7 @@ def get_entries_temp_wednesday():
     return jsonify(odata)
 
 
-@app.route('/StandardThermostatThursday', methods=["GET"])
+@app.route('/GetStandardThermostatThursday', methods=["GET"])
 def get_entries_temp_thursday():
     """
     Return a simple odata container with date time information
@@ -537,7 +539,7 @@ def get_entries_temp_thursday():
     return jsonify(odata)
 
 
-@app.route('/StandardThermostatFriday', methods=["GET"])
+@app.route('/GetStandardThermostatFriday', methods=["GET"])
 def get_entries_temp_friday():
     """
     Return a simple odata container with date time information
@@ -563,7 +565,7 @@ def get_entries_temp_friday():
     return jsonify(odata)
 
 
-@app.route('/ThermostatStandardSetMonday', methods=["POST"])
+@app.route('/SetThermostatStandardMonday', methods=["POST"])
 def set_temp_standard_monday():
     """
     Return a simple odata container with date time information
@@ -580,7 +582,7 @@ def set_temp_standard_monday():
     return start, end, value
 
 
-@app.route('/ThermostatStandardSetTuesday', methods=["POST"])
+@app.route('/SetThermostatStandardTuesday', methods=["POST"])
 def set_temp_standard_tuesday():
     """
     Return a simple odata container with date time information
@@ -597,7 +599,7 @@ def set_temp_standard_tuesday():
     return start, end, value
 
 
-@app.route('/ThermostatStandardSetWednesday', methods=["POST"])
+@app.route('/SetThermostatStandardWednesday', methods=["POST"])
 def set_temp_standard_wednesday():
     """
     Return a simple odata container with date time information
@@ -614,7 +616,7 @@ def set_temp_standard_wednesday():
     return start, end, value
 
 
-@app.route('/ThermostatStandardSetThursday', methods=["POST"])
+@app.route('/SetThermostatStandardThursday', methods=["POST"])
 def set_temp_standard_thursday():
     """
     Return a simple odata container with date time information
@@ -631,7 +633,7 @@ def set_temp_standard_thursday():
     return start, end, value
 
 
-@app.route('/ThermostatStandardSetFriday', methods=["POST"])
+@app.route('/SetThermostatStandardFriday', methods=["POST"])
 def set_temp_standard_friday():
     """
     Return a simple odata container with date time information
