@@ -284,6 +284,88 @@ def get_entries_jal_friday():
     return jsonify(odata)
 
 
+
+@app.route('/JalousienStandardSetMonday', methods=["POST"])
+def set_jal_standard_monday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    start = request.form["start"]
+    end = request.form["end"]
+    value = request.form["value"]
+    time.sleep(4)
+    adm.set_jal_standard_entry_monday(start, end, value)
+    return start, end, value
+
+@app.route('/JalousienStandardSetTuesday', methods=["POST"])
+def set_jal_standard_tuesday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    start = request.form["start"]
+    end = request.form["end"]
+    value = request.form["value"]
+    time.sleep(4)
+    adm.set_jal_standard_entry_tuesday(start, end, value)
+    return start, end, value
+
+@app.route('/JalousienStandardSetWednesday', methods=["POST"])
+def set_jal_standard_wednesday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    start = request.form["start"]
+    end = request.form["end"]
+    value = request.form["value"]
+    time.sleep(4)
+    adm.set_jal_standard_entry_wednesday(start, end, value)
+    return start, end, value
+
+@app.route('/JalousienStandardSetThursday', methods=["POST"])
+def set_jal_standard_thursday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    start = request.form["start"]
+    end = request.form["end"]
+    value = request.form["value"]
+    time.sleep(4)
+    adm.set_jal_standard_entry_thursday(start, end, value)
+    return start, end, value
+
+@app.route('/JalousienStandardSetFriday', methods=["POST"])
+def set_jal_standard_friday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    start = request.form["start"]
+    end = request.form["end"]
+    value = request.form["value"]
+    time.sleep(4)
+    adm.set_jal_standard_entry_friday(start, end, value)
+    return start, end, value
+
+
 @app.route('/Jalousien', methods=["POST"])
 def set_min_temp():
     """
