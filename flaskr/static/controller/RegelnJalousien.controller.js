@@ -100,7 +100,7 @@ sap.ui.define([
 
                 oModel.setProperty(path, obj);
 
-                console.log("Neuer Wert wurde eingestellt.");
+                console.log("Neuer Wert wurde eingestellt. Juhu");
                 sap.ui.core.BusyIndicator.hide(0);
                 //var oThis = this;
                 var oData = {
