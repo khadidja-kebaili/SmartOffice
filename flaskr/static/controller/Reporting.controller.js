@@ -1,7 +1,8 @@
 sap.ui.define([
     "../controller/SmartOffice.controller",
     "sap/ui/model/json/JSONModel",
-    "sap/m/MessageToast"
+    "sap/m/MessageToast",
+    "sap/ui/core/routing/History"
     ],
     function (SmartOfficeController, JSONModel, MessageToast) {
         "use strict";
@@ -10,6 +11,7 @@ sap.ui.define([
 
         return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Reporting",{
             onInit: function () {
+                self=this;
                 this.oModelSettings = new JSONModel({
                     maxIterations: 200,
                     maxTime: 500,
@@ -18,32 +20,25 @@ sap.ui.define([
                 });
                 this.getView().setModel(this.oModelSettings, "settings");
                 this.getView().setModel(sap.ui.getCore().getModel("TestModel"), "TestModel");
-                this.getView().setModel(this.oModelSettings, "percentage");
                 sap.ui.core.BusyIndicator.hide(0);
+
+                let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                oRouter.getRoute("reporting").attachMatched(this._onRouteMatched, this);
             },
-            getValue: function(oEvent) {
-                console.log("Werte werden geladen.");
-                sap.ui.core.BusyIndicator.hide(0);
-                //var oThis = this;
-                var oData = {
-                    'percentage': oEvent.getParameter("percentage")
-                };
-                console.log(oData),
-                jQuery.ajax({
-                    url : "/LastStatusJalousien",
-                    type : "GET",
-                    dataType : "json",
-                    async : true,
-                    data : oData,
-                    success : function(response){
-                        MessageToast.show(response.data.message);
-                        //oThis.makeGraph(response.graph);
-                        sap.ui.core.BusyIndicator.hide();
-                    },
-                    error: function(response){
-                        console.log(response);
-                    }
-                });
+
+            _onRouteMatched : function (oEvent){
+                this.getStatus().done(function(result) {
+
+                    console.log(result.d.results[0])
+                    var wert = result.d.results[0]
+                    self.byId("testtext").setText(wert)
+                })
+            },
+            getStatus: function() {
+            return jQuery.ajax({
+                url: "/LastStatusJalousien",
+                type: "GET"
+              });
             },
         });
     });
