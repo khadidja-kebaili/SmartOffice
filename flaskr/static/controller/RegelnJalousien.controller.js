@@ -8,20 +8,18 @@ sap.ui.define([
         "use strict";
 
         var self;
-        var dummyData = [{"id": 1, "startzeit":"8:00","endzeit":"10:00","wert":50},
-                {"id": 2, "startzeit":"11:00","endzeit":"12:00","wert":70}]
-        var datatest = []
-
-        dummyData.map(function(eintrag, index) {
-                
-                    datatest.push(eintrag)
-            })
 
         return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.RegelnJalousien", {
             onInit : function() {
+                self = this;
+                var oModel = new sap.ui.model.json.JSONModel({"id": null, "startzeit":null,"endzeit":null,"wert":null});
+                this.getView().setModel(oModel)
+                let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                oRouter.getRoute("regelnjalousien").attachMatched(this._onRouteMatched, this);
+                
               },
 
-              addEmptyObject : function() {
+            addEmptyObject : function() {
                 var oModel = this.getView().getModel();
                 var aData  = oModel.getProperty("/data");
 
@@ -29,15 +27,41 @@ sap.ui.define([
 
                 aData.push(emptyObject);
                 oModel.setProperty("/data", aData);
+                this.addEntry();
               },
 
             test: function() {
                 ///var selectedDay = oEvent.getParameter("item").getText()
-
-                var oModel = new sap.ui.model.json.JSONModel({data : datatest});
-                this.getView().setModel(oModel);
-                this.addEmptyObject()
+                MessageToast.show("Hallo Juhu")
+               
             },
+            _onRouteMatched : function (oEvent){
+                var datatest2 = []
+                this.getData().done(function(result) {
+                    
+                    var dummyDatat = result.d.results
+                    dummyDatat.map(function(eintrag, index) {
+                        datatest2.push(eintrag)
+                    })
+                    console.log(datatest2)                
+                    var oModel = new sap.ui.model.json.JSONModel({data: datatest2});
+                    self.getView().setModel(oModel);
+                    self.addEmptyObject();
+                    console.log("Jetzt bin ich am Ende")
+                })
+
+                //var oModel = new sap.ui.model.json.JSONModel({data: datatest2});
+                //this.getView().setModel(oModel);
+                //this.addEmptyObject()
+
+            },
+            getData: function () {
+				console.log('Get data für Regeln Jalousien')
+				return jQuery.ajax({
+					url: "/RegelnJalousien",
+					type: "GET"
+				});
+			},
 
               enableControl : function(value) {
                 return !!value;
@@ -50,6 +74,7 @@ sap.ui.define([
               addEntry : function(oEvent) {
                 var path = oEvent.getSource().getBindingContext().getPath();
                 var obj = {
+                  id: null,
                   startzeit: null,
                   endzeit: null, 
                   wert: null,
@@ -104,8 +129,34 @@ sap.ui.define([
                 console.log('object',obj)
             },
 
-            removeEntry: function () {
-                MessageToast.show("Löschen Eintrag mit ID:")  
+            removeEntry: function (oEvent) {
+                var path = oEvent.getSource().getBindingContext().getPath();
+                var obj = oEvent.getSource().getBindingContext().getObject();
+                
+                obj.saveNew = false;
+                obj.removeNew = true;
+
+                var oModel = this.getView().getModel();
+
+                oModel.setProperty(path, obj);
+                MessageToast.show("Löschen Eintrag mit ID:" + obj.id) 
+                var oData = {
+                    'jalousien_id': 1,
+                    'id': obj.id
+                }; 
+                console.log(oData)
+                 //jQuery.ajax({
+                    //url : "/remove/{obj.id}",
+                    //type : "DELETE",
+                    //dataType : "json",
+                    //success : function(response){
+                        //MessageToast.show(response.data.message);
+                        //sap.ui.core.BusyIndicator.hide();
+                    //},
+                    //error: function(response){
+                        //console.log(response);
+                    //}
+                //});
             },
             
             onPress: function () {

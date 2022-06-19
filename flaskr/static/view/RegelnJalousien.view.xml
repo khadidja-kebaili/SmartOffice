@@ -9,8 +9,7 @@
         <App id="app">
             <pages>
                 <Page id="page" title="Regeln für Jalousien verwalten">
-                    <content>
-                    <Button text="Neue Regel" press="test"/> 
+                    <content> 
                     <Table id="tbl" items="{/data}">
                                 <columns>
                                     <Column />
