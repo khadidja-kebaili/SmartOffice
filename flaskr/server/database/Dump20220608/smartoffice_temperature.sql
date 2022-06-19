@@ -16,30 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `thermostate`
+-- Table structure for table `temperature`
 --
 
-DROP TABLE IF EXISTS `thermostate`;
+DROP TABLE IF EXISTS `temperature`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `thermostate` (
+CREATE TABLE `temperature` (
   `id` int NOT NULL,
-  `ain` varchar(45) DEFAULT NULL,
-  `sid` varchar(45) DEFAULT NULL,
-  `timestamp` date DEFAULT NULL,
+  `temperature` float DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `device_id` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
+  KEY `id_idx` (`device_id`),
+  CONSTRAINT `id` FOREIGN KEY (`device_id`) REFERENCES `jalousien` (`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `thermostate`
+-- Dumping data for table `temperature`
 --
 
-LOCK TABLES `thermostate` WRITE;
-/*!40000 ALTER TABLE `thermostate` DISABLE KEYS */;
-INSERT INTO `thermostate` VALUES (1,'139790057201','20444d8597ab303b',NULL);
-/*!40000 ALTER TABLE `thermostate` ENABLE KEYS */;
+LOCK TABLES `temperature` WRITE;
+/*!40000 ALTER TABLE `temperature` DISABLE KEYS */;
+/*!40000 ALTER TABLE `temperature` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-19 17:37:45
+-- Dump completed on 2022-06-08 17:12:32

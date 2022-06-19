@@ -16,30 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `temperature`
+-- Table structure for table `jalousien`
 --
 
-DROP TABLE IF EXISTS `temperature`;
+DROP TABLE IF EXISTS `jalousien`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `temperature` (
-  `id` int NOT NULL,
-  `temperature` float DEFAULT NULL,
-  `date` date DEFAULT NULL,
+CREATE TABLE `jalousien` (
+  `id` int NOT NULL DEFAULT '0',
+  `ip_address` varchar(45) DEFAULT NULL,
+  `local_key` varchar(45) DEFAULT NULL,
   `device_id` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_idx` (`device_id`),
-  CONSTRAINT `id` FOREIGN KEY (`device_id`) REFERENCES `jalousien` (`device_id`)
+  UNIQUE KEY `local_key_UNIQUE` (`local_key`),
+  UNIQUE KEY `device_id_UNIQUE` (`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `temperature`
+-- Dumping data for table `jalousien`
 --
 
-LOCK TABLES `temperature` WRITE;
-/*!40000 ALTER TABLE `temperature` DISABLE KEYS */;
-/*!40000 ALTER TABLE `temperature` ENABLE KEYS */;
+LOCK TABLES `jalousien` WRITE;
+/*!40000 ALTER TABLE `jalousien` DISABLE KEYS */;
+INSERT INTO `jalousien` VALUES (1,'192.168.2.106','1877eea950b2d4ff','bf1562e54d66eccf59oq7t');
+/*!40000 ALTER TABLE `jalousien` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-19 17:37:45
+-- Dump completed on 2022-06-08 17:12:32

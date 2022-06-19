@@ -103,3 +103,5 @@ def send_response(box_url: str, username: str, challenge_response: str) -> str:
     # Parse SID from resulting XML.
     xml = ET.fromstring(http_response.read())
     return xml.find("SID").text
+
+

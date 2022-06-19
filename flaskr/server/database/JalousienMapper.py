@@ -13,7 +13,6 @@ class JalousienMapper(Mapper):
     def __init__(self):
         super().__init__()
 
-
     def insert(self, jalousie):
         """Einfügen eines Account-Objekts in die Datenbank.
 
@@ -34,7 +33,8 @@ class JalousienMapper(Mapper):
                 jalousie.set_id(int(maxid[0]) + 1)
 
         command = "INSERT INTO jalousien (id, device_id, ip_address, local_key) VALUES (%s,%s,%s,%s)"
-        data = (jalousie.get_id(), jalousie.get_device_id(), jalousie.get_ip_address(), jalousie.get_local_key())
+        data = (jalousie.get_id(), jalousie.get_device_id(),
+                jalousie.get_ip_address(), jalousie.get_local_key())
         cursor.execute(command, data)
 
         self._cnx.commit()
@@ -49,7 +49,8 @@ class JalousienMapper(Mapper):
         """
         result = []
         cursor = self._cnx.cursor()
-        cursor.execute("SELECT id, device_id, ip_address, local_key from jalousien")
+        cursor.execute(
+            "SELECT id, device_id, ip_address, local_key from jalousien")
         tuples = cursor.fetchall()
 
         for (id, device_id, ip_address, local_key) in tuples:
@@ -74,7 +75,8 @@ class JalousienMapper(Mapper):
         """
         result = None
         cursor = self._cnx.cursor()
-        command = "SELECT id, device_id, ip_address, local_key FROM jalousien WHERE device_id={} ORDER BY id".format(device_id)
+        command = "SELECT id, device_id, ip_address, local_key FROM jalousien WHERE device_id={} ORDER BY id".format(
+            device_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -99,7 +101,8 @@ class JalousienMapper(Mapper):
         """
         result = None
         cursor = self._cnx.cursor()
-        command = "SELECT id, device_id, ip_address, local_key FROM jalousien WHERE id={} ORDER BY id".format(id)
+        command = "SELECT id, device_id, ip_address, local_key FROM jalousien WHERE id={} ORDER BY id".format(
+            id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -126,7 +129,8 @@ class JalousienMapper(Mapper):
         result = None
 
         cursor = self._cnx.cursor()
-        command = "SELECT id, device_id, ip_address, local_key FROM jalousien WHERE local_key={}".format(local_key)
+        command = "SELECT id, device_id, ip_address, local_key FROM jalousien WHERE local_key={}".format(
+            local_key)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -143,7 +147,6 @@ class JalousienMapper(Mapper):
         cursor.close()
         return result
 
-
     def update(self, jalousie):
         """Wiederholtes Schreiben eines Objekts in die Datenbank.
 
@@ -151,8 +154,10 @@ class JalousienMapper(Mapper):
         """
         cursor = self._cnx.cursor()
 
-        command = "UPDATE jalousien " + "SET device_id=%s, ip_address=%s, local_key=%s WHERE id=%s"
-        data = (jalousie.get_device_id(), jalousie.get_ip_address(), jalousie.get_local_key(), jalousie.get_id())
+        command = "UPDATE jalousien " + \
+            "SET device_id=%s, ip_address=%s, local_key=%s WHERE id=%s"
+        data = (jalousie.get_device_id(), jalousie.get_ip_address(),
+                jalousie.get_local_key(), jalousie.get_id())
         cursor.execute(command, data)
 
         self._cnx.commit()

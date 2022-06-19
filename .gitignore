@@ -10,5 +10,9 @@ mta-*
 resources
 archive.zip
 .*_mta_build_tmp
+<<<<<<< HEAD
+flaskr/server/bo/ZZZWochenplanJalBOAlt.py
+=======
 *.pyc
 *.pyo
+>>>>>>> 59e6d6a9a681b2b053f2e050a2800b0b5754ca55
