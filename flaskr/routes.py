@@ -3,7 +3,7 @@ from flaskr import app
 from flask import request
 from flaskr.server.DeviceAdministration import DeviceAdministration
 import time
-from server.bo.RulesBO import RulesBO
+from flaskr.server.bo.RulesBO import RulesBO
 
 
 @app.route('/')
