@@ -211,19 +211,19 @@ sap.ui.define([
                   'test': 1
                   };
                 console.log(oData)
-                 //jQuery.ajax({
-                    //url : "/DeleteStandardJalousienMonday",
-                    //type : "POST",
-                    //dataType : "json",
-                    //data: oData,
-                    //success : function(response){
-                       // MessageToast.show(response.data.message);
-                       // sap.ui.core.BusyIndicator.hide();
-                    //},
-                    //error: function(response){
-                    //    console.log(response);
-                    //}
-                //});
+                 jQuery.ajax({
+                    url : "/DeleteStandardJalousienMonday",
+                    type : "DELETE",
+                    dataType : "json",
+                    data: oData,
+                    success : function(response){
+                        MessageToast.show(response.data.message);
+                        sap.ui.core.BusyIndicator.hide();
+                    },
+                    error: function(response){
+                        console.log(response);
+                    }
+                });
             },
             onSelectionChange: function (oEvent) {
                 //MessageToast.show("Ausgewählter Wochentag:" + oEvent.getParameter("item").getText() );

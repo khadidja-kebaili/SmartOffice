@@ -213,7 +213,7 @@ class MondayMapper(Mapper):
     def delete_byId(self, id):
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM monday WHERE id={}".format(id)
+        command = "DELETE FROM monday WHERE monday_id={}".format(id)
         cursor.execute(command)
 
         self._cnx.commit()
