@@ -220,7 +220,10 @@ def delete_entry_jal_monday_ById():
     for elem in liste:
         if elem.get_monday_id() == id_entry:
             adm.delete_entry_in_standard_weeklyplan_jal(elem)
-    adm.delete_standard_entry_monday(id_entry)
+    monday = adm.get_all_jal_standard_entries_monday()
+    for elem in monday:
+        if elem.get_id() == id_entry:
+            adm.delete_standard_entry_monday(elem)
 
     return ' '
 

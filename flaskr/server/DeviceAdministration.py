@@ -1175,3 +1175,5 @@ d = DeviceAdministration()
 k = d.set_status_to_percentage_by_id(1, 10)
 if type(k) == tuple:
     print('Hallo')
+
+d.delete_standard_entry_monday()
