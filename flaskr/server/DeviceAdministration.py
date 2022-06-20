@@ -369,7 +369,7 @@ class DeviceAdministration(object):
         sid = self.generate_sid(
             'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
         conn.request("GET",
-                     "/webservices/homeautoswitch.lua?ain=139790057201&switchcmd=gethrktsoll&sid={}".format(
+                     "/webservices/homeautoswitch.lua?ain=139790057201&switchcmd=gettemperature&sid={}".format(
                          sid),
                      payload, headers)
         res = conn.getresponse()
