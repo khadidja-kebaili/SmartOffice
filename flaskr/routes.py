@@ -204,8 +204,8 @@ def get_entries_jal_monday():
 
     return jsonify(odata)
 
-@app.route('/DeleteStandardJalousienMonday', methods=["POST"])
-def delete_entry_jal_monday_by_id():
+@app.route('/DeleteStandardJalousienMonday', methods=["DELETE"])
+def delete_entry_jal_monday_ById():
     """
     Return a simple odata container with date time information
     :return:
@@ -213,9 +213,9 @@ def delete_entry_jal_monday_by_id():
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]
     test = request.form["test"]
-    print(test)
-    time.sleep(4)
-    adm.delete_jal_monday_ById(id_entry)
+    print(id_entry)
+    adm.delete_entry_in_standard_weeklyplan_jal(id_entry)
+
     return ' '
 
 

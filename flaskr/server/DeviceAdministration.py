@@ -714,7 +714,7 @@ class DeviceAdministration(object):
         with MondayMapper() as mapper:
             return mapper.delete(entry)
 
-    def delete_jal_monday_ById(self, id):
+    def delete_jal_monday_by_id(self, id):
         with MondayMapper() as mapper:
             return mapper.delete_byId(id)
 
