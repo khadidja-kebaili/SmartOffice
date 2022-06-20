@@ -21,6 +21,8 @@ from flaskr.server.database.weekday_mapper.FridayMapper import FridayMapper
 from flaskr.server.bo.RulesBO import RulesBO
 from flaskr.server.database.RulesMapper import RulesMapper
 from flaskr.server.AuthGen import get_sid
+from flaskr.server.bo.ThermostatStatusBO import ThermostatStatusBO
+from flaskr.server.database.ThermostatStatusMapper import ThermostatStatusMapper
 import time
 import http.client
 from datetime import datetime, timedelta
@@ -85,10 +87,6 @@ class DeviceAdministration(object):
         """Den gegebenen Benutzer aus unserem System löschen."""
         with JalousienMapper() as mapper:
             mapper.delete(jalousie)
-
-    def get_all_status(self):
-        with JalousienStatusMapper() as mapper:
-            return mapper.find_all()
 
     '''    def open_all_jalousies(self):
             jalousies = []
@@ -165,7 +163,7 @@ class DeviceAdministration(object):
             status.set_percentage(new_list[1])
             return status'''
 
-    def set_status_to_percentage_by_id(self, id, perc=int):
+    def set_status_to_percentage_by_id(self, id, perc):
         date = datetime.datetime.now()
         date = date.strftime('%H:%M:%S')
         trigger = False
@@ -175,7 +173,7 @@ class DeviceAdministration(object):
                 if self.in_between_times(date, elem.get_start_time(), elem.get_end_time()):
                     message = 'Die No_Access Zeit ist eingetroffen'
                     return message
-            elif perc > elem.get_max() or perc < elem.get_min():
+            elif int(perc) > elem.get_max() or int(perc) < elem.get_min():
                 message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
                 ), 'Maxtemp:', elem.get_max()
                 return message
@@ -209,8 +207,12 @@ class DeviceAdministration(object):
             mapper.delete(status)
 
     def get_last_status(self):
-        status = self.get_all_status()
+        status = self.get_all_jal_status()
         return status[-1]
+
+    def get_all_jal_status(self):
+        with JalousienStatusMapper() as mapper:
+            return mapper.find_all()
 
     def in_between_times(self, searched_time, start, end):
         searched_time = datetime.datetime.strptime(searched_time, '%H:%M:%S')
@@ -230,7 +232,7 @@ class DeviceAdministration(object):
     def get_all_stats_by_timeperiod(self, start, end):
         enddate = datetime.now().fromisoformat(str(end))
         startdate = datetime.now().fromisoformat(str(start))
-        stats = self.get_all_status()
+        stats = self.get_all_jal_status()
         interval = []
         for elem in stats:
             if self.in_between_times(elem.get_date(), startdate, enddate):
@@ -240,6 +242,22 @@ class DeviceAdministration(object):
                 pass
         return interval
 
+    def get_status_of_thermostat_by_id(self, id):
+        with ThermostatStatusMapper() as mapper:
+            return mapper.find_by_key(id)
+
+    def delete_thermostat_status_by_id(self, id):
+        status = self.get_status_of_jalousie_by_id(id)
+        with ThermostatStatusMapper() as mapper:
+            mapper.delete(status)
+
+    def get_last_thermostat_status(self):
+        status = self.get_all_thermostat_status()
+        return status[-1]
+
+    def get_all_thermostat_status(self):
+        with ThermostatStatusMapper() as mapper:
+            return mapper.find_all()
     """
     Thermostat-spezifische Methoden
     """
@@ -274,8 +292,9 @@ class DeviceAdministration(object):
         with ThermostatMapper() as mapper:
             mapper.update(thermostat)'''
 
-    def set_temperature(self, temp):
+    def set_temperature(self, temp, device_id = None):
         date = datetime.datetime.now()
+        date_for_stat = date.strftime('%Y-%m-%d %H:%M:%S')
         date = date.strftime('%H:%M:%S')
         trigger = False
         rules = self.get_all_temp_rules()
@@ -304,7 +323,12 @@ class DeviceAdministration(object):
             res = conn.getresponse()
             data = res.read()
             data = data.decode("utf-8")
-            return data
+            status = ThermostatStatusBO()
+            status.set_temp(temp)
+            status.set_date(date_for_stat)
+            status.set_device(device_id)
+            with ThermostatStatusMapper() as mapper:
+                return mapper.insert(status)
 
     def get_temperature(self):
         conn = http.client.HTTPSConnection("192.168.2.254", 8254)

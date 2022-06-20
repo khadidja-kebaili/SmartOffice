@@ -27,7 +27,7 @@ def Status():
         }
     }
     i = 0
-    names = adm.get_all_status()
+    names = adm.get_all_jal_status()
 
     for elem in names:
         odata['d']['results'].append({
