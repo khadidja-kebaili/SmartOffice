@@ -216,6 +216,10 @@ def delete_entry_jal_monday_ById():
     id_entry = request.form["id_entry"]
     test = request.form["test"]
     print(id_entry)
+    liste = adm.get_all_standard_weekly_jal_entries_by_weekday(1)
+    for elem in liste:
+        if elem.get_monday_id() == id_entry:
+            adm.delete_entry_in_standard_weeklyplan_jal(elem)
     adm.delete_entry_in_standard_weeklyplan_jal_byId(id_entry)
 
     return ' '
