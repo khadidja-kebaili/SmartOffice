@@ -72,11 +72,13 @@ def set_jal():
     data = request.form["value"]
     data = int(data)
     time.sleep(4)
-    adm.set_status_to_percentage_by_id(1, data)
-    jal = adm.get_last_status()
-    print('Jal: ', jal)
-    x = "Hi"
-    return x
+    k = adm.set_status_to_percentage_by_id(1, data)
+    if type(k) == tuple:
+        return 0
+    else:
+        adm.set_status_to_percentage_by_id(1, data)
+        jal = adm.get_last_status()
+        return jal
 
 
 

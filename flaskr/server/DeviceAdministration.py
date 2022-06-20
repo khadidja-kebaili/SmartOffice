@@ -1166,3 +1166,8 @@ class DeviceAdministration(object):
     def get_all_temp_customized_entries_friday(self):
         with FridayMapper() as mapper:
             return mapper.find_all()'''
+
+d = DeviceAdministration()
+k = d.set_status_to_percentage_by_id(1, 10)
+if type(k) == tuple:
+    print('Hallo')
