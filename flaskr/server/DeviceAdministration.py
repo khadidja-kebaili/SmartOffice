@@ -166,17 +166,19 @@ class DeviceAdministration(object):
 
     def set_status_to_percentage_by_id(self, id, perc):
         date = datetime.datetime.now()
-        date = date.strftime('%H:%M:%S')
+        date = date.strftime('%Y-%m-%d %H:%M:%S')
         trigger = False
         rules = self.get_all_jal_rules()
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.in_between_times(date, elem.get_start_time(), elem.get_end_time()):
                     message = 'Die No_Access Zeit ist eingetroffen'
+                    print(message)
                     return message
             elif int(perc) > elem.get_max() or int(perc) < elem.get_min():
                 message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
                 ), 'Maxtemp:', elem.get_max()
+                print(message)
                 return message
             else:
                 trigger = True
@@ -373,6 +375,7 @@ class DeviceAdministration(object):
         res = conn.getresponse()
         data = res.read()
         data = data.decode("utf-8")
+        print(data)
         return data
 
     '''    def get_min_temp(self):
@@ -416,19 +419,25 @@ class DeviceAdministration(object):
     # Er macht einen Check und wenn die neue Zeit sich mit einem anderen Timeintervall überlappt, wird der alte gelöscht.
 
     def set_jal_standard_entry_monday(self, start, end, perc):
+    
         trigger = False
         rules = self.get_all_jal_rules()
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
                     message = 'Die No_Access Zeit ist eingetroffen'
+                    print(message)
                     return message
             elif elem.get_min() is not None and elem.get_max() is not None and perc > elem.get_max() or perc < elem.get_min():
                 message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
                 ), 'Maxtemp:', elem.get_max()
+                print(message)
                 return message
             else:
                 trigger = True
+        print(trigger)
         if trigger:
             monday = Monday()
             monday.set_type('J')
@@ -450,7 +459,7 @@ class DeviceAdministration(object):
             last_entry = self.get_latest_jal_standard_entry_monday()
             standard_entry.set_monday_id(last_entry.get_id())
             standard_entry.set_weekday(1)
-            with WeeklyPlanTempMapper() as mapper:
+            with WeeklyPlanJalMapper() as mapper:
                 return mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_monday(self):
@@ -464,6 +473,8 @@ class DeviceAdministration(object):
     def set_jal_standard_entry_tuesday(self, start, end, perc):
         trigger = False
         rules = self.get_all_jal_rules()
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
@@ -496,7 +507,7 @@ class DeviceAdministration(object):
             last_entry = self.get_latest_jal_standard_entry_tuesday()
             standard_entry.set_tuesday_id(last_entry.get_id())
             standard_entry.set_weekday(2)
-            with WeeklyPlanTempMapper() as mapper:
+            with WeeklyPlanJalMapper() as mapper:
                 return mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_tuesday(self):
@@ -510,6 +521,8 @@ class DeviceAdministration(object):
     def set_jal_standard_entry_wednesday(self, start, end, perc):
         trigger = False
         rules = self.get_all_jal_rules()
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
@@ -542,7 +555,7 @@ class DeviceAdministration(object):
             last_entry = self.get_latest_jal_standard_entry_wednesday()
             standard_entry.set_wednesday_id(last_entry.get_id())
             standard_entry.set_weekday(3)
-            with WeeklyPlanTempMapper() as mapper:
+            with WeeklyPlanJalMapper() as mapper:
                 return mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_wednesday(self):
@@ -556,6 +569,8 @@ class DeviceAdministration(object):
     def set_jal_standard_entry_thursday(self, start, end, perc):
         trigger = False
         rules = self.get_all_jal_rules()
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
@@ -588,7 +603,7 @@ class DeviceAdministration(object):
             last_entry = self.get_latest_jal_standard_entry_thursday()
             standard_entry.set_thursday_id(last_entry.get_id())
             standard_entry.set_weekday(4)
-            with WeeklyPlanTempMapper() as mapper:
+            with WeeklyPlanJalMapper() as mapper:
                 return mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_thursday(self):
@@ -602,6 +617,8 @@ class DeviceAdministration(object):
     def set_jal_standard_entry_friday(self, start, end, perc):
         trigger = False
         rules = self.get_all_jal_rules()
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
@@ -634,7 +651,7 @@ class DeviceAdministration(object):
             last_entry = self.get_latest_jal_standard_entry_friday()
             standard_entry.set_friday_id(last_entry.get_id())
             standard_entry.set_weekday(5)
-            with WeeklyPlanTempMapper() as mapper:
+            with WeeklyPlanJalMapper() as mapper:
                 return mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_friday(self):
@@ -648,6 +665,8 @@ class DeviceAdministration(object):
     def set_temp_standard_entry_monday(self, start, end, temp):
         trigger = False
         rules = self.get_all_temp_rules()
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
@@ -695,9 +714,15 @@ class DeviceAdministration(object):
         with MondayMapper() as mapper:
             return mapper.delete(entry)
 
+    def delete_jal_monday_ById(self, id):
+        with MondayMapper() as mapper:
+            return mapper.delete_byId(id)
+
     def set_temp_standard_entry_tuesday(self, start, end, temp):
         trigger = False
         rules = self.get_all_temp_rules()
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
@@ -749,6 +774,8 @@ class DeviceAdministration(object):
     def set_temp_standard_entry_wednesday(self, start, end, temp):
         trigger = False
         rules = self.get_all_temp_rules()
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
@@ -800,6 +827,8 @@ class DeviceAdministration(object):
     def set_temp_standard_entry_thursday(self, start, end, temp):
         trigger = False
         rules = self.get_all_temp_rules()
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
@@ -851,6 +880,8 @@ class DeviceAdministration(object):
     def set_temp_standard_entry_friday(self, start, end, temp):
         trigger = False
         rules = self.get_all_temp_rules()
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):

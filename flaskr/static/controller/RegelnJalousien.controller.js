@@ -13,7 +13,7 @@ sap.ui.define([
         return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.RegelnJalousien", {
             onInit : function() {
                 self = this;
-                var oModel = new sap.ui.model.json.JSONModel({"id": null, "startzeit":null,"endzeit":null,"wert":null});
+                var oModel = new sap.ui.model.json.JSONModel({"id": null, "startzeit":null,"endzeit":null,"min":null,"max": null});
                 this.getView().setModel(oModel)
                 let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.getRoute("regelnjalousien").attachMatched(this._onRouteMatched, this);
@@ -22,10 +22,11 @@ sap.ui.define([
 
             addEmptyObject : function() {
                 var oModel = this.getView().getModel();
+                console.log(oModel)
                 var aData  = oModel.getProperty("/data");
-
-                var emptyObject = { createNew: true};
-
+                console.log(aData)
+                var emptyObject = { createNew: true };
+                console.log(emptyObject)
                 aData.push(emptyObject);
                 oModel.setProperty("/data", aData);
                 this.addEntry();
@@ -37,11 +38,12 @@ sap.ui.define([
                
             },
             _onRouteMatched : function (oEvent){
+              //this.addEmptyObject()
                 var datatest2 = []
                 this.getData().done(function(result) {
                     
-                    var dummyDatat = result.d.results
-                    dummyDatat.map(function(eintrag, index) {
+                    var data = result.d.results
+                    data.map(function(eintrag, index) {
                         datatest2.push(eintrag)
                     })
                     console.log(datatest2)                
@@ -51,18 +53,14 @@ sap.ui.define([
                     //console.log("Jetzt bin ich am Ende")
                 })
 
-                //var oModel = new sap.ui.model.json.JSONModel({data: datatest2});
-                //this.getView().setModel(oModel);
-                //this.addEmptyObject()
-
             },
             getData: function () {
-				console.log('Get data für Regeln Jalousien')
-				return jQuery.ajax({
-					url: "/RegelnJalousien",
-					type: "GET"
-				});
-			},
+              console.log('Get data für Regeln Jalousien')
+              return jQuery.ajax({
+                url: "/GetJalRule",
+                type: "GET"
+              });
+            },
 
               enableControl : function(value) {
                 return !!value;
@@ -78,7 +76,8 @@ sap.ui.define([
                   id: null,
                   startzeit: null,
                   endzeit: null, 
-                  wert: null,
+                  min: null,
+                  max: null,
                   createNew: false,
                   removeNew: false,
                   saveNew: true,
@@ -104,28 +103,28 @@ sap.ui.define([
                 sap.ui.core.BusyIndicator.hide(0);
                 //var oThis = this;
                 var oData = {
-                    'jalousien_id': 1,
                     'start': obj.startzeit,
                     'end': obj.endzeit, 
-                    'value': obj.wert
+                    'min': obj.min,
+                    'max': obj.max
                 };
                 console.log(oData),
 
-                //jQuery.ajax({
-                    //url : "/",
-                    //type : "POST",
-                    //dataType : "json",
-                    //async : true,
-                    //data : oData,
-                    //success : function(response){
-                        //MessageToast.show(response.data.message);
-                        //oThis.makeGraph(response.graph);
-                        //sap.ui.core.BusyIndicator.hide();
-                    //},
-                    //error: function(response){
-                        //console.log(response);
-                    //}
-                //});
+                jQuery.ajax({
+                    url : "/SetJalRule",
+                    type : "POST",
+                    dataType : "json",
+                    async : true,
+                    data : oData,
+                    success : function(response){
+                        MessageToast.show(response.data.message);
+                        oThis.makeGraph(response.graph);
+                        sap.ui.core.BusyIndicator.hide();
+                    },
+                    error: function(response){
+                        console.log(response);
+                    }
+                });
                 this.addEmptyObject();
                 console.log('object',obj)
             },

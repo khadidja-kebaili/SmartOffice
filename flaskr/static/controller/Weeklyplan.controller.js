@@ -30,36 +30,54 @@ sap.ui.define([
                 wednesdayData.length = 0
                 thursdayData.length = 0
                 fridayData.length = 0
-                this.getData().done(function(result) {
-                    
+                this.getData("/GetStandardJalousienMonday").done(function(result) {
                     var data = result.d.results
-                    
                     data.map(function(eintrag, index) {
-                      if(eintrag.day == "Mo"){
-                          mondayData.push(eintrag)
-                      }
-                      if(eintrag.day == "Di"){
-                          tuesdayData.push(eintrag)
-                      }
-                      if(eintrag.day == "Mi"){
-                          wednesdayData.push(eintrag)
-                      }
-                      if(eintrag.day == "Do"){
-                          thursdayData.push(eintrag)
-                      }
-                      if(eintrag.day == "Fr"){
-                          fridayData.push(eintrag)
-                      }
-                      })       
+                      mondayData.push(eintrag)
+                      })     
+                    console.log(mondayData)  
                     var oModel = new sap.ui.model.json.JSONModel({data: mondayData});
                     self.getView().setModel(oModel);
+                  
+                })
+                this.getData("/GetStandardJalousienTuesday").done(function(result) {
+                  var data = result.d.results
+                  data.map(function(eintrag, index) {
+                    tuesdayData.push(eintrag)
+                    })     
+                  console.log(mondayData)  
+              
+                })
+                this.getData("/GetStandardJalousienWednesday").done(function(result) {
+                  var data = result.d.results
+                  data.map(function(eintrag, index) {
+                    wednesdayData.push(eintrag)
+                    })     
+                  console.log(mondayData)  
+              
+                })
+                this.getData("/GetStandardJalousienThursday").done(function(result) {
+                  var data = result.d.results
+                  data.map(function(eintrag, index) {
+                    thursdayData.push(eintrag)
+                    })     
+                  console.log(mondayData)  
+              
+                })
+                this.getData("/GetStandardJalousienFriday").done(function(result) {
+                  var data = result.d.results
+                  data.map(function(eintrag, index) {
+                    fridayData.push(eintrag)
+                    })     
+                  console.log(mondayData)  
+              
                 })
             },
             
-            getData: function () {
+            getData: function (url) {
               console.log('Get data für Wochenplan Jalousien')
               return jQuery.ajax({
-                url: "/WochenplanJalousien",
+                url: url,
                 type: "GET"
               });
             },
@@ -67,7 +85,8 @@ sap.ui.define([
               addEmptyObject : function() {
                 var oModel = this.getView().getModel();
                 var aData  = oModel.getProperty("/data");
-
+                console.log(oModel)
+                console.log(aData)
                 var emptyObject = { createNew: true, removeNew: false};
 
                 aData.push(emptyObject);
@@ -116,36 +135,95 @@ sap.ui.define([
                 sap.ui.core.BusyIndicator.hide(0);
                 //var oThis = this;
                 console.log('objSave', obj, "path", path, "obj.", )
-                var oData = {
-                    'jalousien_id': 1,
-                    'day': obj.day,
+              
+                if(obj.day == "Mo"){
+                    console.log("Send Monday")
+                    var oData = {
                     'start': obj.startzeit,
                     'end': obj.endzeit, 
-                    'wert': obj.wert
+                    'value': parseInt(obj.wert)
+                    };
+                    this.sendValues(oData, "/SetJalousienStandardMonday")
+                }
+                if(obj.day == "Di"){
+                  console.log("Send Tuesday")
+                  var oData = {
+                  'start': obj.startzeit,
+                  'end': obj.endzeit, 
+                  'value': parseInt(obj.wert)
+                  };
+                  this.sendValues(oData, "/SetJalousienStandardTuesday")
+                }
+                if(obj.day == "Mi"){
+                  console.log("Send Wednesday")
+                  var oData = {
+                  'start': obj.startzeit,
+                  'end': obj.endzeit, 
+                  'value': parseInt(obj.wert)
+                  };
+                  this.sendValues(oData, "/SetJalousienStandardWednesday")
+              }
+                if(obj.day == "Do"){
+                  console.log("Send Thursday")
+                  var oData = {
+                  'start': obj.startzeit,
+                  'end': obj.endzeit, 
+                  'value': parseInt(obj.wert)
+                  };
+                  this.sendValues(oData, "/SetJalousienStandardThursday")
+              }
+              if(obj.day == "Fr"){
+                console.log("Send Friday")
+                var oData = {
+                'start': obj.startzeit,
+                'end': obj.endzeit, 
+                'value': parseInt(obj.wert)
                 };
-                console.log(oData)
-                //jQuery.ajax({
-                    //url : "/",
-                    //type : "POST",
-                    //dataType : "json",
-                    //async : true,
-                    //data : oData,
-                    //success : function(response){
-                        //MessageToast.show(response.data.message);
-                        //oThis.makeGraph(response.graph);
-                        //sap.ui.core.BusyIndicator.hide();
-                    //},
-                    //error: function(response){
-                        //console.log(response);
-                    //}
-                //});
+                this.sendValues(oData, "/SetJalousienStandardFriday")
+            }
 
+
+              },
+              sendValues: function(oData, url) {
+                jQuery.ajax({
+                  url : url,
+                  type : "POST",
+                  dataType : "json",
+                  async : true,
+                  data : oData,
+                  success : function(response){
+                      MessageToast.show(response.data.message);
+    
+                      sap.ui.core.BusyIndicator.hide();
+                  },
+                  error: function(response){
+                      console.log(response);
+                  }
+              });
               },
               removeEntry: function (oEvent) {
                 var path = oEvent.getSource().getBindingContext().getPath();
                 var obj = oEvent.getSource().getBindingContext().getObject();
                 console.log('objDelte', obj)
                 MessageToast.show("Löschen Eintrag mit ID:" + obj.id)  
+                var oData = {
+                  'id_entry': obj.id,
+                  'test': 1
+                  };
+                console.log(oData)
+                 //jQuery.ajax({
+                    //url : "/DeleteStandardJalousienMonday",
+                    //type : "POST",
+                    //dataType : "json",
+                    //data: oData,
+                    //success : function(response){
+                       // MessageToast.show(response.data.message);
+                       // sap.ui.core.BusyIndicator.hide();
+                    //},
+                    //error: function(response){
+                    //    console.log(response);
+                    //}
+                //});
             },
             onSelectionChange: function (oEvent) {
                 //MessageToast.show("Ausgewählter Wochentag:" + oEvent.getParameter("item").getText() );

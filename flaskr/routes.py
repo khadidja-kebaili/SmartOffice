@@ -55,10 +55,7 @@ def LastStatusJalousien():
 
     last_status = adm.get_last_status()
 
-    odata['d']['results'].append({
-        'date': last_status.get_date(),
-        'percentage': last_status.get_percentage()
-    })
+    odata['d']['results'].append(last_status.get_percentage())
 
     return jsonify(odata)
 
@@ -73,11 +70,13 @@ def set_jal():
     adm = DeviceAdministration()
 
     data = request.form["value"]
+    data = int(data)
     time.sleep(4)
     adm.set_status_to_percentage_by_id(1, data)
     jal = adm.get_last_status()
     print('Jal: ', jal)
-    return data
+    x = "Hi"
+    return x
 
 
 
@@ -188,7 +187,9 @@ def get_entries_jal_monday():
 
     odata = {
         'd': {
-            'results': []
+            'results': [
+                
+            ]
         }
     }
 
@@ -196,12 +197,26 @@ def get_entries_jal_monday():
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
-            'start': elem.get_start_time(),
-            'end': elem.get_end_time(),
-            'value': elem.get_value()
+            'startzeit': elem.get_start_time(),
+            'endzeit': elem.get_end_time(),
+            'wert': elem.get_value()
         })
 
     return jsonify(odata)
+
+@app.route('/DeleteStandardJalousienMonday', methods=["POST"])
+def delete_entry_jal_monday_by_id():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+    id_entry = request.form["id_entry"]
+    test = request.form["test"]
+    print(test)
+    time.sleep(4)
+    adm.delete_jal_monday_ById(id_entry)
+    return ' '
 
 
 @app.route('/GetStandardJalousienTuesday', methods=["GET"])
@@ -222,9 +237,9 @@ def get_entries_jal_tuesday():
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
-            'start': elem.get_start_time(),
-            'end': elem.get_end_time(),
-            'value': elem.get_value()
+            'startzeit': elem.get_start_time(),
+            'endzeit': elem.get_end_time(),
+            'wert': elem.get_value()
         })
 
     return jsonify(odata)
@@ -248,9 +263,9 @@ def get_entries_jal_wednesday():
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
-            'start': elem.get_start_time(),
-            'end': elem.get_end_time(),
-            'value': elem.get_value()
+            'startzeit': elem.get_start_time(),
+            'endzeit': elem.get_end_time(),
+            'wert': elem.get_value()
         })
 
     return jsonify(odata)
@@ -274,9 +289,9 @@ def get_entries_jal_thursday():
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
-            'start': elem.get_start_time(),
-            'end': elem.get_end_time(),
-            'value': elem.get_value()
+            'startzeit': elem.get_start_time(),
+            'endzeit': elem.get_end_time(),
+            'wert': elem.get_value()
         })
 
     return jsonify(odata)
@@ -300,9 +315,9 @@ def get_entries_jal_friday():
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
-            'start': elem.get_start_time(),
-            'end': elem.get_end_time(),
-            'value': elem.get_value()
+            'startzeit': elem.get_start_time(),
+            'endzeit': elem.get_end_time(),
+            'wert': elem.get_value()
         })
 
     return jsonify(odata)
@@ -320,9 +335,10 @@ def set_jal_standard_monday():
     start = request.form["start"]
     end = request.form["end"]
     value = request.form["value"]
+    value = int(value)
     time.sleep(4)
     adm.set_jal_standard_entry_monday(start, end, value)
-    return start, end, value
+    return ' '
 
 
 @app.route('/SetJalousienStandardTuesday', methods=["POST"])
@@ -339,7 +355,7 @@ def set_jal_standard_tuesday():
     value = request.form["value"]
     time.sleep(4)
     adm.set_jal_standard_entry_tuesday(start, end, value)
-    return start, end, value
+    return ' '
 
 
 @app.route('/SetJalousienStandardWednesday', methods=["POST"])
@@ -356,7 +372,7 @@ def set_jal_standard_wednesday():
     value = request.form["value"]
     time.sleep(4)
     adm.set_jal_standard_entry_wednesday(start, end, value)
-    return start, end, value
+    return ' '
 
 
 @app.route('/SetJalousienStandardThursday', methods=["POST"])
@@ -373,7 +389,7 @@ def set_jal_standard_thursday():
     value = request.form["value"]
     time.sleep(4)
     adm.set_jal_standard_entry_thursday(start, end, value)
-    return start, end, value
+    return ' '
 
 
 @app.route('/SetJalousienStandardFriday', methods=["POST"])
@@ -390,7 +406,7 @@ def set_jal_standard_friday():
     value = request.form["value"]
     time.sleep(4)
     adm.set_jal_standard_entry_friday(start, end, value)
-    return start, end, value
+    return ' '
 
 @app.route('/SetJalRule', methods=["POST"])
 def set_jal_rule():
@@ -406,8 +422,34 @@ def set_jal_rule():
     min = request.form["min"]
     max = request.form["max"]
     time.sleep(4)
-    adm.set_jal_rule(max, min, start, end)
-    return start, end, max, min
+    adm.set_jal_rule(min, max, start, end)
+    return ' '
+
+@app.route('/GetJalRule', methods=["GET"])
+def get_jal_rules():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+    rules = adm.get_all_jal_rules()
+    for elem in rules:
+        odata['d']['results'].append({
+            'id': elem.get_id(),
+            'startzeit': elem.get_start_time(),
+            'endzeit': elem.get_end_time(),
+            'min': elem.get_min(),
+            'max': elem.get_max()
+        })
+
+    return jsonify(odata)
 
 
 @app.route('/SetMinTemp', methods=["POST"])
@@ -479,9 +521,9 @@ def get_entries_temp_monday():
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
-            'start': elem.get_start_time(),
-            'end': elem.get_end_time(),
-            'value': elem.get_value()
+            'startzeit': elem.get_start_time(),
+            'endzeit': elem.get_end_time(),
+            'wert': elem.get_value()
         })
 
     return jsonify(odata)
@@ -505,9 +547,9 @@ def get_entries_temp_tuesday():
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
-            'start': elem.get_start_time(),
-            'end': elem.get_end_time(),
-            'value': elem.get_value()
+            'startzeit': elem.get_start_time(),
+            'endzeit': elem.get_end_time(),
+            'wert': elem.get_value()
         })
 
     return jsonify(odata)
@@ -531,9 +573,9 @@ def get_entries_temp_wednesday():
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
-            'start': elem.get_start_time(),
-            'end': elem.get_end_time(),
-            'value': elem.get_value()
+            'startzeit': elem.get_start_time(),
+            'endzeit': elem.get_end_time(),
+            'wert': elem.get_value()
         })
 
     return jsonify(odata)
@@ -557,9 +599,9 @@ def get_entries_temp_thursday():
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
-            'start': elem.get_start_time(),
-            'end': elem.get_end_time(),
-            'value': elem.get_value()
+            'startzeit': elem.get_start_time(),
+            'endzeit': elem.get_end_time(),
+            'wert': elem.get_value()
         })
 
     return jsonify(odata)
@@ -583,9 +625,9 @@ def get_entries_temp_friday():
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
-            'start': elem.get_start_time(),
-            'end': elem.get_end_time(),
-            'value': elem.get_value()
+            'startzeit': elem.get_start_time(),
+            'endzeit': elem.get_end_time(),
+            'wert': elem.get_value()
         })
 
     return jsonify(odata)
@@ -603,9 +645,10 @@ def set_temp_standard_monday():
     start = request.form["start"]
     end = request.form["end"]
     value = request.form["value"]
+    value = int(value)
     time.sleep(4)
     adm.set_temp_standard_entry_monday(start, end, value)
-    return start, end, value
+    return ' '
 
 
 @app.route('/SetThermostatStandardTuesday', methods=["POST"])
@@ -620,9 +663,10 @@ def set_temp_standard_tuesday():
     start = request.form["start"]
     end = request.form["end"]
     value = request.form["value"]
+    value = int(value)
     time.sleep(4)
     adm.set_temp_standard_entry_tuesday(start, end, value)
-    return start, end, value
+    return ' '
 
 
 @app.route('/SetThermostatStandardWednesday', methods=["POST"])
@@ -637,9 +681,10 @@ def set_temp_standard_wednesday():
     start = request.form["start"]
     end = request.form["end"]
     value = request.form["value"]
+    value = int(value)
     time.sleep(4)
     adm.set_temp_standard_entry_wednesday(start, end, value)
-    return start, end, value
+    return ' '
 
 
 @app.route('/SetThermostatStandardThursday', methods=["POST"])
@@ -654,9 +699,10 @@ def set_temp_standard_thursday():
     start = request.form["start"]
     end = request.form["end"]
     value = request.form["value"]
+    value = int(value)
     time.sleep(4)
     adm.set_temp_standard_entry_thursday(start, end, value)
-    return start, end, value
+    return ' '
 
 
 @app.route('/SetThermostatStandardFriday', methods=["POST"])
@@ -671,8 +717,9 @@ def set_temp_standard_friday():
     start = request.form["start"]
     end = request.form["end"]
     value = request.form["value"]
+    value = int(value)
     time.sleep(4)
     adm.set_temp_standard_entry_friday(start, end, value)
-    return start, end, value
+    return ' '
 
 

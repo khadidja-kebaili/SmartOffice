@@ -9,11 +9,11 @@
         id="thermoMain"
         title="Thermostate"
         class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer"
+        titleAlignment="Center"
         showNavButton="true"
+        navButtonPress="onNavBack"
     >
-		<headerContent>
-			<Button id="b1" icon="sap-icon://save" tooltip="Save"/>
-		</headerContent>
+		
 		<content>
 			<GenericTile id="gt1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" press="goToThermoLounge">
                 <TileContent id="tc1">

@@ -19,7 +19,7 @@
                     id="page" 
                     title="Reporting zur Energie- und Raumnutzung"
                     class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer"
-                    showNavButton="true"
+                    showNavButton="true" navButtonPress="onNavBack"
                 >
 
             <!-- Seitentext Information-->
@@ -31,64 +31,58 @@
             <!-- Dect-Thermostat Card Control Header folgt-->
             <f:Card class="sapUiMediumMargin" width="300px">
                 <f:header>
-                    <card:Header title="Echtzeit Soll-Ist Vergleich" subtitle=" Dect-Thermostat" />
+                    <card:Header title="Soll-Ist Temperaturwert Vergleich" subtitle=" Dect-Thermostat" />
                 </f:header>
 
             <!-- Dect-Thermostat Card Control Content folgt, !muss angepasst werden!-->
                 <f:content>
-                    <List
-                        showSeparators="None"
-                        items="{TestModel>/results}">
-                        <CustomListItem  type="Active">
-                            <HBox alignItems="Center" justifyContent="SpaceBetween">
-                                <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
-                                    <Title level="H3" text="Ist-Wert" />
-
-                                    <Label text="Name:" />
-									<Text class="titleText" text="{TestModel>name}" />
-
-                                    <Label text="Percentage:" />
-									<Text class="titleText" text="{TestModel>percentage}" />
-                                </VBox>
-                                <ObjectStatus
-                                    class="sapUiTinyMargin sapUiSmallMarginEnd"
-                                    text="{TestModel>/name}"
-                                    state="{products>statusSchema}" />
+                    <List>
+				        <CustomListItem>
+					        <HBox alignItems="Center" justifyContent="SpaceBetween">
+						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+							        <Title level="H3" text="Durchschnitt Ist-Wert Temperatur:" />
+                                    <!--<<Text id="actualvaluetempid" text="{InputValue'}" width="100%"/>-->
+						        </VBox>
                             </HBox>
-                        </CustomListItem>
-                    </List>
+				        </CustomListItem>
+                        <CustomListItem>
+					        <HBox alignItems="Center" justifyContent="SpaceBetween">
+						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+                                    <Title level="H3" text="Durchschnitt Soll-Wert Temperatur:" />
+                                    <!--<Text id="supposedlvaluetempid" text="{InputValue'}" width="100%"/>-->
+						        </VBox>
+                            </HBox>
+				        </CustomListItem>
+			        </List>
                 </f:content>
             </f:Card>
 
             <!-- WLAN-Jalousienmodul Card Control Header folgt-->
             <f:Card class="sapUiMediumMargin" width="300px">
                 <f:header>
-                    <card:Header title="Echtzeit Soll-Ist Vergleich" subtitle=" WLAN-Jalousienmodul" />
+                    <card:Header title="Soll-Ist Statuswert Vergleich" subtitle=" WLAN-Jalousienmodul" />
                 </f:header>
 
             <!-- WLAN-Jalousienmodul Card Control Content folgt, !muss angepasst werden!-->
                 <f:content>
-                    <Button id="testbutton" text="testbutton" press="press('LastStatusJalousien')"/> -->
-                    <List
-                        id="attachmentsList"
-                        itemPress="masterListItemSelected"
-                        items="{TestModel>/results}"
-                        growing="true"
-					    growingThreshold="50"
-					    growingScrollToLoad="true"
-                        liveChange=".getValue">
-
-                        <CustomListItem type ="Active">
-                            <HBox alignItems="Start" justifyContent="SpaceBetween">
-                                <HBox>
-                                    <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
-                                        <Label text="Percentage:" />
-							            <Text class="titleText" text="TestModel>percentage" />
-                                    </VBox>
-                                </HBox>
+                    <List>
+				        <CustomListItem>
+					        <HBox alignItems="Center" justifyContent="SpaceBetween">
+						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+							        <Title level="H3" text="Durchschnitt Ist-Wert in Prozent:" />
+                                    <Text id="actualvaluejalid" text="{InputValue'}" width="100%"/>
+						        </VBox>
                             </HBox>
-                        </CustomListItem>
-                    </List>
+				        </CustomListItem>
+                        <CustomListItem>
+					        <HBox alignItems="Center" justifyContent="SpaceBetween">
+						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+                                    <Title level="H3" text="Durchschnitt Soll-Wert in Prozent:" />
+                                    <!--<Text id="supposedlvaluejalid" text="{InputValue'}" width="100%"/>-->
+						        </VBox>
+                            </HBox>
+				        </CustomListItem>
+			        </List>
                 </f:content>
             </f:Card>
 
@@ -135,13 +129,6 @@
                         </layout:VerticalLayout>
                     </layout:Grid>
                 </Panel>-->
-
-                <footer>
-                    <OverflowToolbar>
-                        <ToolbarSpacer/>
-                        <Button text="Edit" />
-                    </OverflowToolbar>
-                </footer>
                     
                 </Page>
             </pages>

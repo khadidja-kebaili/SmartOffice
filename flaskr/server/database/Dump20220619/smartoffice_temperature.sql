@@ -25,11 +25,11 @@ DROP TABLE IF EXISTS `temperature`;
 CREATE TABLE `temperature` (
   `id` int NOT NULL,
   `temperature` float DEFAULT NULL,
-  `date` date DEFAULT NULL,
-  `device_id` varchar(45) DEFAULT NULL,
+  `date` datetime DEFAULT NULL,
+  `device_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_idx` (`device_id`),
-  CONSTRAINT `id` FOREIGN KEY (`device_id`) REFERENCES `jalousien` (`device_id`)
+  CONSTRAINT `id` FOREIGN KEY (`device_id`) REFERENCES `thermostate` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
