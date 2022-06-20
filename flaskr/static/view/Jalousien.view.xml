@@ -11,8 +11,9 @@
                 <Page id="page" title="Jalousien" titleAlignment="Center" showNavButton="true" navButtonPress="onNavBack">
                     <content> 
 						<layout:VerticalLayout id="verticallayoutcontent" width="100%">
-							<Text id="textjalousien" text="Auf wie viel Prozent sollen die Jalousien gesteuert werden?" textAlign="Center" width="100%" class="sapUiMediumMargin"/>            
+							<Text id="textjalousien" text="Auf wie viel Prozent sollen die Jalousien geöffnet werden?" textAlign="Center" width="100%" class="sapUiMediumMargin"/>            
 							<Slider id="sliderrealtime" value="{/InputValue}" width="100%"
+								enableTickmarks="true"
 								min="0" max="100"
 								showAdvancedTooltip="true"
 								showHandleTooltip="false"
@@ -20,32 +21,6 @@
 								class="sapUiSmallMarginBottom" 
 								liveChange=".sendValue"/>
 							
-
-				<!--
-				<List
-					id="attachmentsList"
-					itemPress="masterListItemSelected"
-					items="{TestModel>/results}"
-					growing="true"
-					growingThreshold="50"
-					growingScrollToLoad="true">
-
-					<CustomListItem type="Active">
-						<HBox alignItems="Start" justifyContent="SpaceBetween">
-							<HBox>
-								<VBox class="sapUiTinyMarginTop sapUiTinyMarginBottom">
-
-									<Label text="Date:" />
-									<Text class="titleText" text="{TestModel>date}" />
-
-									<Label text="Percentage:" />
-									<Text class="titleText" text="{TestModel>percentage}" />
-								</VBox>
-							</HBox>
-						</HBox>
-					</CustomListItem>
-				</List>-->
-
             </layout:VerticalLayout>
             </content>
                 
