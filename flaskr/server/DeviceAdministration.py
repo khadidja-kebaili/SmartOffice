@@ -369,7 +369,7 @@ class DeviceAdministration(object):
         sid = self.generate_sid(
             'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
         conn.request("GET",
-                     "/webservices/homeautoswitch.lua?ain=139790057201&switchcmd=gethrktsoll&sid={}".format(
+                     "/webservices/homeautoswitch.lua?ain=139790057201&switchcmd=gettemperature&sid={}".format(
                          sid),
                      payload, headers)
         res = conn.getresponse()
@@ -1171,9 +1171,6 @@ class DeviceAdministration(object):
         with FridayMapper() as mapper:
             return mapper.find_all()'''
 
-d = DeviceAdministration()
-k = d.set_status_to_percentage_by_id(1, 10)
-if type(k) == tuple:
-    print('Hallo')
 
-d.delete_standard_entry_monday()
+d = DeviceAdministration()
+print(d.get_temperature())
