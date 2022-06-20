@@ -353,6 +353,7 @@ def set_jal_standard_tuesday():
     start = request.form["start"]
     end = request.form["end"]
     value = request.form["value"]
+    value = int(value)
     time.sleep(4)
     adm.set_jal_standard_entry_tuesday(start, end, value)
     return ' '
@@ -370,6 +371,7 @@ def set_jal_standard_wednesday():
     start = request.form["start"]
     end = request.form["end"]
     value = request.form["value"]
+    value = int(value)
     time.sleep(4)
     adm.set_jal_standard_entry_wednesday(start, end, value)
     return ' '
@@ -387,6 +389,7 @@ def set_jal_standard_thursday():
     start = request.form["start"]
     end = request.form["end"]
     value = request.form["value"]
+    value = int(value)
     time.sleep(4)
     adm.set_jal_standard_entry_thursday(start, end, value)
     return ' '
@@ -404,6 +407,7 @@ def set_jal_standard_friday():
     start = request.form["start"]
     end = request.form["end"]
     value = request.form["value"]
+    value = int(value)
     time.sleep(4)
     adm.set_jal_standard_entry_friday(start, end, value)
     return ' '
