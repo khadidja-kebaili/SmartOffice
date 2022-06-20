@@ -74,7 +74,11 @@ sap.ui.define([
                     }
                 });
             if (displayerror == 1) {
-                MessageBox.error("Der Eintrag verstößt gegen eine Regel.");
+                var time = "12:00:00"
+                var timeend = "14:00:00"
+                var min = "20"
+                var max = "70"
+                MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Startzeit: " + time + " \n Endzeit: " + timeend + " \n Mindestwert: " + min + " \n Maximalwert: " + max);
             }
         },
         onNavBack: function () {
