@@ -27,6 +27,7 @@ import time
 import http.client
 from datetime import datetime, timedelta
 import datetime
+import statistics
 
 
 class DeviceAdministration(object):
@@ -213,6 +214,35 @@ class DeviceAdministration(object):
     def get_all_jal_status(self):
         with JalousienStatusMapper() as mapper:
             return mapper.find_all()
+
+    def get_jal_mean_of_hours_for_day(self, weekday, hour):
+        liste = self.get_all_jal_status()
+        stats_for_weekday = []
+        hourly_rate = []
+        values = []
+        for elem in liste:
+            if elem.get_date().isoweekday() == weekday:
+                stats_for_weekday.append(elem)
+        for elem in stats_for_weekday:
+            if elem.get_date().hour == hour:
+                hourly_rate.append(elem)
+        for elem in hourly_rate:
+            values.append(elem.get_percentage())
+        if len(values) > 1:
+            return statistics.mean(values)
+        elif len(values) == 1:
+            return values[0]
+        else:
+            return 0
+
+    def get_mean_jal_for_day(self, von, bis, day):
+        values = []
+        delta = bis - von
+        for elem in range(von , bis+1):
+            print(elem, day)
+            values.append(self.get_jal_mean_of_hours_for_day(day, elem))
+        return values
+
 
     def in_between_times(self, searched_time, start, end):
         searched_time = datetime.datetime.strptime(searched_time, '%H:%M:%S')

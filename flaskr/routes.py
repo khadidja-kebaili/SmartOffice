@@ -80,6 +80,32 @@ def set_jal():
     return data
 
 
+
+@app.route('/JalousienStatusPerHour', methods=["GET"])
+def get_jal_stats_per_hour_for_weekday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+    weekday = request.form["weekday"]
+    von = request.form["von"]
+    bis = request.form["bis"]
+    data = adm.get_mean_jal_for_day(von, bis, weekday)
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+    for elem in data:
+        odata['d']['results'].append({
+            'mean_value': elem,
+        })
+
+    return jsonify(odata)
+
 @app.route('/Status', methods=["GET"])
 def Status_by_Timeperiode():
     """
