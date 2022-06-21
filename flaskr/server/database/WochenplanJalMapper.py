@@ -132,9 +132,10 @@ class WeeklyPlanJalMapper(Mapper):
         return entry
 
     def delete(self, entry):
+        print(entry)
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM standard_jal WHERE id={}".format(entry)
+        command = "DELETE FROM standard_jal WHERE id={}".format(entry.get_id())
         cursor.execute(command)
 
         self._cnx.commit()

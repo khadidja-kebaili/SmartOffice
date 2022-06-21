@@ -199,9 +199,9 @@ class WednesdayMapper(Mapper):
     def delete(self, wednesday):
         cursor = self._cnx.cursor()
 
-        command = "DELETE FROM wednesday WHERE id={} and type=%s".format(
-            wednesday.get_id(), wednesday.get_type())
-        cursor.execute(command)
+        command = "DELETE FROM wednesday WHERE id=%s and type=%s"
+        data = (wednesday.get_id(), wednesday.get_type())
+        cursor.execute(command, data)
 
         self._cnx.commit()
         cursor.close()
