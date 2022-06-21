@@ -65,21 +65,19 @@ sap.ui.define([
                     async: true,
                     data: oData,
                     success: function (response) {
-                        MessageToast.show(response.data.message);
+                        console.log(response)
                         //oThis.makeGraph(response.graph);
                         sap.ui.core.BusyIndicator.hide();
+                        var errorcheck = response
+                        if (errorcheck == "0") {
+                            MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Bitte versuche eine andere Einstellung!");
+                        }
                     },
                     error: function (response) {
-                        console.log(response);
+                        console.log(typeof(response.responseText));
+                        
                     }
                 });
-            if (displayerror == 1) {
-                var time = "12:00:00"
-                var timeend = "14:00:00"
-                var min = "20"
-                var max = "70"
-                MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Startzeit: " + time + " \n Endzeit: " + timeend + " \n Mindestwert: " + min + " \n Maximalwert: " + max);
-            }
         },
         onNavBack: function () {
 
