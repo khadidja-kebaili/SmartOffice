@@ -109,7 +109,7 @@ def get_jal_stats_per_hour_for_weekday():
     return jsonify(odata)
 
 @app.route('/Status', methods=["GET"])
-def Status_by_Timeperiode():
+def status_per_day():
     """
     Return a simple odata container with date time information
     :return:
@@ -121,9 +121,8 @@ def Status_by_Timeperiode():
 
     adm = DeviceAdministration()
 
-    start = request.form["start"]
-    end = request.form["end"]
-    stats = adm.get_all_stats_by_timeperiod(start, end)
+    day = request.form["day"]
+    stats = adm.get_jal_mean_per_day(day)
     print('Jal: ', stats)
 
     odata = {
@@ -139,6 +138,38 @@ def Status_by_Timeperiode():
         })
 
     return odata
+
+@app.route('/Status', methods=["GET"])
+def status_for_week():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    week = request.form["week"]
+    stats = adm.get_jal_median_per_week(week)
+    print('Jal: ', stats)
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    for elem in stats:
+        odata['d']['results'].append({
+            'date': elem.get_date(),
+            'percentage': elem.get_percentage()
+        })
+
+    return odata
+
 
 
 @app.route('/SetTemp', methods=["POST"])

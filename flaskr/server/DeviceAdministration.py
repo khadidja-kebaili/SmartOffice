@@ -217,7 +217,25 @@ class DeviceAdministration(object):
         with JalousienStatusMapper() as mapper:
             return mapper.find_all()
 
-    def get_jal_median_of_hours_for_day(self, day, hour):
+    # def get_jal_median_of_hours_for_day(self, day, hour):
+    #     all_jal_stats = self.get_all_jal_status()
+    #     stats_for_weekday = []
+    #     hourly_rate = []
+    #     for elem in all_jal_stats:
+    #         vergleich = elem.get_date().strftime('%Y-%m-%d')
+    #         if vergleich == day:
+    #             stats_for_weekday.append(elem)
+    #     for elem in stats_for_weekday:
+    #         if elem.get_date().hour == hour:
+    #             hourly_rate.append(elem.get_percentage())
+    #     if len(hourly_rate) > 1:
+    #         return statistics.median(hourly_rate)
+    #     elif len(hourly_rate) == 1:
+    #         return hourly_rate[0]
+    #     else:
+    #         return 0
+
+    def get_last_entry_of_hour_for_day(self, day, hour):
         all_jal_stats = self.get_all_jal_status()
         stats_for_weekday = []
         hourly_rate = []
@@ -228,18 +246,13 @@ class DeviceAdministration(object):
         for elem in stats_for_weekday:
             if elem.get_date().hour == hour:
                 hourly_rate.append(elem.get_percentage())
-        if len(hourly_rate) > 1:
-            return statistics.median(hourly_rate)
-        elif len(hourly_rate) == 1:
-            return hourly_rate[0]
-        else:
-            return 0
+        return hourly_rate[-1]
 
-    def get_jal_median_per_day(self, day):
+    def get_jal_mean_per_day(self, day):
         result = []
         i = 6
         while i <= 20:
-            x = self.get_jal_median_of_hours_for_day(day, i)
+            x = self.get_last_entry_of_hour_for_day(day, i)
             result.append(x)
             i += 1
         return statistics.mean(result)
@@ -255,7 +268,7 @@ class DeviceAdministration(object):
             elem_week = elem.get_date().isocalendar()[1]
             day = elem.get_date().strftime('%Y-%m-%d')
             if elem_week == week:
-                x = self.get_jal_median_per_day(day)
+                x = self.get_jal_mean_per_day(day)
                 weekly_stats.append(x)
         if len(weekly_stats) > 1:
             return statistics.median(weekly_stats)
@@ -269,7 +282,7 @@ class DeviceAdministration(object):
         delta = bis - von
         week = datetime.datetime.strptime(day, '%Y-%m-%d').isocalendar()[1]
         for elem in range(von , bis+1):
-            x = self.get_jal_median_of_hours_for_day(day, elem)
+            x = self.get_last_entry_of_hour_for_day(day, elem)
             values.append(x)
         return values
 
@@ -1010,7 +1023,7 @@ class DeviceAdministration(object):
             mapper.delete_jal_rules_byId(id_entry)
 
     def set_temp_rule(self, min, max, start, end):
-    '''    def set_temp_rule(self, min, max, start, end):
+     '''    def set_temp_rule(self, min, max, start, end):
             rule = RulesBO()
             rule.set_min(min)
             rule.set_max(max)
