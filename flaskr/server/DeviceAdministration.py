@@ -242,7 +242,7 @@ class DeviceAdministration(object):
             x = self.get_jal_median_of_hours_for_day(day, i)
             result.append(x)
             i += 1
-        return statistics.median(result)
+        return statistics.mean(result)
 
     def get_jal_median_per_week(self, week):
         liste = self.get_all_jal_status()
@@ -252,12 +252,15 @@ class DeviceAdministration(object):
             if elem.get_date().isocalendar()[1] == week:
                 stats_for_week.append(elem)
         for elem in stats_for_week:
-            week = elem.get_date().isocalendar()[1]
-            weekly_stats.append(self.get_jal_median_per_day(str(elem.get_date().weekday()), week))
-        if len(stats_for_week) > 1:
-            return statistics.median(stats_for_week)
-        elif len(stats_for_week) == 1:
-            return stats_for_week[0]
+            elem_week = elem.get_date().isocalendar()[1]
+            day = elem.get_date().strftime('%Y-%m-%d')
+            if elem_week == week:
+                x = self.get_jal_median_per_day(day)
+                weekly_stats.append(x)
+        if len(weekly_stats) > 1:
+            return statistics.median(weekly_stats)
+        elif len(weekly_stats) == 1:
+            return weekly_stats[0]
         else:
             return 0
 
@@ -266,7 +269,8 @@ class DeviceAdministration(object):
         delta = bis - von
         week = datetime.datetime.strptime(day, '%Y-%m-%d').isocalendar()[1]
         for elem in range(von , bis+1):
-            values.append(self.get_jal_median_of_hours_for_day(day, elem, week))
+            x = self.get_jal_median_of_hours_for_day(day, elem)
+            values.append(x)
         return values
 
 
