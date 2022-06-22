@@ -217,32 +217,73 @@ class DeviceAdministration(object):
         with JalousienStatusMapper() as mapper:
             return mapper.find_all()
 
-    def get_jal_mean_of_hours_for_day(self, weekday, hour):
-        liste = self.get_all_jal_status()
+    # def get_jal_median_of_hours_for_day(self, day, hour):
+    #     all_jal_stats = self.get_all_jal_status()
+    #     stats_for_weekday = []
+    #     hourly_rate = []
+    #     for elem in all_jal_stats:
+    #         vergleich = elem.get_date().strftime('%Y-%m-%d')
+    #         if vergleich == day:
+    #             stats_for_weekday.append(elem)
+    #     for elem in stats_for_weekday:
+    #         if elem.get_date().hour == hour:
+    #             hourly_rate.append(elem.get_percentage())
+    #     if len(hourly_rate) > 1:
+    #         return statistics.median(hourly_rate)
+    #     elif len(hourly_rate) == 1:
+    #         return hourly_rate[0]
+    #     else:
+    #         return 0
+
+    def get_last_entry_of_hour_for_day(self, day, hour):
+        all_jal_stats = self.get_all_jal_status()
         stats_for_weekday = []
         hourly_rate = []
-        values = []
-        for elem in liste:
-            if elem.get_date().isoweekday() == weekday:
+        for elem in all_jal_stats:
+            vergleich = elem.get_date().strftime('%Y-%m-%d')
+            if vergleich == day:
                 stats_for_weekday.append(elem)
         for elem in stats_for_weekday:
             if elem.get_date().hour == hour:
-                hourly_rate.append(elem)
-        for elem in hourly_rate:
-            values.append(elem.get_percentage())
-        if len(values) > 1:
-            return statistics.mean(values)
-        elif len(values) == 1:
-            return values[0]
+                hourly_rate.append(elem.get_percentage())
+        return hourly_rate[-1]
+
+    def get_jal_mean_per_day(self, day):
+        result = []
+        i = 6
+        while i <= 20:
+            x = self.get_last_entry_of_hour_for_day(day, i)
+            result.append(x)
+            i += 1
+        return statistics.mean(result)
+
+    def get_jal_median_per_week(self, week):
+        liste = self.get_all_jal_status()
+        stats_for_week = []
+        weekly_stats = []
+        for elem in liste:
+            if elem.get_date().isocalendar()[1] == week:
+                stats_for_week.append(elem)
+        for elem in stats_for_week:
+            elem_week = elem.get_date().isocalendar()[1]
+            day = elem.get_date().strftime('%Y-%m-%d')
+            if elem_week == week:
+                x = self.get_jal_mean_per_day(day)
+                weekly_stats.append(x)
+        if len(weekly_stats) > 1:
+            return statistics.median(weekly_stats)
+        elif len(weekly_stats) == 1:
+            return weekly_stats[0]
         else:
             return 0
 
-    def get_mean_jal_for_day(self, von, bis, day):
+    def get_median_jal_for_timespan(self, von, bis, day):
         values = []
         delta = bis - von
+        week = datetime.datetime.strptime(day, '%Y-%m-%d').isocalendar()[1]
         for elem in range(von , bis+1):
-            print(elem, day)
-            values.append(self.get_jal_mean_of_hours_for_day(day, elem))
+            x = self.get_last_entry_of_hour_for_day(day, elem)
+            values.append(x)
         return values
 
 
@@ -982,7 +1023,7 @@ class DeviceAdministration(object):
             mapper.delete_jal_rules_byId(id_entry)
 
     def set_temp_rule(self, min, max, start, end):
-    '''    def set_temp_rule(self, min, max, start, end):
+     '''    def set_temp_rule(self, min, max, start, end):
             rule = RulesBO()
             rule.set_min(min)
             rule.set_max(max)
@@ -1006,31 +1047,42 @@ class DeviceAdministration(object):
         rule.set_min(min)
         rule.set_type('T')
         rules = self.get_all_temp_rules()
-        for elem in rules:
-            if elem.get_start_time() is None and elem.get_end_time() is None and elem.get_min() is not min:
-                print(elem, 'wurde gelöscht.')
-                self.delete_rule(elem)
-                with RulesMapper() as mapper:
-                    mapper.insert(rule)
+        if len(rules)>= 1:
+            for elem in rules:
+                if elem.get_start_time() is None and elem.get_end_time() is None and elem.get_min() is not min:
+                    print(elem, 'wurde gelöscht.')
+                    self.delete_rule(elem)
+                    with RulesMapper() as mapper:
+                        mapper.insert(rule)
+                        return min
+                else:
+                    print('nichts passiert')
                     return min
-            else:
-                print('nichts passiert')
+        else:
+            with RulesMapper() as mapper:
+                mapper.insert(rule)
                 return min
+
 
     def set_temp_rule_max(self, max):
         rule = RulesBO()
         rule.set_max(max)
         rule.set_type('T')
         rules = self.get_all_temp_rules()
-        for elem in rules:
-            if elem.get_start_time() is None and elem.get_end_time() is None and elem.get_max() is not max:
-                print(elem, 'wurde gelöscht.')
-                self.delete_rule(elem)
-                with RulesMapper() as mapper:
-                    mapper.insert(rule)
+        if len(rules) >= 1:
+            for elem in rules:
+                if elem.get_start_time() is None and elem.get_end_time() is None and elem.get_max() is not max:
+                    print(elem, 'wurde gelöscht.')
+                    self.delete_rule(elem)
+                    with RulesMapper() as mapper:
+                        mapper.insert(rule)
+                        return max
+                else:
+                    print('nichts passiert')
                     return max
-            else:
-                print('nichts passiert')
+        else:
+            with RulesMapper() as mapper:
+                mapper.insert(rule)
                 return max
 
 
