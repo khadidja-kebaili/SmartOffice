@@ -224,7 +224,6 @@ def delete_entry_jal_monday_ById():
     for elem in monday:
         if elem.get_id() == id_entry:
             adm.delete_standard_entry_monday(elem)
-
     return ' '
 
 
@@ -474,7 +473,7 @@ def set_min_temp():
 
     adm = DeviceAdministration()
     data = request.form["value"]
-    temp = adm.set_temp_rule(data, None, None, None)
+    temp = adm.set_temp_rule_min(data)
     print('temp: ', temp)
     return data
 
@@ -511,7 +510,7 @@ def set_max_temp():
 
     adm = DeviceAdministration()
     data = request.form["value"]
-    temp = adm.set_temp_rule(None, data, None, None)
+    temp = adm.set_temp_rule_max(data)
     print('temp: ', temp)
     return data
 

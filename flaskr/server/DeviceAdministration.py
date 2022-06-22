@@ -977,23 +977,54 @@ class DeviceAdministration(object):
         with RulesMapper() as mapper:
             mapper.delete(rule)
 
-    def set_temp_rule(self, min, max, start, end):
+    '''    def set_temp_rule(self, min, max, start, end):
+            rule = RulesBO()
+            rule.set_min(min)
+            rule.set_max(max)
+            rule.set_type('T')
+            rule.set_start_time(start)
+            rule.set_end_time(end)
+            rules = self.get_all_temp_rules()
+            for elem in rules:
+                if elem.get_start_time() is None and elem.get_end_time() is None and min is None and elem.get_min()
+                    
+                    print(elem, 'wurde gelöscht.')
+                    self.delete_rule(elem)
+                else:
+                    print('nichts passiert', start, end,
+                          elem.get_start_time(), elem.get_end_time())
+            with RulesMapper() as mapper:
+                return mapper.insert(rule)'''
+
+    def set_temp_rule_min(self, min):
         rule = RulesBO()
         rule.set_min(min)
-        rule.set_max(max)
         rule.set_type('T')
-        rule.set_start_time(start)
-        rule.set_end_time(end)
         rules = self.get_all_temp_rules()
         for elem in rules:
-            if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
+            if elem.get_start_time() is None and elem.get_end_time() is None and elem.get_min() is not min:
                 print(elem, 'wurde gelöscht.')
                 self.delete_rule(elem)
+                with RulesMapper() as mapper:
+                    return mapper.insert(rule)
             else:
-                print('nichts passiert', start, end,
-                      elem.get_start_time(), elem.get_end_time())
-        with RulesMapper() as mapper:
-            return mapper.insert(rule)
+                print('nichts passiert')
+
+    def set_temp_rule_max(self, max):
+        rule = RulesBO()
+        rule.set_max(max)
+        rule.set_type('T')
+        rules = self.get_all_temp_rules()
+        for elem in rules:
+            if elem.get_start_time() is None and elem.get_end_time() is None and elem.get_max() is not max:
+                print(elem, 'wurde gelöscht.')
+                self.delete_rule(elem)
+                with RulesMapper() as mapper:
+                    return mapper.insert(rule)
+            else:
+                print('nichts passiert')
+
+
 
     def get_all_rules(self):
         with RulesMapper() as mapper:
@@ -1170,7 +1201,3 @@ class DeviceAdministration(object):
     def get_all_temp_customized_entries_friday(self):
         with FridayMapper() as mapper:
             return mapper.find_all()'''
-
-
-d = DeviceAdministration()
-print(d.get_temperature())
