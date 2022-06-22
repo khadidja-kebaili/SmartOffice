@@ -108,7 +108,7 @@ def get_jal_stats_per_hour_for_weekday():
 
     return jsonify(odata)
 
-@app.route('/Status', methods=["GET"])
+@app.route('/StatusPerDay', methods=["GET"])
 def status_per_day():
     """
     Return a simple odata container with date time information
@@ -139,7 +139,7 @@ def status_per_day():
 
     return odata
 
-@app.route('/Status', methods=["GET"])
+@app.route('/StatusPerWeek', methods=["GET"])
 def status_for_week():
     """
     Return a simple odata container with date time information
