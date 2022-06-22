@@ -437,7 +437,6 @@ class DeviceAdministration(object):
                 return message
             else:
                 trigger = True
-        print(trigger)
         if trigger:
             monday = Monday()
             monday.set_type('J')
@@ -977,6 +976,10 @@ class DeviceAdministration(object):
     def delete_rule(self, rule):
         with RulesMapper() as mapper:
             mapper.delete(rule)
+
+    def delete_jal_rules_byId(self, id_entry):
+        with RulesMapper() as mapper:
+            mapper.delete_jal_rules_byId(id_entry)
 
     def set_temp_rule(self, min, max, start, end):
         rule = RulesBO()

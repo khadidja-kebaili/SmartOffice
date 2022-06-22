@@ -139,3 +139,13 @@ class RulesMapper(Mapper):
 
         self._cnx.commit()
         cursor.close()
+
+    def delete_jal_rules_byId(self, id_entry):
+        cursor = self._cnx.cursor()
+
+        command = "DELETE FROM rules WHERE id=%s and type=%s"
+        data=(id_entry, "J")
+        cursor.execute(command, data)
+
+        self._cnx.commit()
+        cursor.close()

@@ -139,24 +139,30 @@ sap.ui.define([
                 var oModel = this.getView().getModel();
 
                 oModel.setProperty(path, obj);
-                MessageToast.show("Löschen Eintrag mit ID:" + obj.id) 
+                //MessageToast.show("Löschen Eintrag mit ID:" + obj.id) 
                 var oData = {
-                    'jalousien_id': 1,
-                    'id': obj.id
+                    'id_entry': obj.id
                 }; 
                 console.log(oData)
-                 //jQuery.ajax({
-                    //url : "/remove/{obj.id}",
-                    //type : "DELETE",
-                    //dataType : "json",
-                    //success : function(response){
-                        //MessageToast.show(response.data.message);
-                        //sap.ui.core.BusyIndicator.hide();
-                    //},
-                    //error: function(response){
-                        //console.log(response);
-                    //}
-                //});
+                 jQuery.ajax({
+                    url : "/DeleteJalRule",
+                    type : "DELETE",
+                    dataType : "json",
+                    data: oData,
+                    success : function(response){
+                        MessageToast.show(response.data.message);
+                        sap.ui.core.BusyIndicator.hide();
+                    },
+                    error: function(response){
+                        console.log(response);
+                    }
+                });
+                var idx = parseInt(path.substring(path.lastIndexOf('/') +1));
+                //console.log(idx)
+                var m = this.getView().getModel();
+                var aData  = m.getProperty("/data");
+                aData.splice(idx, 1);
+                m.setProperty("/data", aData);
             },
             
             onPress: function () {
