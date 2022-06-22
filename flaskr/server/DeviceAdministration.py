@@ -1047,31 +1047,42 @@ class DeviceAdministration(object):
         rule.set_min(min)
         rule.set_type('T')
         rules = self.get_all_temp_rules()
-        for elem in rules:
-            if elem.get_start_time() is None and elem.get_end_time() is None and elem.get_min() is not min:
-                print(elem, 'wurde gelöscht.')
-                self.delete_rule(elem)
-                with RulesMapper() as mapper:
-                    mapper.insert(rule)
+        if len(rules)>= 1:
+            for elem in rules:
+                if elem.get_start_time() is None and elem.get_end_time() is None and elem.get_min() is not min:
+                    print(elem, 'wurde gelöscht.')
+                    self.delete_rule(elem)
+                    with RulesMapper() as mapper:
+                        mapper.insert(rule)
+                        return min
+                else:
+                    print('nichts passiert')
                     return min
-            else:
-                print('nichts passiert')
+        else:
+            with RulesMapper() as mapper:
+                mapper.insert(rule)
                 return min
+
 
     def set_temp_rule_max(self, max):
         rule = RulesBO()
         rule.set_max(max)
         rule.set_type('T')
         rules = self.get_all_temp_rules()
-        for elem in rules:
-            if elem.get_start_time() is None and elem.get_end_time() is None and elem.get_max() is not max:
-                print(elem, 'wurde gelöscht.')
-                self.delete_rule(elem)
-                with RulesMapper() as mapper:
-                    mapper.insert(rule)
+        if len(rules) >= 1:
+            for elem in rules:
+                if elem.get_start_time() is None and elem.get_end_time() is None and elem.get_max() is not max:
+                    print(elem, 'wurde gelöscht.')
+                    self.delete_rule(elem)
+                    with RulesMapper() as mapper:
+                        mapper.insert(rule)
+                        return max
+                else:
+                    print('nichts passiert')
                     return max
-            else:
-                print('nichts passiert')
+        else:
+            with RulesMapper() as mapper:
+                mapper.insert(rule)
                 return max
 
 
