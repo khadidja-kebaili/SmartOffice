@@ -151,11 +151,13 @@ def set_temp():
     adm = DeviceAdministration()
 
     data = request.form["value"]
+    data = int(data)
     time.sleep(4)
     adm.set_temperature(data)
     temp = adm.get_temperature()
     print('temp: ', temp)
-    return data
+    x = "Hi"
+    return x
 
 
 @app.route('/GetTemp', methods=["GET"])
