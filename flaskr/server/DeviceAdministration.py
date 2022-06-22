@@ -942,6 +942,7 @@ class DeviceAdministration(object):
             return mapper.find_by_weekday(weekday)
 
     def delete_entry_in_standard_weeklyplan_jal(self, entry):
+        print(entry)
         with WeeklyPlanJalMapper() as mapper:
             mapper.delete(entry)
 

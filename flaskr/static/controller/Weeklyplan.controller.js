@@ -201,18 +201,68 @@ sap.ui.define([
                   }
               });
               },
+
               removeEntry: function (oEvent) {
+                var oTable = this.getView().byId("tbl");
                 var path = oEvent.getSource().getBindingContext().getPath();
                 var obj = oEvent.getSource().getBindingContext().getObject();
-                console.log('objDelte', obj)
-                MessageToast.show("Löschen Eintrag mit ID:" + obj.id)  
+                var oModel = this.getView().getModel();
+
+                oModel.setProperty(path, obj);
+                //var selectedDay = oEvent.getParameter("item").getText()
+                //MessageToast.show("Löschen Eintrag mit ID:" + obj.id)  
+                console.log(obj)
+                var oSegmentedButton = this.byId('SB1');
+                var oSelectedItemId = oSegmentedButton.getSelectedItem();
+                var oSelectedItem = Element.registry.get(oSelectedItemId);
+                var selectedDay = oSelectedItem.getText()
+
+                if(selectedDay == "Mo"){
+                  console.log("Löschen Montag")
+                  var oData = {
+                    'id_entry': obj.id,
+                  };
+                  console.log(oData)
+                  this.deleteValues(oData, "/DeleteStandardJalousienMonday")
+                }
+                if(selectedDay == "Di"){
+                  console.log("Löschen Dienstag")
+                  var oData = {
+                    'id_entry': obj.id,
+                  };
+                  this.deleteValues(oData, "/DeleteStandardJalousienTuesday")
+                }
+                if(selectedDay == "Mi"){
+                  var oData = {
+                    'id_entry': obj.id,
+                  };
+                  this.deleteValues(oData, "/DeleteStandardJalousienWednesday")
+              }
+                if(selectedDay == "Do"){
+                  var oData = {
+                    'id_entry': obj.id,
+                  };
+                  this.deleteValues(oData, "/DeleteStandardJalousienThursday")
+              }
+              if(selectedDay == "Fr"){
                 var oData = {
                   'id_entry': obj.id,
-                  'test': 1
-                  };
-                console.log(oData)
-                 jQuery.ajax({
-                    url : "/DeleteStandardJalousienMonday",
+                };
+                this.deleteValues(oData, "/DeleteStandardJalousienFriday")
+              }
+
+                var idx = parseInt(path.substring(path.lastIndexOf('/') +1));
+                //console.log(idx)
+                var m = this.getView().getModel();
+                var aData  = m.getProperty("/data");
+                aData.splice(idx, 1);
+                m.setProperty("/data", aData);
+                 
+            },
+
+            deleteValues: function(oData, url) {
+              jQuery.ajax({
+                    url : url,
                     type : "DELETE",
                     dataType : "json",
                     data: oData,
@@ -223,8 +273,9 @@ sap.ui.define([
                     error: function(response){
                         console.log(response);
                     }
-                });
+                })
             },
+
             onSelectionChange: function (oEvent) {
                 //MessageToast.show("Ausgewählter Wochentag:" + oEvent.getParameter("item").getText() );
               
@@ -261,9 +312,7 @@ sap.ui.define([
                 var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.navTo("/", {}, true);
               }
-            }
-            
-
+            },
 		});
 
 });

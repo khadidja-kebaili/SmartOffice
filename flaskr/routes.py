@@ -71,14 +71,15 @@ def set_jal():
 
     data = request.form["value"]
     data = int(data)
-    time.sleep(4)
+    #time.sleep(4)
     k = adm.set_status_to_percentage_by_id(1, data)
     if type(k) == tuple:
-        return 0
+        test = str(k)
+        return "0"
     else:
         adm.set_status_to_percentage_by_id(1, data)
         jal = adm.get_last_status()
-        return jal
+        return ' ', 200
 
 
 
@@ -205,26 +206,6 @@ def get_entries_jal_monday():
         })
 
     return jsonify(odata)
-
-@app.route('/DeleteStandardJalousienMonday', methods=["DELETE"])
-def delete_entry_jal_monday_ById():
-    """
-    Return a simple odata container with date time information
-    :return:
-    """
-    adm = DeviceAdministration()
-    id_entry = request.form["id_entry"]
-    test = request.form["test"]
-    print(id_entry)
-    liste = adm.get_all_standard_weekly_jal_entries_by_weekday(1)
-    for elem in liste:
-        if elem.get_monday_id() == id_entry:
-            adm.delete_entry_in_standard_weeklyplan_jal(elem)
-    monday = adm.get_all_jal_standard_entries_monday()
-    for elem in monday:
-        if elem.get_id() == id_entry:
-            adm.delete_standard_entry_monday(elem)
-    return ' '
 
 
 @app.route('/GetStandardJalousienTuesday', methods=["GET"])
@@ -418,6 +399,106 @@ def set_jal_standard_friday():
     value = int(value)
     time.sleep(4)
     adm.set_jal_standard_entry_friday(start, end, value)
+    return ' '
+
+@app.route('/DeleteStandardJalousienMonday', methods=["DELETE"])
+def delete_entry_jal_monday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+    id_entry = request.form["id_entry"]
+    id_entry = int(id_entry)
+    liste = adm.get_all_standard_weekly_jal_entries_by_weekday(1)
+    for elem in liste:
+        if elem.get_monday_id() == id_entry:
+            adm.delete_entry_in_standard_weeklyplan_jal(elem)
+    monday = adm.get_all_jal_standard_entries_monday()
+    for elem in monday:
+        if elem.get_id() == id_entry:
+            adm.delete_standard_entry_monday(elem)
+
+    return ' '
+
+@app.route('/DeleteStandardJalousienTuesday', methods=["DELETE"])
+def delete_entry_jal_tuesday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+    id_entry = request.form["id_entry"]
+    id_entry = int(id_entry)
+    liste = adm.get_all_standard_weekly_jal_entries_by_weekday(2)
+    for elem in liste:
+        if elem.get_tuesday_id() == id_entry:
+            adm.delete_entry_in_standard_weeklyplan_jal(elem)
+    tuesday = adm.get_all_jal_standard_entries_tuesday()
+    for elem in tuesday:
+        if elem.get_id() == id_entry:
+            adm.delete_standard_entry_tuesday(elem)
+
+    return ' '
+
+@app.route('/DeleteStandardJalousienWednesday', methods=["DELETE"])
+def delete_entry_jal_wednesday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+    id_entry = request.form["id_entry"]
+    id_entry = int(id_entry)
+    liste = adm.get_all_standard_weekly_jal_entries_by_weekday(3)
+    for elem in liste:
+        if elem.get_wednesday_id() == id_entry:
+            adm.delete_entry_in_standard_weeklyplan_jal(elem)
+    wednesday = adm.get_all_jal_standard_entries_wednesday()
+    for elem in wednesday:
+        if elem.get_id() == id_entry:
+            adm.delete_standard_entry_wednesday(elem)
+
+    return ' '
+
+@app.route('/DeleteStandardJalousienThursday', methods=["DELETE"])
+def delete_entry_jal_thursday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+    id_entry = request.form["id_entry"]
+    id_entry = int(id_entry)
+    liste = adm.get_all_standard_weekly_jal_entries_by_weekday(4)
+    for elem in liste:
+        if elem.get_thursday_id() == id_entry:
+            adm.delete_entry_in_standard_weeklyplan_jal(elem)
+    thursday = adm.get_all_jal_standard_entries_thursday()
+    for elem in thursday:
+        if elem.get_id() == id_entry:
+            adm.delete_standard_entry_thursday(elem)
+
+    return ' '
+
+@app.route('/DeleteStandardJalousienFriday', methods=["DELETE"])
+def delete_entry_jal_friday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+    id_entry = request.form["id_entry"]
+    id_entry = int(id_entry)
+    liste = adm.get_all_standard_weekly_jal_entries_by_weekday(5)
+    for elem in liste:
+        if elem.get_friday_id() == id_entry:
+            adm.delete_entry_in_standard_weeklyplan_jal(elem)
+    friday = adm.get_all_jal_standard_entries_friday()
+    for elem in friday:
+        if elem.get_id() == id_entry:
+            adm.delete_standard_entry_friday(elem)
+
     return ' '
 
 @app.route('/SetJalRule', methods=["POST"])

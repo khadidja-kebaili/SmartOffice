@@ -1,9 +1,10 @@
 sap.ui.define([
     "../controller/SmartOffice.controller",
     "sap/ui/model/json/JSONModel",
+    "sap/m/MessageBox",
     "sap/m/MessageToast",
     "sap/ui/core/routing/History"
-], function (SmartOfficeController, JSONModel, MessageToast, History) {
+], function (SmartOfficeController, JSONModel, MessageBox, MessageToast, History) {
     "use strict";
 
     var self;
@@ -24,7 +25,6 @@ sap.ui.define([
         },
         _onRouteMatched : function (oEvent){
             this.getStatus().done(function(result) {
-            
                 console.log(result.d.results[0])  
                 var currentvalue = result.d.results[0]
                 self.byId("sliderrealtime").setValue(currentvalue)       
@@ -50,6 +50,7 @@ sap.ui.define([
             oRouter.navTo("regelnjalousien")
         },
         sendValue: function (oEvent) {
+            var displayerror = 0
             console.log("Neuer Wert wurde eingestellt.");
             sap.ui.core.BusyIndicator.hide(0);
             //var oThis = this;
@@ -64,12 +65,17 @@ sap.ui.define([
                     async: true,
                     data: oData,
                     success: function (response) {
-                        MessageToast.show(response.data.message);
+                        console.log(response)
                         //oThis.makeGraph(response.graph);
                         sap.ui.core.BusyIndicator.hide();
+                        var errorcheck = response
+                        if (errorcheck == "0") {
+                            MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Bitte versuche eine andere Einstellung!");
+                        }
                     },
                     error: function (response) {
-                        console.log(response);
+                        console.log(typeof(response.responseText));
+                        
                     }
                 });
         },
