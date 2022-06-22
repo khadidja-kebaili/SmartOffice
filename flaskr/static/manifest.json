@@ -127,6 +127,13 @@
               ]
             },
             {
+              "name": "regelnthermo",
+              "pattern": "regelnthermo",
+              "target": [
+                "TargetRegelnThermo"
+              ]
+            },
+            {
               "name": "thermoMain",
               "pattern": "thermoMain",
               "target": [
@@ -190,6 +197,13 @@
               "clearControlAggregation": false,
               "viewId": "weeklyplanthermo",
               "viewName": "WeeklyplanThermo"
+            },
+            "TargetRegelnThermo": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "regelnthermo",
+              "viewName": "RegelnThermo"
             },
             "TargetThermoMain": {
               "viewType": "XML",

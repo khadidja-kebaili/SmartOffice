@@ -151,11 +151,13 @@ def set_temp():
     adm = DeviceAdministration()
 
     data = request.form["value"]
+    data = int(data)
     time.sleep(4)
     adm.set_temperature(data)
     temp = adm.get_temperature()
     print('temp: ', temp)
-    return data
+    x = "Hi"
+    return x
 
 
 @app.route('/GetTemp', methods=["GET"])
@@ -572,7 +574,7 @@ def set_min_temp():
 
     adm = DeviceAdministration()
     data = request.form["value"]
-    temp = adm.set_temp_rule(data, None, None, None)
+    temp = adm.set_temp_rule_min(data)
     print('temp: ', temp)
     return data
 
@@ -609,7 +611,7 @@ def set_max_temp():
 
     adm = DeviceAdministration()
     data = request.form["value"]
-    temp = adm.set_temp_rule(None, data, None, None)
+    temp = adm.set_temp_rule_max(data)
     print('temp: ', temp)
     return data
 
