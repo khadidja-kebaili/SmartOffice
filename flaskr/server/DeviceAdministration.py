@@ -1047,7 +1047,7 @@ class DeviceAdministration(object):
         rule.set_min(min)
         rule.set_type('T')
         rules = self.get_all_temp_rules()
-        if len(rule)>= 1:
+        if len(rules)>= 1:
             for elem in rules:
                 if elem.get_start_time() is None and elem.get_end_time() is None and elem.get_min() is not min:
                     print(elem, 'wurde gelöscht.')
@@ -1069,7 +1069,7 @@ class DeviceAdministration(object):
         rule.set_max(max)
         rule.set_type('T')
         rules = self.get_all_temp_rules()
-        if len(rule) >= 1:
+        if len(rules) >= 1:
             for elem in rules:
                 if elem.get_start_time() is None and elem.get_end_time() is None and elem.get_max() is not max:
                     print(elem, 'wurde gelöscht.')
