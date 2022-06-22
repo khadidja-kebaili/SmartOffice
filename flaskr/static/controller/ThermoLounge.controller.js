@@ -1,52 +1,79 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller",
-	"sap/ui/core/routing/History"
+    "sap/ui/core/mvc/Controller",
+    "sap/m/MessageToast",
+    "sap/ui/core/routing/History"
 ], function(
-	Controller,
-	History
+    Controller,
+    MessageToast,
+    History
 ) {
-	"use strict";
+    "use strict";
 
-	return Controller.extend("com.quanto.solutions.ui.smartoffice.controller.ThermoLounge", {
-		onInit: function() {
-			let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+    return Controller.extend("com.quanto.solutions.ui.smartoffice.controller.ThermoLounge", {
+        onInit: function() {
+            let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.getRoute("thermoLounge").attachMatched(this._onRouteMatched, this);
-		},
-		
-            _onRouteMatched : function (oEvent){
-              //this.addEmptyObject()
-                //var datatest2 = []
-                this.getData().done(function(result) {
-                    
-                    var data = result.d.results
-                    console.log(data)
-                    //console.log("Jetzt bin ich am Ende")
-                })
-
-            },
-            getData: function () {
-              console.log('Get data für Thermo')
-              return jQuery.ajax({
-                url: "/GetTemp",
-                type: "GET"
-              });
-            },
-		
+        },
+        
+        _onRouteMatched : function (oEvent){
+            this.getTemp().done(function(result) {
+                console.log(result.d.results[0].temperature)  
+                var currentTemp = result.d.results[0].temperature
+                console.log(currentTemp.typeof())
+                self.byId("currentTemp").setValue(currentTemp)
+            })
+        },
+        getTemp: function () {
+            console.log('Get data für Thermo')
+            return jQuery.ajax({
+            url: "/GetTemp",
+            type: "GET"
+            });
+        },
+        
         pressnavWeeklyPlanThermo: function (evt) {
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			oRouter.navTo("wochenplanthermo")
-		},
-		onNavBack: function(){
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("wochenplanthermo")
+        },
+        pressNavRegelnThermo: function(oEvent) {
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("regelnthermo")
+        },
+        onNavBack: function(){
 
-		  var oHistory = History.getInstance();
-		  var sPreviousHash = oHistory.getPreviousHash();
+          var oHistory = History.getInstance();
+          var sPreviousHash = oHistory.getPreviousHash();
 
-		  if (sPreviousHash !== undefined) {
-			window.history.go(-1);
-		  } else {
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			oRouter.navTo("/", {}, true);
-		  }
-		}
-	});
+          if (sPreviousHash !== undefined) {
+            window.history.go(-1);
+          } else {
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("/", {}, true);
+          }
+        },
+        
+        onChange: function(oEvent) {
+            console.log("Neue Temperatur wurde eingestellt.");
+            sap.ui.core.BusyIndicator.hide(0);
+            var oData = {
+                'value': oEvent.getParameter("value")
+            };
+            // console.log(oData);
+            // console.log(typeof(oData.value));
+            jQuery.ajax({
+                url: "/SetTemp",
+                type: "POST",
+                dataType: "json",
+                async: true,
+                data: oData,
+                success: function (response) {
+                    MessageToast.show(response.data.message);
+                    sap.ui.core.BusyIndicator.hide();
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+    });
 });

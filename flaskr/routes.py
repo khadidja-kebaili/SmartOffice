@@ -151,11 +151,13 @@ def set_temp():
     adm = DeviceAdministration()
 
     data = request.form["value"]
+    data = int(data)
     time.sleep(4)
     adm.set_temperature(data)
     temp = adm.get_temperature()
     print('temp: ', temp)
-    return data
+    x = "Hi"
+    return x
 
 
 @app.route('/GetTemp', methods=["GET"])
@@ -326,8 +328,13 @@ def set_jal_standard_monday():
     value = request.form["value"]
     value = int(value)
     time.sleep(4)
-    adm.set_jal_standard_entry_monday(start, end, value)
-    return ' '
+
+    k = adm.set_jal_standard_entry_monday(start, end, value)
+    if type(k) == tuple:
+        test = str(k)
+        return "0"
+    else:
+        return ' ', 200
 
 
 @app.route('/SetJalousienStandardTuesday', methods=["POST"])
@@ -539,10 +546,23 @@ def get_jal_rules():
             'startzeit': elem.get_start_time(),
             'endzeit': elem.get_end_time(),
             'min': elem.get_min(),
-            'max': elem.get_max()
+            'max': elem.get_max(),
+            'removeNew': "true"
         })
 
     return jsonify(odata)
+
+@app.route('/DeleteJalRule', methods=["DELETE"])
+def delete_jal_rules():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+    id_entry = request.form["id_entry"]
+    id_entry = int(id_entry)
+    adm.delete_jal_rules_byId(id_entry)
+    return ' '
 
 
 @app.route('/SetMinTemp', methods=["POST"])

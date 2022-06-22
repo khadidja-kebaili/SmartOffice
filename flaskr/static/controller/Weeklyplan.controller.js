@@ -2,10 +2,11 @@ sap.ui.define([
     "../controller/SmartOffice.controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
+    "sap/m/MessageBox",
     'sap/ui/core/Element',
     'sap/ui/core/Core',
     "sap/ui/core/routing/History"
-], function(SmartOfficeController, JSONModel, MessageToast, Element, Core, History) {
+], function(SmartOfficeController, JSONModel, MessageToast, MessageBox, Element, Core, History) {
         "use strict";
 
         var self;
@@ -192,14 +193,18 @@ sap.ui.define([
                   async : true,
                   data : oData,
                   success : function(response){
-                      MessageToast.show(response.data.message);
-    
+                      //MessageToast.show(response.data.message);
+                      console.log(response)
                       sap.ui.core.BusyIndicator.hide();
+                      var errorcheck = response
+                        if (errorcheck == "0") {
+                            MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Bitte versuche eine andere Einstellung!");
+                        }
                   },
                   error: function(response){
                       console.log(response);
                   }
-              });
+                });
               },
 
               removeEntry: function (oEvent) {

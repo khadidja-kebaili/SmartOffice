@@ -1,5 +1,5 @@
 <mvc:View
-	xmlns:core="sap.ui.core"
+    xmlns:core="sap.ui.core"
     controllerName="com.quanto.solutions.ui.smartoffice.controller.ThermoLounge"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
@@ -7,7 +7,7 @@
     xmlns:layout="sap.ui.layout"
     height="100%"
 >
-	<Shell id="shell">
+    <Shell id="shell">
         <App id="app">
             <pages>
                 <Page id="page" title="Thermostate" titleAlignment="Center" showNavButton="true" navButtonPress="onNavBack">
@@ -16,33 +16,35 @@
                         <VBox alignItems="Center" width="100%">
                             <Text id="textThermo" text="Echtzeitsteuerung Temperatur" class="sapUiMediumMarginTop sapUiSmallMarginBottom" />
                             <StepInput
-                                id="CurrentTemp"
-                                value="20"
+                                id="currentTemp"
+                                value="{/InputValue}"
                                 width="100%"
                                 textAlign="Center"
+                                change="onChange"
                             />
                         </VBox>
                         <VBox alignItems="Center" width="100%">
                             <Text id="textMinTemp" text="Mindesttemperatur" class="sapUiMediumMarginTop sapUiSmallMarginBottom"/>
                             <StepInput
-                                id="MinTemp"
-                                value="18"
+                                id="minTemp"
+                                value="{/InputValue}"
                                 width="100%"
                                 textAlign="Center"
+                                change="changeMinTemp"
                             />
                         </VBox>
                         </layout:VerticalLayout>
                         </content>
 
         <!-- DynamicPage Footer -->
-		    <footer>
-				<OverflowToolbar id="toolbarjalousien" class="sapUiMediumMarginTop">
+            <footer>
+                <OverflowToolbar id="toolbarjalousien" class="sapUiMediumMarginTop">
                     <ToolbarSpacer id="tbs1"/>
-                    <!-- <Button id="buttonMinTemp" text="Min. Temp." /> -->
+                    <Button id="Regeln" text="Regeln" press="pressNavRegelnThermo"/>
                     <Button id="buttonWopl" text="Wochenplan" press="pressnavWeeklyPlanThermo"/>
                     <ToolbarSpacer id="tbs2"/>
                 </OverflowToolbar>
-			</footer>
+            </footer>
         </Page>
         </pages>
         </App>
