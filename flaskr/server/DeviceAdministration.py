@@ -1007,9 +1007,11 @@ class DeviceAdministration(object):
                 print(elem, 'wurde gelöscht.')
                 self.delete_rule(elem)
                 with RulesMapper() as mapper:
-                    return mapper.insert(rule)
+                    mapper.insert(rule)
+                    return min
             else:
                 print('nichts passiert')
+                return min
 
     def set_temp_rule_max(self, max):
         rule = RulesBO()
@@ -1021,9 +1023,11 @@ class DeviceAdministration(object):
                 print(elem, 'wurde gelöscht.')
                 self.delete_rule(elem)
                 with RulesMapper() as mapper:
-                    return mapper.insert(rule)
+                    mapper.insert(rule)
+                    return max
             else:
                 print('nichts passiert')
+                return max
 
 
 
