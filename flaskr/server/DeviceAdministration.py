@@ -217,32 +217,56 @@ class DeviceAdministration(object):
         with JalousienStatusMapper() as mapper:
             return mapper.find_all()
 
-    def get_jal_mean_of_hours_for_day(self, weekday, hour):
-        liste = self.get_all_jal_status()
+    def get_jal_median_of_hours_for_day(self, day, hour):
+        all_jal_stats = self.get_all_jal_status()
         stats_for_weekday = []
         hourly_rate = []
-        values = []
-        for elem in liste:
-            if elem.get_date().isoweekday() == weekday:
+        for elem in all_jal_stats:
+            vergleich = elem.get_date().strftime('%Y-%m-%d')
+            if vergleich == day:
                 stats_for_weekday.append(elem)
         for elem in stats_for_weekday:
             if elem.get_date().hour == hour:
-                hourly_rate.append(elem)
-        for elem in hourly_rate:
-            values.append(elem.get_percentage())
-        if len(values) > 1:
-            return statistics.mean(values)
-        elif len(values) == 1:
-            return values[0]
+                hourly_rate.append(elem.get_percentage())
+        if len(hourly_rate) > 1:
+            return statistics.median(hourly_rate)
+        elif len(hourly_rate) == 1:
+            return hourly_rate[0]
         else:
             return 0
 
-    def get_mean_jal_for_day(self, von, bis, day):
+    def get_jal_median_per_day(self, day):
+        result = []
+        i = 6
+        while i <= 20:
+            x = self.get_jal_median_of_hours_for_day(day, i)
+            result.append(x)
+            i += 1
+        return statistics.median(result)
+
+    def get_jal_median_per_week(self, week):
+        liste = self.get_all_jal_status()
+        stats_for_week = []
+        weekly_stats = []
+        for elem in liste:
+            if elem.get_date().isocalendar()[1] == week:
+                stats_for_week.append(elem)
+        for elem in stats_for_week:
+            week = elem.get_date().isocalendar()[1]
+            weekly_stats.append(self.get_jal_median_per_day(str(elem.get_date().weekday()), week))
+        if len(stats_for_week) > 1:
+            return statistics.median(stats_for_week)
+        elif len(stats_for_week) == 1:
+            return stats_for_week[0]
+        else:
+            return 0
+
+    def get_median_jal_for_timespan(self, von, bis, day):
         values = []
         delta = bis - von
+        week = datetime.datetime.strptime(day, '%Y-%m-%d').isocalendar()[1]
         for elem in range(von , bis+1):
-            print(elem, day)
-            values.append(self.get_jal_mean_of_hours_for_day(day, elem))
+            values.append(self.get_jal_median_of_hours_for_day(day, elem, week))
         return values
 
 

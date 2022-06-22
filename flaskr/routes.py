@@ -94,7 +94,7 @@ def get_jal_stats_per_hour_for_weekday():
     weekday = request.form["weekday"]
     von = request.form["von"]
     bis = request.form["bis"]
-    data = adm.get_mean_jal_for_day(von, bis, weekday)
+    data = adm.get_median_jal_for_timespan(von, bis, weekday)
 
     odata = {
         'd': {
@@ -103,7 +103,7 @@ def get_jal_stats_per_hour_for_weekday():
     }
     for elem in data:
         odata['d']['results'].append({
-            'mean_value': elem,
+            'median_value': elem,
         })
 
     return jsonify(odata)
