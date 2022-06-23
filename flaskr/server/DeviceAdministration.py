@@ -246,7 +246,10 @@ class DeviceAdministration(object):
         for elem in stats_for_weekday:
             if elem.get_date().hour == hour:
                 hourly_rate.append(elem.get_percentage())
-        return hourly_rate[-1]
+        if len(hourly_rate) >= 1:
+            return hourly_rate[-1]
+        else:
+            return 0
 
     def get_jal_mean_per_day(self, day):
         result = []
@@ -284,6 +287,22 @@ class DeviceAdministration(object):
         for elem in range(von , bis+1):
             x = self.get_last_entry_of_hour_for_day(day, elem)
             values.append(x)
+        return values
+
+    def get_median_values_jal(self, day):
+        values = []
+        k = self.get_median_jal_for_timespan(7, 10, day)
+        k = k[-1]
+        values.append(k)
+        m = self.get_median_jal_for_timespan(10, 13, day)
+        m = m[-1]
+        values.append(m)
+        n = self.get_median_jal_for_timespan(13, 16, day)
+        n = n[-1]
+        values.append(n)
+        l = self.get_median_jal_for_timespan(16, 19, day)
+        l = l[-1]
+        values.append(l)
         return values
 
 
@@ -1262,3 +1281,8 @@ class DeviceAdministration(object):
     def get_all_temp_customized_entries_friday(self):
         with FridayMapper() as mapper:
             return mapper.find_all()'''
+
+
+adm = DeviceAdministration()
+k = adm.get_median_values_jal('2022-06-20')
+print(k)
