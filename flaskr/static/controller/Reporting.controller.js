@@ -24,7 +24,55 @@ sap.ui.define([
 
                 let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.getRoute("reporting").attachMatched(this._onRouteMatched, this);
+
+                //Bar Chart
+                //var Bar = this.getView().byId("vizBar");
+                //var dataset = new sap.viz.ui5.data.FlattenedDataset({
+                    //dimensions:[{
+                        //axis: 1,
+                        //name:"id",
+                        //value: "{Model>id}"
+                    //}],
+                    //measures: [{
+                        //name:"percentage",
+                        //value: "{Model>percentage}"
+                    //}],
+                    //data: {
+                        //path: "{Model>/value}"
+                    //}
+                //});
+                //Bar.setDataset(dataset);
             },
+
+            //Line Chart
+            //onAfterRendering: function() {
+                //var oBusinessData =
+                    //[{
+                        //Name: "Arav",
+                        //2015 : 93.4,
+                      // 2015: 96
+                    //},
+                    //{
+                        //Name: "Brij",
+                        //2015 : 75.7,
+                      // 2015: 93
+                    //},
+                    //{
+                        //Name: "Sia",
+                        2015 : 92.5,
+                      // 2015: 98
+                    //},
+                    //{
+                        //Name: "Preya",
+                        //2015 : 98.1,
+                      //2015: 98
+                    //},
+                    //{
+                        //Name: "Avi",
+                        //2015 : 85.3,
+                      // 2015: 101
+                    //}];
+            //},
 
             _onRouteMatched : function (oEvent){
 

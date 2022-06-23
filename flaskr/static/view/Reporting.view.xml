@@ -8,7 +8,7 @@
 	xmlns:core="sap.ui.core"
     xmlns:mc="sap.suite.ui.microchart"
     xmlns:layout="sap.ui.layout"
-    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz="sap.viz.ui5"
     height="100%">
     
     <Shell id="shell">
@@ -31,7 +31,7 @@
             <!-- Dect-Thermostat Card Control Header folgt-->
             <f:Card class="sapUiMediumMargin" width="300px">
                 <f:header>
-                    <card:Header title="Soll-Ist Temperaturwert Vergleich" subtitle=" Dect-Thermostat" />
+                    <card:Header title="Dect-Thermostat" subtitle="Echtzeit Soll-Ist Vergleich" />
                 </f:header>
 
             <!-- Dect-Thermostat Card Control Content folgt, !muss angepasst werden!-->
@@ -40,7 +40,7 @@
 				        <CustomListItem>
 					        <HBox alignItems="Center" justifyContent="SpaceBetween">
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
-							        <Title level="H3" text="Durchschnitt Ist-Wert Temperatur:" />
+							        <Title level="H3" text="Ist-Wert der Temperatur:" />
                                     <!--<<Text id="actualvaluetempid" text="{InputValue'}" width="100%"/>-->
 						        </VBox>
                             </HBox>
@@ -48,7 +48,7 @@
                         <CustomListItem>
 					        <HBox alignItems="Center" justifyContent="SpaceBetween">
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
-                                    <Title level="H3" text="Durchschnitt Soll-Wert Temperatur:" />
+                                    <Title level="H3" text="Soll-Wert der Temperatur:" />
                                     <!--<Text id="supposedlvaluetempid" text="{InputValue'}" width="100%"/>-->
 						        </VBox>
                             </HBox>
@@ -60,7 +60,7 @@
             <!-- WLAN-Jalousienmodul Card Control Header folgt-->
             <f:Card class="sapUiMediumMargin" width="300px">
                 <f:header>
-                    <card:Header title="Soll-Ist Statuswert Vergleich" subtitle=" WLAN-Jalousienmodul" />
+                    <card:Header title="WLAN-Jalousienmodul" subtitle="Echtzeit Soll-Ist Vergleich" />
                 </f:header>
 
             <!-- WLAN-Jalousienmodul Card Control Content folgt, !muss angepasst werden!-->
@@ -69,7 +69,7 @@
 				        <CustomListItem>
 					        <HBox alignItems="Center" justifyContent="SpaceBetween">
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
-							        <Title level="H3" text="Durchschnitt Ist-Wert in Prozent:" />
+							        <Title level="H3" text="Ist-Wert in Prozent:" />
                                     <Text id="actualvaluejalid" text="{InputValue'}" width="100%"/>
 						        </VBox>
                             </HBox>
@@ -77,7 +77,7 @@
                         <CustomListItem>
 					        <HBox alignItems="Center" justifyContent="SpaceBetween">
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
-                                    <Title level="H3" text="Durchschnitt Soll-Wert in Prozent:" />
+                                    <Title level="H3" text="Soll-Wert in Prozent:" />
                                     <!--<Text id="supposedlvaluejalid" text="{InputValue'}" width="100%"/>-->
 						        </VBox>
                             </HBox>
@@ -129,7 +129,29 @@
                         </layout:VerticalLayout>
                     </layout:Grid>
                 </Panel>-->
-                    
+
+                <!-- Viz Line-->
+                <!--<viz:Bar id="vizBar" visible="true" width="100%"/>-->
+
+                <!-- Viz Chart
+                <viz:ui5.Line id="outcome" width="600px" height="280px">
+                    <viz:plotArea>
+                        <viz:ui5.types.Line/>
+                    </viz:plotArea>
+                    <viz:dataset>
+                        <viz:ui5.data.FlattenedDateset data="{/}">
+                            <viz:dimensions>
+                                <viz:ui5.data.DimensionDefinition axis="1" name="Name" value="{Name}">
+                                </viz:ui5.data.DimensionDefinition>
+                            </viz:dimensions>
+                            <viz:measures>
+                                <viz:ui5.data.MeasureDefinition group="1" name="2015" value="{2015}">
+                                </viz:ui5.data.MeasureDefinition>
+                            </viz:measures>
+                        </viz:ui5.data.FlattenedDateset>
+                    </viz:dataset>
+                </viz:ui5.Line>
+                -->
                 </Page>
             </pages>
         </App>
