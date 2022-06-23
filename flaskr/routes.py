@@ -122,7 +122,7 @@ def status_per_day():
     adm = DeviceAdministration()
 
     day = request.form["day"]
-    stats = adm.get_jal_mean_per_day(day)
+    stats = adm.get_median_values_jal(day)
     print('Jal: ', stats)
 
     odata = {
@@ -133,8 +133,7 @@ def status_per_day():
 
     for elem in stats:
         odata['d']['results'].append({
-            'date': elem.get_date(),
-            'percentage': elem.get_percentage()
+            'value': elem
         })
 
     return odata
