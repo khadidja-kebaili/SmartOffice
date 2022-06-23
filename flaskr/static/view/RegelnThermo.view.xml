@@ -1,23 +1,23 @@
 <mvc:View xmlns:core="sap.ui.core"
-		controllerName="com.quanto.solutions.ui.smartoffice.controller.RegelnThermo"
-		xmlns:mvc="sap.ui.core.mvc"
-		xmlns="sap.m"
-		xmlns:f="sap.f"
-		xmlns:layout="sap.ui.layout"
-		height="100%">
-	<Shell id="shell">
+        controllerName="com.quanto.solutions.ui.smartoffice.controller.RegelnThermo"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m"
+        xmlns:f="sap.f"
+        xmlns:layout="sap.ui.layout"
+        height="100%">
+    <Shell id="shell">
         <App id="app">
             <pages>
                 <Page id="page" title="Regeln für Thermostate verwalten" titleAlignment="Center" showNavButton="true" navButtonPress="onNavBack">
                     <content> 
-					<Text text="Hier können Sie Regeln für die min. und max. Temperatur der Thermostate festlegen. Diese sind nicht abhängig vom Wochentag und gelten immer." textAlign="Center" width="100%" class="sapUiMediumMargin"/>
-					<Table id="tbl">
+                    <Text text="Hier können Sie Regeln für die min. und max. Temperatur der Thermostate festlegen. Diese sind nicht abhängig vom Wochentag und gelten immer." textAlign="Center" width="100%" class="sapUiMediumMargin"/>
+                    <Table id="tbl">
                                 <columns>
                                     <Column />
                                     <Column>
                                         <Text text="Mindesttemperatur" />
                                     </Column>
-									<Column>
+                                    <Column>
                                         <Text text="Maximaltemperatur" />
                                     </Column>
                                 </columns>
@@ -28,8 +28,8 @@
                                             <HBox/>
                                             <HBox>
                                                 <Input
-                                                    id="minTemp"
-                                                    value="{/InputValue}"
+                                                    id="minTemp1"
+                                                    value="{targetType: 'any'}"
                                                     description="°C"
                                                     width="150px"
                                                     fieldWidth="80%"
@@ -38,14 +38,16 @@
                                                     change="changeMinTemp"
                                                 />
                                             </HBox>
-											<HBox>
+                                            <HBox>
                                                 <Input
-                                                    value="28"
+                                                    id="maxTemp"
+                                                    value="{targetType: 'any'}"
                                                     description="°C"
                                                     width="150px"
                                                     fieldWidth="80%"
                                                     showClearIcon="true"
                                                     class="sapUiSmallMarginBottom"
+                                                    change="changeMaxTemp"
                                                 />
                                             </HBox>
                                         </cells>
