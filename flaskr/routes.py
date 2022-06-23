@@ -646,6 +646,28 @@ def set_max_temp():
     print('temp: ', temp)
     return data
 
+@app.route('/GetMaxTemp', methods=["GET"])
+# hier ist die get_Status Methode
+def get_max_temp():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    temp = adm.get_max_temp()
+    odata['d']['results'].append({
+        'max_temperature': temp
+    })
+
+    return jsonify(odata)
+
 
 @app.route('/GetStandardThermostatMonday', methods=["GET"])
 def get_entries_temp_monday():
