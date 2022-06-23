@@ -1047,8 +1047,10 @@ class DeviceAdministration(object):
         rule.set_min(min)
         rule.set_type('T')
         rules = self.get_all_temp_rules()
+        x = 0
         if len(rules)>= 1:
             for elem in rules:
+                x += 1
                 if elem.get_start_time() is None and elem.get_end_time() is None and elem.get_min() is not min and elem.get_max() is None:
                     print(elem, 'wurde gelöscht.')
                     self.delete_rule(elem)
@@ -1057,6 +1059,10 @@ class DeviceAdministration(object):
                         return min
                 else:
                     print('nichts passiert')
+                    if x == len(rules):
+                        with RulesMapper() as mapper:
+                            mapper.insert(rule)
+                            return min
                     #return min
         else:
             with RulesMapper() as mapper:
@@ -1069,8 +1075,10 @@ class DeviceAdministration(object):
         rule.set_max(max)
         rule.set_type('T')
         rules = self.get_all_temp_rules()
+        x = 0
         if len(rules) >= 1:
             for elem in rules:
+                x += 1
                 if elem.get_start_time() is None and elem.get_end_time() is None and elem.get_max() is not max and elem.get_min() is None:
                     print(elem, 'wurde gelöscht.')
                     self.delete_rule(elem)
@@ -1079,6 +1087,10 @@ class DeviceAdministration(object):
                         return max
                 else:
                     print('nichts passiert')
+                    if x == len(rules):
+                        with RulesMapper() as mapper:
+                            mapper.insert(rule)
+                            return max
                     #return max
         else:
             with RulesMapper() as mapper:
