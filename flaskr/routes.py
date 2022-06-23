@@ -6,6 +6,7 @@ import time
 from flaskr.server.bo.RulesBO import RulesBO
 
 
+
 @app.route('/')
 def index():
     return render_template("index.html")

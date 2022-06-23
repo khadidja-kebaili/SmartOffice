@@ -1293,8 +1293,3 @@ class DeviceAdministration(object):
     def get_all_temp_customized_entries_friday(self):
         with FridayMapper() as mapper:
             return mapper.find_all()'''
-
-
-adm = DeviceAdministration()
-k = adm.get_median_values_jal('2022-06-20')
-print(k)
