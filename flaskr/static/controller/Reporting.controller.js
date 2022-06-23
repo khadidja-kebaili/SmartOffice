@@ -8,22 +8,24 @@ sap.ui.define([
         "use strict";
 
         var self;
+        var dayData =[]
 
         return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Reporting",{
             onInit: function () {
                 self=this;
-                this.oModelSettings = new JSONModel({
-                    maxIterations: 200,
-                    maxTime: 500,
-                    initialTemperature: 200,
-                    coolDownStep: 1
-                });
-                this.getView().setModel(this.oModelSettings, "settings");
-                this.getView().setModel(sap.ui.getCore().getModel("TestModel"), "TestModel");
-                sap.ui.core.BusyIndicator.hide(0);
-
+                var oModel = new sap.ui.model.json.JSONModel({"day": null});
+                this.getView().setModel(oModel);
                 let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.getRoute("reporting").attachMatched(this._onRouteMatched, this);
+                //this.oModelSettings = new JSONModel({
+                    //maxIterations: 200,
+                    //maxTime: 500,
+                    //initialTemperature: 200,
+                    //coolDownStep: 1
+                //});
+                //this.getView().setModel(this.oModelSettings, "settings");
+                //this.getView().setModel(sap.ui.getCore().getModel("TestModel"), "TestModel");
+                //sap.ui.core.BusyIndicator.hide(0);
 
                 //Bar Chart
                 //var Bar = this.getView().byId("vizBar");
@@ -59,7 +61,7 @@ sap.ui.define([
                     //},
                     //{
                         //Name: "Sia",
-                        2015 : 92.5,
+                        //2015 : 92.5,
                       // 2015: 98
                     //},
                     //{
@@ -75,14 +77,20 @@ sap.ui.define([
             //},
 
             _onRouteMatched : function (oEvent){
+                dayData.length = 0
+                this.getData("/StatusPerDay").done(function(result) {
+                    var data = result.d.results
+                    var oModel = new sap.ui.model.json.JSONModel({data: dayData});
+                    self.getView().setModel(oModel);
 
-                //Jal
-                this.getActualValueJal().done(function(result) {
-
-                    console.log(result.d.results[0])
-                    var actualValueJal = result.d.results[0]
-                    self.byId("actualvaluejalid").setText(actualValueJal)
                 })
+                //Jal
+                //this.getActualValueJal().done(function(result) {
+
+                    //console.log(result.d.results[0])
+                    //var actualValueJal = result.d.results[0]
+                    //self.byId("actualvaluejalid").setText(actualValueJal)
+                //})
                 /*this.getSupposedValueJal().done(function(result)
 
                     console.log(result.d.results[0])
@@ -106,13 +114,13 @@ sap.ui.define([
             },
 
             //Jal
-            getActualValueJal: function() {
-            return jQuery.ajax({
-                url: "/LastStatusJalousien",
-                type: "GET"
-              });
+            //getActualValueJal: function() {
+            //return jQuery.ajax({
+                //url: "/LastStatusJalousien",
+                //type: "GET"
+              //});
 
-            },
+            //},
 
             /*getSupposedValueJal: function() {
             return jQuery.ajax({
@@ -120,6 +128,14 @@ sap.ui.define([
                 type: "GET"
               });
             },*/
+
+            getData: function (url) {
+              console.log('Get data für Day')
+              return jQuery.ajax({
+                url: url,
+                type: "GET"
+              });
+            },
 
             onNavBack: function () {
 
