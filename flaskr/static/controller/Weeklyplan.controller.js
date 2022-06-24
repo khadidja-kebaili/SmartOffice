@@ -62,7 +62,6 @@ sap.ui.define([
                   data.map(function(eintrag, index) {
                     thursdayData.push(eintrag)
                     })     
-                  console.log(mondayData)  
               
                 })
                 this.getData("/GetStandardJalousienFriday").done(function(result) {
@@ -70,7 +69,6 @@ sap.ui.define([
                   data.map(function(eintrag, index) {
                     fridayData.push(eintrag)
                     })     
-                  console.log(mondayData)  
               
                 })
             },
@@ -124,6 +122,7 @@ sap.ui.define([
               },
 
               saveEntry : function(oEvent) {
+                
                 var path = oEvent.getSource().getBindingContext().getPath();
                 var obj = oEvent.getSource().getBindingContext().getObject();
                 obj.saveNew = false;
@@ -164,15 +163,35 @@ sap.ui.define([
                             MessageBox.information("Auf Grund von Überschneidungen wurde der Eintrag von " + start + " Uhr bis " + end + " Uhr gelöscht. \n Der so eben eingestelle Eintrag wurde gespeichert.");
                             var oModel = self.getView().getModel();
                             oModel.setProperty(path, obj);
+                            mondayData.length = 0
+                            self.getData("/GetStandardJalousienMonday").done(function(result) {
+                              var data = result.d.results
+                              data.map(function(eintrag, index) {
+                                mondayData.push(eintrag)
+                                })     
+                              var oModel = new sap.ui.model.json.JSONModel({data: mondayData});
+                              self.getView().setModel(oModel);
+                              })
                           }  
                           else {
                             var oModel = self.getView().getModel();
                             oModel.setProperty(path, obj);
+                            mondayData.length = 0
+                            self.getData("/GetStandardJalousienMonday").done(function(result) {
+                              var data = result.d.results
+                              data.map(function(eintrag, index) {
+                                mondayData.push(eintrag)
+                                })     
+                              var oModel = new sap.ui.model.json.JSONModel({data: mondayData});
+                              self.getView().setModel(oModel);
+                              })
                           }
                         }
                   
                     })
+                    
                 }
+
                 if(obj.day == "Di"){
                   console.log("Send Tuesday")
                   var oData = {
@@ -200,13 +219,32 @@ sap.ui.define([
                           MessageBox.information("Auf Grund von Überschneidungen wurde der Eintrag von " + start + " Uhr bis " + end + " Uhr gelöscht. \n Der so eben eingestelle Eintrag wurde gespeichert.");
                           var oModel = self.getView().getModel();
                           oModel.setProperty(path, obj);
+                          tuesdayData.length = 0
+                          self.getData("/GetStandardJalousienTuesday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              tuesdayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: tuesdayData});
+                            self.getView().setModel(oModel);
+                          })
+                          
                         }  
                         else {
                           var oModel = self.getView().getModel();
                           oModel.setProperty(path, obj);
+                          tuesdayData.length = 0
+                          self.getData("/GetStandardJalousienTuesday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              tuesdayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: tuesdayData});
+                            self.getView().setModel(oModel);
+                          })
                         }
                       }
-                
+                    
                   })
                 }
                 if(obj.day == "Mi"){
@@ -236,10 +274,28 @@ sap.ui.define([
                           MessageBox.information("Auf Grund von Überschneidungen wurde der Eintrag von " + start + " Uhr bis " + end + " Uhr gelöscht. \n Der so eben eingestelle Eintrag wurde gespeichert.");
                           var oModel = self.getView().getModel();
                           oModel.setProperty(path, obj);
+                          wednesdayData.length = 0
+                          self.getData("/GetStandardJalousienWednesday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              wednesdayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: wednesdayData});
+                            self.getView().setModel(oModel);
+                          })
                         }  
                         else {
                           var oModel = self.getView().getModel();
                           oModel.setProperty(path, obj);
+                          wednesdayData.length = 0
+                          self.getData("/GetStandardJalousienWednesday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              wednesdayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: wednesdayData});
+                            self.getView().setModel(oModel);
+                          })
                         }
                       }
                 
@@ -272,10 +328,28 @@ sap.ui.define([
                           MessageBox.information("Auf Grund von Überschneidungen wurde der Eintrag von " + start + " Uhr bis " + end + " Uhr gelöscht. \n Der so eben eingestelle Eintrag wurde gespeichert.");
                           var oModel = self.getView().getModel();
                           oModel.setProperty(path, obj);
+                          thursdayData.length = 0
+                          self.getData("/GetStandardJalousienThursday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              thursdayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: thursdayData});
+                            self.getView().setModel(oModel);
+                          })
                         }  
                         else {
                           var oModel = self.getView().getModel();
                           oModel.setProperty(path, obj);
+                          thursdayData.length = 0
+                          self.getData("/GetStandardJalousienThursday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              thursdayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: thursdayData});
+                            self.getView().setModel(oModel);
+                          })
                         }
                       }
                 
@@ -308,10 +382,28 @@ sap.ui.define([
                         MessageBox.information("Auf Grund von Überschneidungen wurde der Eintrag von " + start + " Uhr bis " + end + " Uhr gelöscht. \n Der so eben eingestelle Eintrag wurde gespeichert.");
                         var oModel = self.getView().getModel();
                         oModel.setProperty(path, obj);
+                        fridayData.length = 0
+                        self.getData("/GetStandardJalousienFriday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              fridayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: fridayData});
+                            self.getView().setModel(oModel);
+                          })
                       }  
                       else {
                         var oModel = self.getView().getModel();
                         oModel.setProperty(path, obj);
+                        fridayData.length = 0
+                        self.getData("/GetStandardJalousienFriday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              fridayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: fridayData});
+                            self.getView().setModel(oModel);
+                          })
                       }
                     }
               

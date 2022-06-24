@@ -358,7 +358,7 @@ def set_jal_standard_monday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
+    time.sleep(1)
 
     k = adm.set_jal_standard_entry_monday(start, end, value)
     if type(k) == dict:
@@ -380,6 +380,7 @@ def set_jal_standard_tuesday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
+    time.sleep(1)
     k = adm.set_jal_standard_entry_tuesday(start, end, value)
     if type(k) == dict:
         return k
@@ -400,7 +401,7 @@ def set_jal_standard_wednesday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
+    time.sleep(1)
     k = adm.set_jal_standard_entry_wednesday(start, end, value)
     if type(k) == dict:
         return k
@@ -421,7 +422,7 @@ def set_jal_standard_thursday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
+    time.sleep(1)
     k = adm.set_jal_standard_entry_thursday(start, end, value)
     if type(k) == dict:
         return k
@@ -442,7 +443,7 @@ def set_jal_standard_friday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
+    time.sleep(1)
     k = adm.set_jal_standard_entry_friday(start, end, value)
     if type(k) == dict:
         return k
