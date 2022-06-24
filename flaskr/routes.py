@@ -71,15 +71,12 @@ def set_jal():
 
     data = request.form["value"]
     data = int(data)
-    #time.sleep(4)
+    time.sleep(1)
     k = adm.set_status_to_percentage_by_id(1, data)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        adm.set_status_to_percentage_by_id(1, data)
-        jal = adm.get_last_status()
-        return ' ', 200
+        return {"type": 1}
 
 
 

@@ -166,20 +166,26 @@ class DeviceAdministration(object):
 
     def set_status_to_percentage_by_id(self, id, perc):
         date = datetime.datetime.now()
-        date = date.strftime('%Y-%m-%d %H:%M:%S')
+        datehour = date.strftime('%H:%M:%S')
+        date2 = date.strftime('%Y-%m-%d %H:%M:%S')
         trigger = False
         rules = self.get_all_jal_rules()
         for elem in rules:
-            if elem.get_min() is None and elem.get_max() is None:
-                if self.in_between_times(date, elem.get_start_time(), elem.get_end_time()):
-                    message = 'Die No_Access Zeit ist eingetroffen'
+            #if elem.get_min() is None and elem.get_max() is None:
+             #   if self.in_between_times(date, elem.get_start_time(), elem.get_end_time()):
+              #      message = 'Die No_Access Zeit ist eingetroffen'
+               #     print(message)
+                #    return message
+            if elem.get_min() is not None and elem.get_max() is not None and self.in_between_times(datehour, elem.get_start_time(), elem.get_end_time()) is True:
+                if perc > elem.get_max() or perc < elem.get_min():
+                    message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
+                    ), 'Maxtemp:', elem.get_max()
                     print(message)
-                    return message
-            elif int(perc) > elem.get_max() or int(perc) < elem.get_min():
-                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
-                ), 'Maxtemp:', elem.get_max()
-                print(message)
-                return message
+                    mindest_jal = elem.get_min()
+                    maximal_jal = elem.get_max()
+                    return {"type": "0", "min": mindest_jal, "max": maximal_jal}
+                else:
+                    trigger = True
             else:
                 trigger = True
         if trigger:
@@ -187,7 +193,7 @@ class DeviceAdministration(object):
             status = JalousienStatusBO()
             status.set_percentage(perc)
             perc = status.get_percentage()
-            status.set_date(date)
+            status.set_date(date2)
             jalousies.append(self.get_all_jalousies())
             for elem in jalousies:
                 for x in elem:
