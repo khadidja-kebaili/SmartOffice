@@ -96,7 +96,7 @@ def something():
 # Create new threads
 checking_jal = myThread('Thread1', 0)
 checking_temp = myThread('Thread2', 0)
-main_server_thread = myThread('main',0)
+main_server_thread = myThread('main_server_thread',0)
 
 # Start new Threads
 checking_jal.start()

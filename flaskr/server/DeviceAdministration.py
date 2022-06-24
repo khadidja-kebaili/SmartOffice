@@ -438,38 +438,38 @@ class DeviceAdministration(object):
         print(data)
         return data
 
-    '''    def get_min_temp(self):
-            conn = http.client.HTTPSConnection("192.168.2.254", 8254)
-            payload = ''
-            sid = self.generate_sid(
-                'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
-            headers = {
-                'Content-Type': 'application/json'
-            }
-            conn.request("GET",
-                         "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=gethkrtsoll".format(sid),
-                         payload, headers)
-            res = conn.getresponse()
-            data = res.read()
-            data = data.decode("utf-8")
-            return data
+    def get_min_temp_from_device(self):
+        conn = http.client.HTTPSConnection("192.168.2.254", 8254)
+        payload = ''
+        sid = self.generate_sid(
+            'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        conn.request("GET",
+                     "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=gethkrtsoll".format(sid),
+                     payload, headers)
+        res = conn.getresponse()
+        data = res.read()
+        data = data.decode("utf-8")
+        return data
 
-        def set_min_temp(self, temp):
-            conn = http.client.HTTPSConnection("192.168.2.254", 8254)
-            payload = ''
-            sid = self.generate_sid(
-                'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
-            headers = {
-                'Content-Type': 'application/json'
-            }
-            conn.request("GET",
-                         "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param={}".format(
-                             sid, temp),
-                         payload, headers)
-            res = conn.getresponse()
-            data = res.read()
-            data = data.decode("utf-8")
-            return data'''
+    def set_min_temp_from_device(self, temp):
+        conn = http.client.HTTPSConnection("192.168.2.254", 8254)
+        payload = ''
+        sid = self.generate_sid(
+            'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        conn.request("GET",
+                     "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param={}".format(
+                         sid, temp),
+                     payload, headers)
+        res = conn.getresponse()
+        data = res.read()
+        data = data.decode("utf-8")
+        return data
 
     ####################################################################################
     '''Für Statistik Soll , Ist (Durchschnitt der Stunden nehmen)'''
@@ -479,7 +479,6 @@ class DeviceAdministration(object):
     # Er macht einen Check und wenn die neue Zeit sich mit einem anderen Timeintervall überlappt, wird der alte gelöscht.
 
     def set_jal_standard_entry_monday(self, start, end, perc):
-    
         trigger = False
         rules = self.get_all_jal_rules()
         if len(rules) == 0:
