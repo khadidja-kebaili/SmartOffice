@@ -2,10 +2,11 @@ sap.ui.define([
     "../controller/SmartOffice.controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
+    "sap/m/MessageBox",
     'sap/ui/core/Element',
     'sap/ui/core/Core',
     "sap/ui/core/routing/History"
-], function(SmartOfficeController, JSONModel, MessageToast, Element, Core, History) {
+], function(SmartOfficeController, JSONModel, MessageToast, MessageBox, Element, Core, History) {
         "use strict";
 
         var self;
@@ -117,16 +118,32 @@ sap.ui.define([
                     async : true,
                     data : oData,
                     success : function(response){
-                        MessageToast.show(response.data.message);
-                        oThis.makeGraph(response.graph);
                         sap.ui.core.BusyIndicator.hide();
+                        var errorcheck = response.type
+                        console.log(errorcheck)
+                        var start = response.start
+                        var end = response.end
+                        if (errorcheck == "0") {
+                            MessageBox.information("Auf Grund von Überschneidungen wurde der Eintrag von " + start + " Uhr bis " + end + " Uhr gelöscht. \n Der so eben eingestelle Eintrag wurde gespeichert.");
+                        }
                     },
                     error: function(response){
                         console.log(response);
                     }
-                });
-                this.addEmptyObject();
-                console.log('object',obj)
+                }).done(function() {
+                  var datatest2 = []
+                  self.getData().done(function(result) {
+                    
+                    var data = result.d.results
+                    data.map(function(eintrag, index) {
+                        datatest2.push(eintrag)
+                    })
+                    console.log(datatest2)                
+                    var oModel = new sap.ui.model.json.JSONModel({data: datatest2});
+                    self.getView().setModel(oModel);
+                    self.addEmptyObject();
+                  })
+                })
             },
 
             removeEntry: function (oEvent) {

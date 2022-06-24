@@ -560,9 +560,12 @@ def set_jal_rule():
     end = request.form["end"]
     min = request.form["min"]
     max = request.form["max"]
-    time.sleep(4)
-    adm.set_jal_rule(min, max, start, end)
-    return ' '
+    time.sleep(1)
+    k = adm.set_jal_rule(min, max, start, end)
+    if type(k) == dict:
+        return k
+    else:
+        return {'type': '1'}
 
 @app.route('/GetJalRule', methods=["GET"])
 def get_jal_rules():

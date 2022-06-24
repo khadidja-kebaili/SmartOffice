@@ -1105,9 +1105,15 @@ class DeviceAdministration(object):
         rule.set_end_time(end)
         rules = self.get_all_jal_rules()
         for elem in rules:
-            if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
+            if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
                 print(elem, 'wurde gelöscht.')
                 self.delete_rule(elem)
+                elem_id = elem.get_id()
+                start = elem.get_start_time()
+                end = elem.get_end_time()
+                with RulesMapper() as mapper:
+                    mapper.insert(rule)
+                return {"type": "0", "element": elem_id, "start": start, "end": end} 
             else:
                 print('nichts passiert', start, end,
                       elem.get_start_time(), elem.get_end_time())
