@@ -479,22 +479,19 @@ class DeviceAdministration(object):
     # Er macht einen Check und wenn die neue Zeit sich mit einem anderen Timeintervall überlappt, wird der alte gelöscht.
 
     def set_jal_standard_entry_monday(self, start, end, perc):
-    
         trigger = False
         rules = self.get_all_jal_rules()
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is None and elem.get_max() is None:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
-                    message = 'Die No_Access Zeit ist eingetroffen'
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+                if perc > elem.get_max() or perc < elem.get_min():
+                    message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
+                    ), 'Maxtemp:', elem.get_max()
                     print(message)
                     return message
-            elif elem.get_min() is not None and elem.get_max() is not None and perc > elem.get_max() or perc < elem.get_min():
-                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
-                ), 'Maxtemp:', elem.get_max()
-                print(message)
-                return message
+                else:
+                    trigger = True
             else:
                 trigger = True
         if trigger:
