@@ -360,11 +360,10 @@ def set_jal_standard_monday():
     time.sleep(4)
 
     k = adm.set_jal_standard_entry_monday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        return ' ', 200
+        return {'type': '2'}
 
 
 @app.route('/SetJalousienStandardTuesday', methods=["POST"])
@@ -380,13 +379,11 @@ def set_jal_standard_tuesday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
     k = adm.set_jal_standard_entry_tuesday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        return ' ', 200
+        return {'type': '2'}
 
 
 @app.route('/SetJalousienStandardWednesday', methods=["POST"])
@@ -404,11 +401,10 @@ def set_jal_standard_wednesday():
     value = int(value)
     time.sleep(4)
     k = adm.set_jal_standard_entry_wednesday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        return ' ', 200
+        return {'type': '2'}
 
 
 @app.route('/SetJalousienStandardThursday', methods=["POST"])
@@ -426,11 +422,10 @@ def set_jal_standard_thursday():
     value = int(value)
     time.sleep(4)
     k = adm.set_jal_standard_entry_thursday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        return ' ', 200
+        return {'type': '2'}
 
 
 @app.route('/SetJalousienStandardFriday', methods=["POST"])
@@ -448,11 +443,10 @@ def set_jal_standard_friday():
     value = int(value)
     time.sleep(4)
     k = adm.set_jal_standard_entry_friday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        return ' ', 200
+        return {'type': '2'}
 
 @app.route('/DeleteStandardJalousienMonday', methods=["DELETE"])
 def delete_entry_jal_monday():
@@ -829,11 +823,11 @@ def set_temp_standard_monday():
     value = int(value)
     time.sleep(4)
     k = adm.set_temp_standard_entry_monday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
-    else:
-        return ' ', 200
+    #if type(k) == tuple:
+    print(k)
+    print(type(k))
+    return k
+    
 
 
 @app.route('/SetThermostatStandardTuesday', methods=["POST"])
