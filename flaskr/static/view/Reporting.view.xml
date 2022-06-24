@@ -77,15 +77,14 @@
                         <CustomListItem>
 					        <HBox alignItems="Center" justifyContent="SpaceBetween">
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
-                                    <Title level="H3" text="Soll-Wert in Prozent:" />
-                                    <InputListItem label="Datum eingeben">
-			                                <Input
-                                            id="InputData"
-				                            placeholder="Date"
-				                            value="{day}"
-				                            type="Date"
-                                            change="handleChange"/>
-		                            </InputListItem>
+                                    <Title level="H3" text="Datum eingeben:" />
+                                    <DatePicker
+			                            id="DP1"
+			                            value="day"
+                                        valueFormat="yyyy-MM-dd"
+                                        displayFormat="short"
+			                            change="handleChange"
+			                            class="sapUiSmallMarginBottom"/>
                                     <!--<Text id="supposedlvaluejalid" text="{InputValue'}" width="100%"/>-->
 						        </VBox>
                             </HBox>

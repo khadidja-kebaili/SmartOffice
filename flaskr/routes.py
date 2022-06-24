@@ -121,7 +121,8 @@ def status_per_day():
 
     adm = DeviceAdministration()
 
-    day = request.form["day"]
+    day = request.args.get('day')
+    print(day)
     stats = adm.get_median_values_jal(day)
     print('Jal: ', stats)
 
