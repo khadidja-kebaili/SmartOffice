@@ -31,7 +31,7 @@
             <!-- Dect-Thermostat Card Control Header folgt-->
             <f:Card class="sapUiMediumMargin" width="300px">
                 <f:header>
-                    <card:Header title="Dect-Thermostat" subtitle="Echtzeit Soll-Ist Vergleich" />
+                    <card:Header title="Dect-Thermostat" subtitle="Reporting" />
                 </f:header>
 
             <!-- Dect-Thermostat Card Control Content folgt, !muss angepasst werden!-->
@@ -48,8 +48,24 @@
                         <CustomListItem>
 					        <HBox alignItems="Center" justifyContent="SpaceBetween">
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
-                                    <Title level="H3" text="Soll-Wert der Temperatur:" />
+                                    <Title level="H3" text="Datum eingeben:" />
+									<DatePicker
+			                            id="DP1"
+			                            value="{InputValue}"
+                                        valueFormat="yyyy-MM-dd"
+                                        displayFormat="short"
+			                            change="handleChange"
+			                            class="sapUiSmallMarginBottom"
+                                    />
                                     <!--<Text id="supposedlvaluetempid" text="{InputValue'}" width="100%"/>-->
+						        </VBox>
+                            </HBox>
+				        </CustomListItem>
+						<CustomListItem>
+					        <HBox alignItems="Center" justifyContent="SpaceBetween">
+						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+                                    <Title level="H3" text="Letzte Einträge" />
+                                    <!--<Text id="supposedlvaluejalid" text="{InputValue'}" width="100%"/>-->
 						        </VBox>
                             </HBox>
 				        </CustomListItem>
@@ -60,7 +76,7 @@
             <!-- WLAN-Jalousienmodul Card Control Header folgt-->
             <f:Card class="sapUiMediumMargin" width="300px">
                 <f:header>
-                    <card:Header title="WLAN-Jalousienmodul" subtitle="Echtzeit Soll-Ist Vergleich" />
+                    <card:Header title="WLAN-Jalousienmodul" subtitle="Reporting" />
                 </f:header>
 
             <!-- WLAN-Jalousienmodul Card Control Content folgt, !muss angepasst werden!-->
@@ -79,12 +95,22 @@
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
                                     <Title level="H3" text="Datum eingeben:" />
                                     <DatePicker
-			                            id="DP1"
-			                            value="day"
+			                            id="DP2"
+			                            value="{/InputValue}"
                                         valueFormat="yyyy-MM-dd"
                                         displayFormat="short"
 			                            change="handleChange"
-			                            class="sapUiSmallMarginBottom"/>
+			                            class="sapUiSmallMarginBottom"
+                                    />
+                                    <!--<Text id="supposedlvaluejalid" text="{InputValue'}" width="100%"/>-->
+						        </VBox>
+                            </HBox>
+				        </CustomListItem>
+						<CustomListItem>
+					        <HBox alignItems="Center" justifyContent="SpaceBetween">
+						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+                                    <Title level="H3" text="Letzte Einträge:" />
+                                    <Text id ="text" text="{/data}" />
                                     <!--<Text id="supposedlvaluejalid" text="{InputValue'}" width="100%"/>-->
 						        </VBox>
                             </HBox>
@@ -93,8 +119,47 @@
                 </f:content>
             </f:Card>
 
-            <!-- Multiple Line Chart für DECT-Thermostat muss noch angepasst werden
-                <Panel
+            <!--<m:Text
+				text="Absolute and Percentage values" class="sapUiSmallMargin">
+			    <layoutData>
+				    <layout:GridData span="XL12 L12 M12 S12"/>
+			    </layoutData>
+		    </m:Text>
+		    <m:FlexBox width="20rem" height="10rem" alignItems="Center" class="sapUiSmallMargin">
+			    <m:items>
+				    <InteractiveLineChart selectionChanged="selectionChanged" press="press" precedingPoint="15"
+									    succeedingPoint="89">
+					    <points>
+						    <InteractiveLineChartPoint value="33.1" label="May" secondaryLabel="Q2"/>
+						    <InteractiveLineChartPoint value="12" label="June"/>
+						    <InteractiveLineChartPoint value="51.4" label="July" secondaryLabel="Q3"/>
+						    <InteractiveLineChartPoint value="52" label="Aug"/>
+						    <InteractiveLineChartPoint value="69.9" label="Sep"/>
+						    <InteractiveLineChartPoint value="0.9" label="Oct" secondaryLabel="Q4"/>
+					    </points>
+				    </InteractiveLineChart>
+			    </m:items>
+		    </m:FlexBox>
+		    <m:FlexBox width="20rem" height="10rem" alignItems="Center" class="sapUiSmallMargin">
+			    <m:items>
+				    <InteractiveLineChart selectionChanged="selectionChanged" press="press" precedingPoint="-20">
+					    <points>
+						    <InteractiveLineChartPoint value="33.1" displayedValue="33.1%" label="May"
+												   secondaryLabel="2015"/>
+						    <InteractiveLineChartPoint value="2.2" displayedValue="2.2%" label="June"
+												   secondaryLabel="2015"/>
+						    <InteractiveLineChartPoint value="51.4" displayedValue="51.4%" label="July"
+												   secondaryLabel="2015"/>
+						    <InteractiveLineChartPoint value="19.9" displayedValue="19.9%" label="Aug"/>
+						    <InteractiveLineChartPoint value="69.9" displayedValue="69.9%" label="Sep"/>
+						    <InteractiveLineChartPoint value="0.9" displayedValue="0.9%" label="Oct"/>
+					    </points>
+				    </InteractiveLineChart>
+			    </m:items>
+		    </m:FlexBox>-->
+
+            <!--<Multiple Line Chart für DECT-Thermostat muss noch angepasst werden
+                    <Panel
                         headerText="Temperaturverlauf vom DECT-Thermostat">
                     <layout:Grid
                             defaultSpan="XL6 L6 M6 S12"

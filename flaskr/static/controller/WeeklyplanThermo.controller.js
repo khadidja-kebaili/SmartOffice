@@ -124,18 +124,19 @@ sap.ui.define([
               },
 
               saveEntry : function(oEvent) {
+                
                 var path = oEvent.getSource().getBindingContext().getPath();
                 var obj = oEvent.getSource().getBindingContext().getObject();
                 obj.saveNew = false;
                 obj.removeNew = true;
 
-                var oModel = this.getView().getModel();
+                //var oModel = this.getView().getModel();
 
-                oModel.setProperty(path, obj);
+                //oModel.setProperty(path, obj);
                 console.log("Neuer Wert wurde eingestellt.");
                 sap.ui.core.BusyIndicator.hide(0);
                 //var oThis = this;
-                console.log('objSave', obj, "path", path, "obj.", )
+                //console.log('objSave', obj, "path", path, "obj.", )
               
                 if(obj.day == "Mo"){
                     console.log("Send Monday")
@@ -144,8 +145,55 @@ sap.ui.define([
                     'end': obj.endzeit, 
                     'value': parseInt(obj.wert)
                     };
-                    this.sendValues(oData, "/SetThermostatStandardMonday")
+                    this.sendValues(oData, "/SetThermostatStandardMonday").done(function(result) {
+                      var errorcheck = result.type
+                      var mindestwert = result.min
+                      var maximalwert = result.max
+                      var start = result.start
+                      var end = result.end
+                        if (errorcheck == "0") {
+                            MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Für diesen Zeitraum muss der Wert zwischen " + mindestwert + "°C und " + maximalwert + "°C liegen. \n Bitte versuche eine andere Einstellung!");
+
+                            var idx = parseInt(path.substring(path.lastIndexOf('/') +1));
+                            var m = self.getView().getModel();
+                            var aData  = m.getProperty("/data");
+                            aData.splice(idx, 1);
+                            m.setProperty("/data", aData);
+                        }
+                        else {
+                          if (errorcheck == "1") {
+                            MessageBox.information("Auf Grund von Überschneidungen wurde der Eintrag von " + start + " Uhr bis " + end + " Uhr gelöscht. \n Der so eben eingestelle Eintrag wurde gespeichert.");
+                            var oModel = self.getView().getModel();
+                            oModel.setProperty(path, obj);
+                            mondayData.length = 0
+                            self.getData("/GetStandardThermostatMonday").done(function(result) {
+                              var data = result.d.results
+                              data.map(function(eintrag, index) {
+                                mondayData.push(eintrag)
+                                })     
+                              var oModel = new sap.ui.model.json.JSONModel({data: mondayData});
+                              self.getView().setModel(oModel);
+                              })
+                          }  
+                          else {
+                            var oModel = self.getView().getModel();
+                            oModel.setProperty(path, obj);
+                            mondayData.length = 0
+                            self.getData("/GetStandardThermostatMonday").done(function(result) {
+                              var data = result.d.results
+                              data.map(function(eintrag, index) {
+                                mondayData.push(eintrag)
+                                })     
+                              var oModel = new sap.ui.model.json.JSONModel({data: mondayData});
+                              self.getView().setModel(oModel);
+                              })
+                          }
+                        }
+                  
+                    })
+                    
                 }
+
                 if(obj.day == "Di"){
                   console.log("Send Tuesday")
                   var oData = {
@@ -153,7 +201,53 @@ sap.ui.define([
                   'end': obj.endzeit, 
                   'value': parseInt(obj.wert)
                   };
-                  this.sendValues(oData, "/SetThermostatStandardTuesday")
+                  this.sendValues(oData, "/SetThermostatStandardTuesday").done(function(result) {
+                    var errorcheck = result.type
+                    var mindestwert = result.min
+                    var maximalwert = result.max
+                    var start = result.start
+                    var end = result.end
+                      if (errorcheck == "0") {
+                          MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Für diesen Zeitraum muss der Wert zwischen " + mindestwert + "% und " + maximalwert + "% liegen. \n Bitte versuche eine andere Einstellung!");
+
+                          var idx = parseInt(path.substring(path.lastIndexOf('/') +1));
+                          var m = self.getView().getModel();
+                          var aData  = m.getProperty("/data");
+                          aData.splice(idx, 1);
+                          m.setProperty("/data", aData);
+                      }
+                      else {
+                        if (errorcheck == "1") {
+                          MessageBox.information("Auf Grund von Überschneidungen wurde der Eintrag von " + start + " Uhr bis " + end + " Uhr gelöscht. \n Der so eben eingestelle Eintrag wurde gespeichert.");
+                          var oModel = self.getView().getModel();
+                          oModel.setProperty(path, obj);
+                          tuesdayData.length = 0
+                          self.getData("/GetStandardThermostatTuesday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              tuesdayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: tuesdayData});
+                            self.getView().setModel(oModel);
+                          })
+                          
+                        }  
+                        else {
+                          var oModel = self.getView().getModel();
+                          oModel.setProperty(path, obj);
+                          tuesdayData.length = 0
+                          self.getData("/GetStandardThermostatTuesday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              tuesdayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: tuesdayData});
+                            self.getView().setModel(oModel);
+                          })
+                        }
+                      }
+                    
+                  })
                 }
                 if(obj.day == "Mi"){
                   console.log("Send Wednesday")
@@ -162,7 +256,52 @@ sap.ui.define([
                   'end': obj.endzeit, 
                   'value': parseInt(obj.wert)
                   };
-                  this.sendValues(oData, "/SetThermostatStandardWednesday")
+                  this.sendValues(oData, "/SetThermostatStandardWednesday").done(function(result) {
+                    var errorcheck = result.type
+                    var mindestwert = result.min
+                    var maximalwert = result.max
+                    var start = result.start
+                    var end = result.end
+                      if (errorcheck == "0") {
+                          MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Für diesen Zeitraum muss der Wert zwischen " + mindestwert + "% und " + maximalwert + "% liegen. \n Bitte versuche eine andere Einstellung!");
+
+                          var idx = parseInt(path.substring(path.lastIndexOf('/') +1));
+                          var m = self.getView().getModel();
+                          var aData  = m.getProperty("/data");
+                          aData.splice(idx, 1);
+                          m.setProperty("/data", aData);
+                      }
+                      else {
+                        if (errorcheck == "1") {
+                          MessageBox.information("Auf Grund von Überschneidungen wurde der Eintrag von " + start + " Uhr bis " + end + " Uhr gelöscht. \n Der so eben eingestelle Eintrag wurde gespeichert.");
+                          var oModel = self.getView().getModel();
+                          oModel.setProperty(path, obj);
+                          wednesdayData.length = 0
+                          self.getData("/GetStandardThermostatWednesday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              wednesdayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: wednesdayData});
+                            self.getView().setModel(oModel);
+                          })
+                        }  
+                        else {
+                          var oModel = self.getView().getModel();
+                          oModel.setProperty(path, obj);
+                          wednesdayData.length = 0
+                          self.getData("/GetStandardThermostatWednesday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              wednesdayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: wednesdayData});
+                            self.getView().setModel(oModel);
+                          })
+                        }
+                      }
+                
+                  })
               }
                 if(obj.day == "Do"){
                   console.log("Send Thursday")
@@ -171,7 +310,52 @@ sap.ui.define([
                   'end': obj.endzeit, 
                   'value': parseInt(obj.wert)
                   };
-                  this.sendValues(oData, "/SetThermostatStandardThursday")
+                  this.sendValues(oData, "/SetThermostatStandardThursday").done(function(result) {
+                    var errorcheck = result.type
+                    var mindestwert = result.min
+                    var maximalwert = result.max
+                    var start = result.start
+                    var end = result.end
+                      if (errorcheck == "0") {
+                          MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Für diesen Zeitraum muss der Wert zwischen " + mindestwert + "% und " + maximalwert + "% liegen. \n Bitte versuche eine andere Einstellung!");
+
+                          var idx = parseInt(path.substring(path.lastIndexOf('/') +1));
+                          var m = self.getView().getModel();
+                          var aData  = m.getProperty("/data");
+                          aData.splice(idx, 1);
+                          m.setProperty("/data", aData);
+                      }
+                      else {
+                        if (errorcheck == "1") {
+                          MessageBox.information("Auf Grund von Überschneidungen wurde der Eintrag von " + start + " Uhr bis " + end + " Uhr gelöscht. \n Der so eben eingestelle Eintrag wurde gespeichert.");
+                          var oModel = self.getView().getModel();
+                          oModel.setProperty(path, obj);
+                          thursdayData.length = 0
+                          self.getData("/GetStandardThermostatThursday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              thursdayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: thursdayData});
+                            self.getView().setModel(oModel);
+                          })
+                        }  
+                        else {
+                          var oModel = self.getView().getModel();
+                          oModel.setProperty(path, obj);
+                          thursdayData.length = 0
+                          self.getData("/GetStandardThermostatThursday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              thursdayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: thursdayData});
+                            self.getView().setModel(oModel);
+                          })
+                        }
+                      }
+                
+                  })
               }
               if(obj.day == "Fr"){
                 console.log("Send Friday")
@@ -180,25 +364,68 @@ sap.ui.define([
                 'end': obj.endzeit, 
                 'value': parseInt(obj.wert)
                 };
-                this.sendValues(oData, "/SetThermostatStandardFriday")
+                this.sendValues(oData, "/SetThermostatStandardFriday").done(function(result) {
+                  var errorcheck = result.type
+                  var mindestwert = result.min
+                  var maximalwert = result.max
+                  var start = result.start
+                  var end = result.end
+                    if (errorcheck == "0") {
+                        MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Für diesen Zeitraum muss der Wert zwischen " + mindestwert + "% und " + maximalwert + "% liegen. \n Bitte versuche eine andere Einstellung!");
+
+                        var idx = parseInt(path.substring(path.lastIndexOf('/') +1));
+                        var m = self.getView().getModel();
+                        var aData  = m.getProperty("/data");
+                        aData.splice(idx, 1);
+                        m.setProperty("/data", aData);
+                    }
+                    else {
+                      if (errorcheck == "1") {
+                        MessageBox.information("Auf Grund von Überschneidungen wurde der Eintrag von " + start + " Uhr bis " + end + " Uhr gelöscht. \n Der so eben eingestelle Eintrag wurde gespeichert.");
+                        var oModel = self.getView().getModel();
+                        oModel.setProperty(path, obj);
+                        fridayData.length = 0
+                        self.getData("/GetStandardThermostatFriday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              fridayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: fridayData});
+                            self.getView().setModel(oModel);
+                          })
+                      }  
+                      else {
+                        var oModel = self.getView().getModel();
+                        oModel.setProperty(path, obj);
+                        fridayData.length = 0
+                        self.getData("/GetStandardThermostatFriday").done(function(result) {
+                            var data = result.d.results
+                            data.map(function(eintrag, index) {
+                              fridayData.push(eintrag)
+                              })     
+                            var oModel = new sap.ui.model.json.JSONModel({data: fridayData});
+                            self.getView().setModel(oModel);
+                          })
+                      }
+                    }
+              
+                })
             }
 
 
               },
               sendValues: function(oData, url) {
-                jQuery.ajax({
+                return jQuery.ajax({
                   url : url,
                   type : "POST",
                   dataType : "json",
                   async : true,
                   data : oData,
                   success : function(response){
-                      MessageToast.show(response.data.message);
-                      sap.ui.core.BusyIndicator.hide();
-                      var errorcheck = response
-                        if (errorcheck == "0") {
-                            MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Bitte versuche eine andere Einstellung!");
-                        }
+                    console.log(response)
+                    console.log(response.max)
+                    console.log(response.min)
+                    sap.ui.core.BusyIndicator.hide();
                   },
                   error: function(response){
                       console.log(response);

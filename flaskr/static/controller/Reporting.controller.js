@@ -3,8 +3,9 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
     "sap/ui/core/routing/History",
+    //"require",
     ],
-    function (SmartOfficeController, JSONModel, MessageToast, History) {
+    function (SmartOfficeController, JSONModel, MessageToast, History, require) {
         "use strict";
 
         var self;
@@ -12,15 +13,20 @@ sap.ui.define([
         return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Reporting",{
             onInit: function () {
                 self=this;
-                this.oModelSettings = new JSONModel({
-                    maxIterations: 200,
-                    maxTime: 500,
-                    initialTemperature: 200,
-                    coolDownStep: 1
-                });
-                this.getView().setModel(this.oModelSettings, "settings");
-                this.getView().setModel(sap.ui.getCore().getModel("TestModel"), "TestModel");
-                sap.ui.core.BusyIndicator.hide(0);
+                // set mock data
+			    //var sPath = require.toUrl("./SampleData.json");
+			    //var oModel = new JSONModel(sPath);
+			    //this.getView().setModel(oModel);
+                //this.oModelSettings = new JSONModel({
+                    //maxIterations: 200,
+                    //maxTime: 500,
+                    //initialTemperature: 200,
+                    //coolDownStep: 1
+                //});
+                //this.getView().setModel(this.oModelSettings, "settings");
+                //this.getView().setModel(sap.ui.getCore().getModel("TestModel"), "TestModel");
+                var oModel = new sap.ui.model.json.JSONModel({"tageszeit": null, "value": null,});
+                this.getView().setModel(oModel)
                 let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.getRoute("reporting").attachMatched(this._onRouteMatched, this);
 
@@ -73,7 +79,21 @@ sap.ui.define([
                     //}];
             //},
 
-            //_onRouteMatched : function (oEvent){
+            _onRouteMatched : function (oEvent){
+                var datareporting = []
+                this.getValue().done(function(result) {
+
+                    var data = result.d.results
+                    data.map(function(eintrag, index) {
+                        datareporting.push(eintrag)
+                    })
+                    console.log(datareporting)
+                    var oModel = new sap.ui.model.json.JSONModel({data: datareporting});
+                    self.getView().setModel(oModel);
+                    self.addObject();
+                    console.log("Jetzt bin ich am Ende")
+                })
+            },
                 //this.getValues().done(function(result) {
                     //console.log(result.d.results[0])
                     //var dayvalue = result.d.results[0]
@@ -123,8 +143,18 @@ sap.ui.define([
               });
             },*/
 
-            getValues: function () {
-                var oData = {"day": "2022-06-06"};
+            handleChange: function (oEvent) {
+			    var oText = this.byId("DP2"),
+				    oDP = oEvent.getSource(),
+				    sValue = oEvent.getParameter("value"),
+				    bValid = oEvent.getParameter("valid");
+
+			    console.log(sValue)
+			    var oData = {"day": sValue};
+			    this.getValue(oData)
+		    },
+
+            getValue: function (oData) {
                 return jQuery.ajax({
                         url :"/StatusPerDay",
                         type: "GET",
@@ -141,6 +171,17 @@ sap.ui.define([
                         }
                 });
             },
+
+            //LineChart
+
+            press: function (oEvent) {
+			    MessageToast.show("The interactive line chart is pressed.");
+		    },
+
+		    selectionChanged: function (oEvent) {
+			    var oPoint = oEvent.getParameter("point");
+			    MessageToast.show("The selection changed: " + oPoint.getLabel() + " " + ((oPoint.getSelected()) ? "selected" : "deselected"));
+		    },
 
             onNavBack: function () {
 
