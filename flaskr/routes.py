@@ -129,8 +129,11 @@ def status_per_day():
         }
     }
 
+    count = 0
+
     for elem in stats:
         odata['d']['results'].append({
+            'tageszeit!': count,
             'value': elem
         })
 

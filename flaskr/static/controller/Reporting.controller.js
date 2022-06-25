@@ -3,8 +3,9 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
     "sap/ui/core/routing/History",
+    //"require",
     ],
-    function (SmartOfficeController, JSONModel, MessageToast, History) {
+    function (SmartOfficeController, JSONModel, MessageToast, History, require) {
         "use strict";
 
         var self;
@@ -12,6 +13,10 @@ sap.ui.define([
         return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Reporting",{
             onInit: function () {
                 self=this;
+                // set mock data
+			    //var sPath = require.toUrl("./SampleData.json");
+			    //var oModel = new JSONModel(sPath);
+			    //this.getView().setModel(oModel);
                 this.oModelSettings = new JSONModel({
                     maxIterations: 200,
                     maxTime: 500,
@@ -123,8 +128,18 @@ sap.ui.define([
               });
             },*/
 
-            getValues: function () {
-                var oData = {"day": "2022-06-06"};
+            handleChange: function (oEvent) {
+			    var oText = this.byId("DP2"),
+				    oDP = oEvent.getSource(),
+				    sValue = oEvent.getParameter("value"),
+				    bValid = oEvent.getParameter("valid");
+
+			    console.log(sValue)
+			    var oData = {"day": sValue};
+			    this.getValue(oData)
+		    },
+
+            getValue: function (oData) {
                 return jQuery.ajax({
                         url :"/StatusPerDay",
                         type: "GET",
@@ -141,6 +156,17 @@ sap.ui.define([
                         }
                 });
             },
+
+            //LineChart
+
+            press: function (oEvent) {
+			    MessageToast.show("The interactive line chart is pressed.");
+		    },
+
+		    selectionChanged: function (oEvent) {
+			    var oPoint = oEvent.getParameter("point");
+			    MessageToast.show("The selection changed: " + oPoint.getLabel() + " " + ((oPoint.getSelected()) ? "selected" : "deselected"));
+		    },
 
             onNavBack: function () {
 
