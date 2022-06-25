@@ -166,20 +166,26 @@ class DeviceAdministration(object):
 
     def set_status_to_percentage_by_id(self, id, perc):
         date = datetime.datetime.now()
-        date = date.strftime('%Y-%m-%d %H:%M:%S')
+        datehour = date.strftime('%H:%M:%S')
+        date2 = date.strftime('%Y-%m-%d %H:%M:%S')
         trigger = False
         rules = self.get_all_jal_rules()
         for elem in rules:
-            if elem.get_min() is None and elem.get_max() is None:
-                if self.in_between_times(date, elem.get_start_time(), elem.get_end_time()):
-                    message = 'Die No_Access Zeit ist eingetroffen'
+            #if elem.get_min() is None and elem.get_max() is None:
+             #   if self.in_between_times(date, elem.get_start_time(), elem.get_end_time()):
+              #      message = 'Die No_Access Zeit ist eingetroffen'
+               #     print(message)
+                #    return message
+            if elem.get_min() is not None and elem.get_max() is not None and self.in_between_times(datehour, elem.get_start_time(), elem.get_end_time()) is True:
+                if perc > elem.get_max() or perc < elem.get_min():
+                    message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
+                    ), 'Maxtemp:', elem.get_max()
                     print(message)
-                    return message
-            elif int(perc) > elem.get_max() or int(perc) < elem.get_min():
-                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
-                ), 'Maxtemp:', elem.get_max()
-                print(message)
-                return message
+                    mindest_jal = elem.get_min()
+                    maximal_jal = elem.get_max()
+                    return {"type": "0", "min": mindest_jal, "max": maximal_jal}
+                else:
+                    trigger = True
             else:
                 trigger = True
         if trigger:
@@ -187,7 +193,7 @@ class DeviceAdministration(object):
             status = JalousienStatusBO()
             status.set_percentage(perc)
             perc = status.get_percentage()
-            status.set_date(date)
+            status.set_date(date2)
             jalousies.append(self.get_all_jalousies())
             for elem in jalousies:
                 for x in elem:
@@ -491,7 +497,9 @@ class DeviceAdministration(object):
                     message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
                     print(message)
-                    return message
+                    mindest_jal = elem.get_min()
+                    maximal_jal = elem.get_max()
+                    return {"type": "0", "min": mindest_jal, "max": maximal_jal}
                 else:
                     trigger = True
             else:
@@ -505,12 +513,25 @@ class DeviceAdministration(object):
             liste = self.get_all_standard_weekly_jal_entries_by_weekday(1)
             entries = self.get_all_jal_standard_entries_monday()
             for elem in entries:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
+                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
                     for y in liste:
                         if y.get_monday_id() == elem.get_id():
                             self.delete_entry_in_standard_weeklyplan_jal(y)
                             self.delete_standard_entry_monday(elem)
                             print(elem, 'wurde gelöscht.')
+                            elem_id = elem.get_id()
+                            start = elem.get_start_time()
+                            end = elem.get_end_time()
+                            with MondayMapper() as mapper:
+                                mapper.insert(monday)
+                            standard_entry = WeeklyPlanTempBO()
+                            last_entry = self.get_latest_jal_standard_entry_monday()
+                            standard_entry.set_monday_id(last_entry.get_id())
+                            standard_entry.set_weekday(1)
+                            with WeeklyPlanJalMapper() as mapper:
+                                mapper.insert(standard_entry)
+                            return {"type": "1", "element": elem_id, "start": start, "end": end}
+
             with MondayMapper() as mapper:
                 mapper.insert(monday)
             standard_entry = WeeklyPlanTempBO()
@@ -518,7 +539,9 @@ class DeviceAdministration(object):
             standard_entry.set_monday_id(last_entry.get_id())
             standard_entry.set_weekday(1)
             with WeeklyPlanJalMapper() as mapper:
-                return mapper.insert(standard_entry)
+                mapper.insert(standard_entry)
+            
+
 
     def get_all_jal_standard_entries_monday(self):
         with MondayMapper() as mapper:
@@ -534,14 +557,16 @@ class DeviceAdministration(object):
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is None and elem.get_max() is None:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
-                    message = 'Die No_Access Zeit ist eingetroffen'
-                    return message
-            elif elem.get_min() is not None and elem.get_max() is not None and perc > elem.get_max() or perc < elem.get_min():
-                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
-                ), 'Maxtemp:', elem.get_max()
-                return message
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+                if perc > elem.get_max() or perc < elem.get_min():
+                    message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
+                    ), 'Maxtemp:', elem.get_max()
+                    print(message)
+                    mindest_jal = elem.get_min()
+                    maximal_jal = elem.get_max()
+                    return {"type": "0", "min": mindest_jal, "max": maximal_jal}
+                else:
+                    trigger = True
             else:
                 trigger = True
         if trigger:
@@ -553,12 +578,25 @@ class DeviceAdministration(object):
             liste = self.get_all_standard_weekly_jal_entries_by_weekday(2)
             entries = self.get_all_jal_standard_entries_tuesday()
             for elem in entries:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
+                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
                     for y in liste:
                         if y.get_tuesday_id() == elem.get_id():
                             self.delete_entry_in_standard_weeklyplan_jal(y)
                             self.delete_standard_entry_tuesday(elem)
                             print(elem, 'wurde gelöscht.')
+                            elem_id = elem.get_id()
+                            start = elem.get_start_time()
+                            end = elem.get_end_time()
+                            with TuesdayMapper() as mapper:
+                                mapper.insert(tuesday)
+                            standard_entry = WeeklyPlanTempBO()
+                            last_entry = self.get_latest_jal_standard_entry_tuesday()
+                            standard_entry.set_tuesday_id(last_entry.get_id())
+                            standard_entry.set_weekday(2)
+                            with WeeklyPlanJalMapper() as mapper:
+                                mapper.insert(standard_entry)
+                            return {"type": "1", "element": elem_id, "start": start, "end": end}
+
             with TuesdayMapper() as mapper:
                 mapper.insert(tuesday)
             standard_entry = WeeklyPlanTempBO()
@@ -566,7 +604,7 @@ class DeviceAdministration(object):
             standard_entry.set_tuesday_id(last_entry.get_id())
             standard_entry.set_weekday(2)
             with WeeklyPlanJalMapper() as mapper:
-                return mapper.insert(standard_entry)
+                mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_tuesday(self):
         with TuesdayMapper() as mapper:
@@ -582,14 +620,16 @@ class DeviceAdministration(object):
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is None and elem.get_max() is None:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
-                    message = 'Die No_Access Zeit ist eingetroffen'
-                    return message
-            elif elem.get_min() is not None and elem.get_max() is not None and perc > elem.get_max() or perc < elem.get_min():
-                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
-                ), 'Maxtemp:', elem.get_max()
-                return message
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+                if perc > elem.get_max() or perc < elem.get_min():
+                    message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
+                    ), 'Maxtemp:', elem.get_max()
+                    print(message)
+                    mindest_jal = elem.get_min()
+                    maximal_jal = elem.get_max()
+                    return {"type": "0", "min": mindest_jal, "max": maximal_jal}
+                else:
+                    trigger = True
             else:
                 trigger = True
         if trigger:
@@ -601,12 +641,25 @@ class DeviceAdministration(object):
             liste = self.get_all_standard_weekly_jal_entries_by_weekday(3)
             entries = self.get_all_jal_standard_entries_wednesday()
             for elem in entries:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
+                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
                     for y in liste:
                         if y.get_wednesday_id() == elem.get_id():
                             self.delete_entry_in_standard_weeklyplan_jal(y)
                             self.delete_standard_entry_wednesday(elem)
                             print(elem, 'wurde gelöscht.')
+                            elem_id = elem.get_id()
+                            start = elem.get_start_time()
+                            end = elem.get_end_time()
+                            with WednesdayMapper() as mapper:
+                                mapper.insert(wednesday)
+                            standard_entry = WeeklyPlanTempBO()
+                            last_entry = self.get_latest_jal_standard_entry_wednesday()
+                            standard_entry.set_wednesday_id(last_entry.get_id())
+                            standard_entry.set_weekday(3)
+                            with WeeklyPlanJalMapper() as mapper:
+                                mapper.insert(standard_entry)
+                            return {"type": "1", "element": elem_id, "start": start, "end": end}
+
             with WednesdayMapper() as mapper:
                 mapper.insert(wednesday)
             standard_entry = WeeklyPlanTempBO()
@@ -614,7 +667,7 @@ class DeviceAdministration(object):
             standard_entry.set_wednesday_id(last_entry.get_id())
             standard_entry.set_weekday(3)
             with WeeklyPlanJalMapper() as mapper:
-                return mapper.insert(standard_entry)
+                mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_wednesday(self):
         with WednesdayMapper() as mapper:
@@ -630,14 +683,16 @@ class DeviceAdministration(object):
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is None and elem.get_max() is None:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
-                    message = 'Die No_Access Zeit ist eingetroffen'
-                    return message
-            elif elem.get_min() is not None and elem.get_max() is not None and perc > elem.get_max() or perc < elem.get_min():
-                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
-                ), 'Maxtemp:', elem.get_max()
-                return message
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+                if perc > elem.get_max() or perc < elem.get_min():
+                    message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
+                    ), 'Maxtemp:', elem.get_max()
+                    print(message)
+                    mindest_jal = elem.get_min()
+                    maximal_jal = elem.get_max()
+                    return {"type": "0", "min": mindest_jal, "max": maximal_jal}
+                else:
+                    trigger = True
             else:
                 trigger = True
         if trigger:
@@ -649,12 +704,25 @@ class DeviceAdministration(object):
             liste = self.get_all_standard_weekly_jal_entries_by_weekday(4)
             entries = self.get_all_jal_standard_entries_thursday()
             for elem in entries:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
+                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
                     for y in liste:
                         if y.get_thursday_id() == elem.get_id():
                             self.delete_entry_in_standard_weeklyplan_jal(y)
                             self.delete_standard_entry_thursday(elem)
                             print(elem, 'wurde gelöscht.')
+                            elem_id = elem.get_id()
+                            start = elem.get_start_time()
+                            end = elem.get_end_time()
+                            with ThursdayMapper() as mapper:
+                                mapper.insert(thursday)
+                            standard_entry = WeeklyPlanTempBO()
+                            last_entry = self.get_latest_jal_standard_entry_thursday()
+                            standard_entry.set_thursday_id(last_entry.get_id())
+                            standard_entry.set_weekday(4)
+                            with WeeklyPlanJalMapper() as mapper:
+                                mapper.insert(standard_entry)
+                            return {"type": "1", "element": elem_id, "start": start, "end": end}
+
             with ThursdayMapper() as mapper:
                 mapper.insert(thursday)
             standard_entry = WeeklyPlanTempBO()
@@ -662,7 +730,7 @@ class DeviceAdministration(object):
             standard_entry.set_thursday_id(last_entry.get_id())
             standard_entry.set_weekday(4)
             with WeeklyPlanJalMapper() as mapper:
-                return mapper.insert(standard_entry)
+                mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_thursday(self):
         with ThursdayMapper() as mapper:
@@ -678,14 +746,16 @@ class DeviceAdministration(object):
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is None and elem.get_max() is None:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
-                    message = 'Die No_Access Zeit ist eingetroffen'
-                    return message
-            elif elem.get_min() is not None and elem.get_max() is not None and perc > elem.get_max() or perc < elem.get_min():
-                message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
-                ), 'Maxtemp:', elem.get_max()
-                return message
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+                if perc > elem.get_max() or perc < elem.get_min():
+                    message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
+                    ), 'Maxtemp:', elem.get_max()
+                    print(message)
+                    mindest_jal = elem.get_min()
+                    maximal_jal = elem.get_max()
+                    return {"type": "0", "min": mindest_jal, "max": maximal_jal}
+                else:
+                    trigger = True
             else:
                 trigger = True
         if trigger:
@@ -697,12 +767,26 @@ class DeviceAdministration(object):
             liste = self.get_all_standard_weekly_jal_entries_by_weekday(5)
             entries = self.get_all_jal_standard_entries_friday()
             for elem in entries:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
+                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
                     for y in liste:
                         if y.get_friday_id() == elem.get_id():
                             self.delete_entry_in_standard_weeklyplan_jal(y)
                             self.delete_standard_entry_friday(elem)
-                    print(elem, 'wurde gelöscht.')
+                            print(elem, 'wurde gelöscht.')
+                            elem_id = elem.get_id()
+                            start = elem.get_start_time()
+                            end = elem.get_end_time()
+
+                            with FridayMapper() as mapper:
+                                mapper.insert(friday)
+                            standard_entry = WeeklyPlanTempBO()
+                            last_entry = self.get_latest_jal_standard_entry_friday()
+                            standard_entry.set_friday_id(last_entry.get_id())
+                            standard_entry.set_weekday(5)
+                            with WeeklyPlanJalMapper() as mapper:
+                                mapper.insert(standard_entry)
+                            return {"type": "1", "element": elem_id, "start": start, "end": end}
+
             with FridayMapper() as mapper:
                 mapper.insert(friday)
             standard_entry = WeeklyPlanTempBO()
@@ -710,7 +794,7 @@ class DeviceAdministration(object):
             standard_entry.set_friday_id(last_entry.get_id())
             standard_entry.set_weekday(5)
             with WeeklyPlanJalMapper() as mapper:
-                return mapper.insert(standard_entry)
+                mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_friday(self):
         with FridayMapper() as mapper:
@@ -726,14 +810,14 @@ class DeviceAdministration(object):
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is None and elem.get_max() is None:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
-                    message = 'Die No_Access Zeit ist eingetroffen'
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+                if temp > elem.get_max() or temp < elem.get_min():
+                    message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
+                    ), 'Maxtemp:', elem.get_max()
+                    print(message)
                     return message
-            elif elem.get_min() is not None and elem.get_max() is not None and temp > elem.get_max() or temp < elem.get_min():
-                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
-                ), 'Maxtemp:', elem.get_max()
-                return message
+                else:
+                    trigger = True
             else:
                 trigger = True
         if trigger:
@@ -782,14 +866,14 @@ class DeviceAdministration(object):
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is None and elem.get_max() is None:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
-                    message = 'Die No_Access Zeit ist eingetroffen'
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+                if temp > elem.get_max() or temp < elem.get_min():
+                    message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
+                    ), 'Maxtemp:', elem.get_max()
+                    print(message)
                     return message
-            elif elem.get_min() is not None and elem.get_max() is not None and temp > elem.get_max() or temp < elem.get_min():
-                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
-                ), 'Maxtemp:', elem.get_max()
-                return message
+                else:
+                    trigger = True
             else:
                 trigger = True
         if trigger:
@@ -835,14 +919,14 @@ class DeviceAdministration(object):
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is None and elem.get_max() is None:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
-                    message = 'Die No_Access Zeit ist eingetroffen'
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+                if temp > elem.get_max() or temp < elem.get_min():
+                    message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
+                    ), 'Maxtemp:', elem.get_max()
+                    print(message)
                     return message
-            elif elem.get_min() is not None and elem.get_max() is not None and temp > elem.get_max() or temp < elem.get_min():
-                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
-                ), 'Maxtemp:', elem.get_max()
-                return message
+                else:
+                    trigger = True
             else:
                 trigger = True
         if trigger:
@@ -888,14 +972,14 @@ class DeviceAdministration(object):
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is None and elem.get_max() is None:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
-                    message = 'Die No_Access Zeit ist eingetroffen'
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+                if temp > elem.get_max() or temp < elem.get_min():
+                    message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
+                    ), 'Maxtemp:', elem.get_max()
+                    print(message)
                     return message
-            elif elem.get_min() is not None and elem.get_max() is not None and temp > elem.get_max() or temp < elem.get_min():
-                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
-                ), 'Maxtemp:', elem.get_max()
-                return message
+                else:
+                    trigger = True
             else:
                 trigger = True
         if trigger:
@@ -941,14 +1025,14 @@ class DeviceAdministration(object):
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is None and elem.get_max() is None:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
-                    message = 'Die No_Access Zeit ist eingetroffen'
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+                if temp > elem.get_max() or temp < elem.get_min():
+                    message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
+                    ), 'Maxtemp:', elem.get_max()
+                    print(message)
                     return message
-            elif temp > elem.get_max() or temp < elem.get_min():
-                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
-                ), 'Maxtemp:', elem.get_max()
-                return message
+                else:
+                    trigger = True
             else:
                 trigger = True
         if trigger:
@@ -1023,9 +1107,15 @@ class DeviceAdministration(object):
         rule.set_end_time(end)
         rules = self.get_all_jal_rules()
         for elem in rules:
-            if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
+            if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
                 print(elem, 'wurde gelöscht.')
                 self.delete_rule(elem)
+                elem_id = elem.get_id()
+                start = elem.get_start_time()
+                end = elem.get_end_time()
+                with RulesMapper() as mapper:
+                    mapper.insert(rule)
+                return {"type": "0", "element": elem_id, "start": start, "end": end} 
             else:
                 print('nichts passiert', start, end,
                       elem.get_start_time(), elem.get_end_time())

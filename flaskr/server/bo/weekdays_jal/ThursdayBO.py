@@ -9,7 +9,7 @@ class Thursday(Weekday):
 
     def __str__(self):
         return "Id: {}, Type of entry: {}, Start of timeinterval: {}, End of timeinterval: {},  Percentage: {}".format(
-            self.get_id(), self.get_type(), self.get_start_time(), self.get_end_time(), self.get_percentage())
+            self.get_id(), self.get_type(), self.get_start_time(), self.get_end_time(), self.get_value())
 
     @staticmethod
     def from_dict(dictionary=dict()):

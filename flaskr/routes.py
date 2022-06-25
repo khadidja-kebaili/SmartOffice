@@ -71,15 +71,12 @@ def set_jal():
 
     data = request.form["value"]
     data = int(data)
-    #time.sleep(4)
+    time.sleep(1)
     k = adm.set_status_to_percentage_by_id(1, data)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        adm.set_status_to_percentage_by_id(1, data)
-        jal = adm.get_last_status()
-        return ' ', 200
+        return {"type": 1}
 
 
 
@@ -121,7 +118,8 @@ def status_per_day():
 
     adm = DeviceAdministration()
 
-    day = request.form["day"]
+    day = request.args.get('day')
+    print(day)
     stats = adm.get_median_values_jal(day)
     print('Jal: ', stats)
 
@@ -357,14 +355,13 @@ def set_jal_standard_monday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
+    time.sleep(1)
 
     k = adm.set_jal_standard_entry_monday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        return ' ', 200
+        return {'type': '2'}
 
 
 @app.route('/SetJalousienStandardTuesday', methods=["POST"])
@@ -380,13 +377,12 @@ def set_jal_standard_tuesday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
+    time.sleep(1)
     k = adm.set_jal_standard_entry_tuesday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        return ' ', 200
+        return {'type': '2'}
 
 
 @app.route('/SetJalousienStandardWednesday', methods=["POST"])
@@ -402,13 +398,12 @@ def set_jal_standard_wednesday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
+    time.sleep(1)
     k = adm.set_jal_standard_entry_wednesday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        return ' ', 200
+        return {'type': '2'}
 
 
 @app.route('/SetJalousienStandardThursday', methods=["POST"])
@@ -424,13 +419,12 @@ def set_jal_standard_thursday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
+    time.sleep(1)
     k = adm.set_jal_standard_entry_thursday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        return ' ', 200
+        return {'type': '2'}
 
 
 @app.route('/SetJalousienStandardFriday', methods=["POST"])
@@ -446,13 +440,12 @@ def set_jal_standard_friday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
+    time.sleep(1)
     k = adm.set_jal_standard_entry_friday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        return ' ', 200
+        return {'type': '2'}
 
 @app.route('/DeleteStandardJalousienMonday', methods=["DELETE"])
 def delete_entry_jal_monday():
@@ -567,9 +560,12 @@ def set_jal_rule():
     end = request.form["end"]
     min = request.form["min"]
     max = request.form["max"]
-    time.sleep(4)
-    adm.set_jal_rule(min, max, start, end)
-    return ' '
+    time.sleep(1)
+    k = adm.set_jal_rule(min, max, start, end)
+    if type(k) == dict:
+        return k
+    else:
+        return {'type': '1'}
 
 @app.route('/GetJalRule', methods=["GET"])
 def get_jal_rules():
@@ -829,11 +825,11 @@ def set_temp_standard_monday():
     value = int(value)
     time.sleep(4)
     k = adm.set_temp_standard_entry_monday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
-    else:
-        return ' ', 200
+    #if type(k) == tuple:
+    print(k)
+    print(type(k))
+    return k
+    
 
 
 @app.route('/SetThermostatStandardTuesday', methods=["POST"])

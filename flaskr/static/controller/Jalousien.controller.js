@@ -50,8 +50,6 @@ sap.ui.define([
             oRouter.navTo("regelnjalousien")
         },
         sendValue: function (oEvent) {
-            var displayerror = 0
-            console.log("Neuer Wert wurde eingestellt.");
             sap.ui.core.BusyIndicator.hide(0);
             //var oThis = this;
             var oData = {
@@ -66,18 +64,25 @@ sap.ui.define([
                     data: oData,
                     success: function (response) {
                         console.log(response)
-                        //oThis.makeGraph(response.graph);
                         sap.ui.core.BusyIndicator.hide();
-                        var errorcheck = response
+                        var errorcheck = response.type
+                        var mindestwert = response.min
+                        var maximalwert = response.max
                         if (errorcheck == "0") {
-                            MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Bitte versuche eine andere Einstellung!");
+                            MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Aktuell darf sich der Wert nur zwischen " + mindestwert + "% und " + maximalwert + "% befinden.");
                         }
                     },
                     error: function (response) {
                         console.log(typeof(response.responseText));
                         
                     }
-                });
+                }).done(function() { 
+                    self.getStatus().done(function(result) { 
+                        var currentvalue = result.d.results[0]
+                        self.byId("sliderrealtime").setValue(currentvalue)       
+                    })
+            })
+                
         },
         onNavBack: function () {
 
