@@ -17,15 +17,16 @@ sap.ui.define([
 			    //var sPath = require.toUrl("./SampleData.json");
 			    //var oModel = new JSONModel(sPath);
 			    //this.getView().setModel(oModel);
-                this.oModelSettings = new JSONModel({
-                    maxIterations: 200,
-                    maxTime: 500,
-                    initialTemperature: 200,
-                    coolDownStep: 1
-                });
-                this.getView().setModel(this.oModelSettings, "settings");
-                this.getView().setModel(sap.ui.getCore().getModel("TestModel"), "TestModel");
-                sap.ui.core.BusyIndicator.hide(0);
+                //this.oModelSettings = new JSONModel({
+                    //maxIterations: 200,
+                    //maxTime: 500,
+                    //initialTemperature: 200,
+                    //coolDownStep: 1
+                //});
+                //this.getView().setModel(this.oModelSettings, "settings");
+                //this.getView().setModel(sap.ui.getCore().getModel("TestModel"), "TestModel");
+                var oModel = new sap.ui.model.json.JSONModel({"tageszeit": null, "value": null,});
+                this.getView().setModel(oModel)
                 let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.getRoute("reporting").attachMatched(this._onRouteMatched, this);
 
@@ -78,7 +79,21 @@ sap.ui.define([
                     //}];
             //},
 
-            //_onRouteMatched : function (oEvent){
+            _onRouteMatched : function (oEvent){
+                var datareporting = []
+                this.getValue().done(function(result) {
+
+                    var data = result.d.results
+                    data.map(function(eintrag, index) {
+                        datareporting.push(eintrag)
+                    })
+                    console.log(datareporting)
+                    var oModel = new sap.ui.model.json.JSONModel({data: datareporting});
+                    self.getView().setModel(oModel);
+                    self.addObject();
+                    console.log("Jetzt bin ich am Ende")
+                })
+            },
                 //this.getValues().done(function(result) {
                     //console.log(result.d.results[0])
                     //var dayvalue = result.d.results[0]

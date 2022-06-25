@@ -65,17 +65,6 @@
 					        <HBox alignItems="Center" justifyContent="SpaceBetween">
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
                                     <Title level="H3" text="Letzte Einträge" />
-									<!--//items="{
-										path: '/ProductCollection',
-										sorter: {
-										path: 'Name'
-									}
-									}">
-									<items>
-									<StandardListItem
-										title="{Name}"
-										description="{ProductId}" />
-									</items>>-->
                                     <!--<Text id="supposedlvaluejalid" text="{InputValue'}" width="100%"/>-->
 						        </VBox>
                             </HBox>
@@ -87,7 +76,7 @@
             <!-- WLAN-Jalousienmodul Card Control Header folgt-->
             <f:Card class="sapUiMediumMargin" width="300px">
                 <f:header>
-                    <card:Header title="WLAN-Jalousienmodul" subtitle="Echtzeit Soll-Ist Vergleich" />
+                    <card:Header title="WLAN-Jalousienmodul" subtitle="Reporting" />
                 </f:header>
 
             <!-- WLAN-Jalousienmodul Card Control Content folgt, !muss angepasst werden!-->
@@ -121,17 +110,7 @@
 					        <HBox alignItems="Center" justifyContent="SpaceBetween">
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
                                     <Title level="H3" text="Letzte Einträge:" />
-                                    <!--//items="{
-										path: '/ProductCollection',
-										sorter: {
-										path: 'Name'
-									}
-									}">
-									<items>
-									<StandardListItem
-										title="{Name}"
-										description="{ProductId}" />
-									</items>>-->
+                                    <Text id ="text" text="{/data}" />
                                     <!--<Text id="supposedlvaluejalid" text="{InputValue'}" width="100%"/>-->
 						        </VBox>
                             </HBox>
