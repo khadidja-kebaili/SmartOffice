@@ -284,7 +284,7 @@ class DeviceAdministration(object):
         values = []
         delta = bis - von
         week = datetime.datetime.strptime(day, '%Y-%m-%d').isocalendar()[1]
-        for elem in range(von , bis+1):
+        for elem in range(von, bis + 1):
             x = self.get_last_entry_of_hour_for_day(day, elem)
             values.append(x)
         return values
@@ -304,7 +304,6 @@ class DeviceAdministration(object):
         l = l[-1]
         values.append(l)
         return values
-
 
     def in_between_times(self, searched_time, start, end):
         searched_time = datetime.datetime.strptime(searched_time, '%H:%M:%S')
@@ -350,6 +349,7 @@ class DeviceAdministration(object):
     def get_all_thermostat_status(self):
         with ThermostatStatusMapper() as mapper:
             return mapper.find_all()
+
     """
     Thermostat-spezifische Methoden
     """
@@ -384,7 +384,7 @@ class DeviceAdministration(object):
         with ThermostatMapper() as mapper:
             mapper.update(thermostat)'''
 
-    def set_temperature(self, temp, device_id = None):
+    def set_temperature(self, temp, device_id=None):
         date = datetime.datetime.now()
         date_for_stat = date.strftime('%Y-%m-%d %H:%M:%S')
         date = date.strftime('%H:%M:%S')
@@ -422,14 +422,14 @@ class DeviceAdministration(object):
             with ThermostatStatusMapper() as mapper:
                 return mapper.insert(status)
 
-    def get_temperature(self):
+    def get_comfort_temperature(self):
         conn = http.client.HTTPSConnection("192.168.2.254", 8254)
         payload = ''
         headers = {}
         sid = self.generate_sid(
             'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
         conn.request("GET",
-                     "/webservices/homeautoswitch.lua?ain=139790057201&switchcmd=gettemperature&sid={}".format(
+                     "/webservices/homeautoswitch.lua?ain=139790057201&switchcmd=gethkrkomfort&sid={}".format(
                          sid),
                      payload, headers)
         res = conn.getresponse()
@@ -438,38 +438,38 @@ class DeviceAdministration(object):
         print(data)
         return data
 
-    '''    def get_min_temp(self):
-            conn = http.client.HTTPSConnection("192.168.2.254", 8254)
-            payload = ''
-            sid = self.generate_sid(
-                'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
-            headers = {
-                'Content-Type': 'application/json'
-            }
-            conn.request("GET",
-                         "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=gethkrtsoll".format(sid),
-                         payload, headers)
-            res = conn.getresponse()
-            data = res.read()
-            data = data.decode("utf-8")
-            return data
+    def get_temp_from_device(self):
+        conn = http.client.HTTPSConnection("192.168.2.254", 8254)
+        payload = ''
+        sid = self.generate_sid(
+            'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        conn.request("GET",
+                     "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=gettemperature".format(sid),
+                     payload, headers)
+        res = conn.getresponse()
+        data = res.read()
+        data = data.decode("utf-8")
+        return data
 
-        def set_min_temp(self, temp):
-            conn = http.client.HTTPSConnection("192.168.2.254", 8254)
-            payload = ''
-            sid = self.generate_sid(
-                'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
-            headers = {
-                'Content-Type': 'application/json'
-            }
-            conn.request("GET",
-                         "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param={}".format(
-                             sid, temp),
-                         payload, headers)
-            res = conn.getresponse()
-            data = res.read()
-            data = data.decode("utf-8")
-            return data'''
+    def set_min_temp_of_device(self, temp):
+        conn = http.client.HTTPSConnection("192.168.2.254", 8254)
+        payload = ''
+        sid = self.generate_sid(
+            'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        conn.request("GET",
+                     "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param={}".format(
+                         sid, temp),
+                     payload, headers)
+        res = conn.getresponse()
+        data = res.read()
+        data = data.decode("utf-8")
+        return data
 
     ####################################################################################
     '''Für Statistik Soll , Ist (Durchschnitt der Stunden nehmen)'''
@@ -484,7 +484,9 @@ class DeviceAdministration(object):
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end,
+                                                                                              elem.get_start_time(),
+                                                                                              elem.get_end_time()) is True:
                 if perc > elem.get_max() or perc < elem.get_min():
                     message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
@@ -1039,7 +1041,7 @@ class DeviceAdministration(object):
             mapper.delete_jal_rules_byId(id_entry)
 
     def set_temp_rule(self, min, max, start, end):
-     '''    def set_temp_rule(self, min, max, start, end):
+        '''    def set_temp_rule(self, min, max, start, end):
             rule = RulesBO()
             rule.set_min(min)
             rule.set_max(max)
@@ -1064,7 +1066,7 @@ class DeviceAdministration(object):
         rule.set_type('T')
         rules = self.get_all_temp_rules()
         x = 0
-        if len(rules)>= 1:
+        if len(rules) >= 1:
             for elem in rules:
                 x += 1
                 if elem.get_start_time() is None and elem.get_end_time() is None and elem.get_min() is not min and elem.get_max() is None:
@@ -1079,12 +1081,11 @@ class DeviceAdministration(object):
                         with RulesMapper() as mapper:
                             mapper.insert(rule)
                             return min
-                    #return min
+                    # return min
         else:
             with RulesMapper() as mapper:
                 mapper.insert(rule)
                 return min
-
 
     def set_temp_rule_max(self, max):
         rule = RulesBO()
@@ -1107,13 +1108,11 @@ class DeviceAdministration(object):
                         with RulesMapper() as mapper:
                             mapper.insert(rule)
                             return max
-                    #return max
+                    # return max
         else:
             with RulesMapper() as mapper:
                 mapper.insert(rule)
                 return max
-
-
 
     def get_all_rules(self):
         with RulesMapper() as mapper:
@@ -1133,15 +1132,31 @@ class DeviceAdministration(object):
 
     def get_min_temp(self):
         rules = self.get_all_temp_rules()
-        for elem in rules:
-            if elem.get_max() is None and elem.get_min() is not None and elem.get_start_time() is None:
-                return elem.get_min()
+        min_of_db = []
+        if len(rules) > 0:
+            for elem in rules:
+                if elem.get_max() is None and elem.get_min() is not None and elem.get_start_time() is None:
+                    min_of_db.append(elem.get_min())
+            if len(min_of_db) >= 1:
+                return min_of_db[0]
+            else:
+                return self.get_temp_from_device()
+        else:
+            return self.get_temp_from_device()
 
     def get_max_temp(self):
         rules = self.get_all_temp_rules()
-        for elem in rules:
-            if elem.get_min() is None and elem.get_max() is not None and elem.get_start_time() is None:
-                return elem.get_max()
+        max_of_db = []
+        if len(rules) > 0:
+            for elem in rules:
+                if elem.get_max() is not None and elem.get_min() is None and elem.get_start_time() is None:
+                    max_of_db.append(elem.get_min())
+            if len(max_of_db) >= 1:
+                return max_of_db[0]
+            else:
+                return self.get_temp_from_device()
+        else:
+            return self.get_temp_from_device()
 
     def overlapping(self, new_start, new_end, old_start, old_end):
         new_start = datetime.datetime.strptime(new_start, '%H:%M:%S').hour
@@ -1293,5 +1308,5 @@ class DeviceAdministration(object):
 
 
 adm = DeviceAdministration()
-k = adm.get_median_values_jal('2022-06-20')
-print(k)
+
+print(adm.get_min_temp())
