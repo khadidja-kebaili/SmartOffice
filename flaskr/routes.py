@@ -230,6 +230,7 @@ def get_entries_jal_monday():
     }
 
     entries = adm.get_all_jal_standard_entries_monday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -256,6 +257,7 @@ def get_entries_jal_tuesday():
     }
 
     entries = adm.get_all_jal_standard_entries_tuesday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -282,6 +284,7 @@ def get_entries_jal_wednesday():
     }
 
     entries = adm.get_all_jal_standard_entries_wednesday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -308,6 +311,7 @@ def get_entries_jal_thursday():
     }
 
     entries = adm.get_all_jal_standard_entries_thursday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -334,6 +338,7 @@ def get_entries_jal_friday():
     }
 
     entries = adm.get_all_jal_standard_entries_friday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
