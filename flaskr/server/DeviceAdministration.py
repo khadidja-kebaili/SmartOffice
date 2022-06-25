@@ -815,7 +815,9 @@ class DeviceAdministration(object):
                     message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
                     print(message)
-                    return message
+                    mindest_temp = elem.get_min()
+                    maximal_temp = elem.get_max()
+                    return {"type": "0", "min": mindest_temp, "max": maximal_temp}
                 else:
                     trigger = True
             else:
@@ -835,6 +837,19 @@ class DeviceAdministration(object):
                             self.delete_entry_in_standard_weeklyplan_temp(y)
                             self.delete_standard_entry_monday(elem)
                             print(elem, 'wurde gelöscht.')
+                            elem_id = elem.get_id()
+                            start = elem.get_start_time()
+                            end = elem.get_end_time()
+                            with MondayMapper() as mapper:
+                                mapper.insert(monday)
+                            standard_entry = WeeklyPlanTempBO()
+                            last_entry = self.get_latest_temp_standard_entry_monday()
+                            standard_entry.set_monday_id(last_entry.get_id())
+                            standard_entry.set_weekday(1)
+                            with WeeklyPlanTempMapper() as mapper:
+                                mapper.insert(standard_entry)
+                            return {"type": "1", "element": elem_id, "start": start, "end": end}
+
             with MondayMapper() as mapper:
                 mapper.insert(monday)
             standard_entry = WeeklyPlanTempBO()
@@ -842,7 +857,7 @@ class DeviceAdministration(object):
             standard_entry.set_monday_id(last_entry.get_id())
             standard_entry.set_weekday(1)
             with WeeklyPlanTempMapper() as mapper:
-                return mapper.insert(standard_entry)
+                mapper.insert(standard_entry)
 
     def get_all_temp_standard_entries_monday(self):
         with MondayMapper() as mapper:
@@ -871,7 +886,9 @@ class DeviceAdministration(object):
                     message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
                     print(message)
-                    return message
+                    mindest_temp = elem.get_min()
+                    maximal_temp = elem.get_max()
+                    return {"type": "0", "min": mindest_temp, "max": maximal_temp}
                 else:
                     trigger = True
             else:
@@ -890,8 +907,20 @@ class DeviceAdministration(object):
                         if y.get_tuesday_id() == elem.get_id():
                             self.delete_entry_in_standard_weeklyplan_temp(y)
                             self.delete_standard_entry_tuesday(elem)
-                    print(elem, 'wurde gelöscht.')
-                    self.delete_rule(elem)
+                            print(elem, 'wurde gelöscht.')
+                            elem_id = elem.get_id()
+                            start = elem.get_start_time()
+                            end = elem.get_end_time()
+                            with TuesdayMapper() as mapper:
+                                mapper.insert(tuesday)
+                            standard_entry = WeeklyPlanTempBO()
+                            last_entry = self.get_latest_temp_standard_entry_tuesday()
+                            standard_entry.set_tuesday_id(last_entry.get_id())
+                            standard_entry.set_weekday(2)
+                            with WeeklyPlanTempMapper() as mapper:
+                                mapper.insert(standard_entry)
+                            return {"type": "1", "element": elem_id, "start": start, "end": end}
+          
             with TuesdayMapper() as mapper:
                 mapper.insert(tuesday)
             standard_entry = WeeklyPlanTempBO()
@@ -899,7 +928,7 @@ class DeviceAdministration(object):
             standard_entry.set_tuesday_id(last_entry.get_id())
             standard_entry.set_weekday(2)
             with WeeklyPlanTempMapper() as mapper:
-                return mapper.insert(standard_entry)
+                mapper.insert(standard_entry)
 
     def get_all_temp_standard_entries_tuesday(self):
         with TuesdayMapper() as mapper:
@@ -924,11 +953,14 @@ class DeviceAdministration(object):
                     message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
                     print(message)
-                    return message
+                    mindest_temp = elem.get_min()
+                    maximal_temp = elem.get_max()
+                    return {"type": "0", "min": mindest_temp, "max": maximal_temp}
                 else:
                     trigger = True
             else:
                 trigger = True
+        
         if trigger:
             wednesday = Wednesday()
             wednesday.set_type('T')
@@ -938,13 +970,24 @@ class DeviceAdministration(object):
             liste = self.get_all_standard_weekly_temp_entries_by_weekday(3)
             entries = self.get_all_temp_standard_entries_wednesday()
             for elem in entries:
-                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()):
+                if self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
                     for y in liste:
                         if y.get_wednesday_id() == elem.get_id():
                             self.delete_entry_in_standard_weeklyplan_temp(y)
                             self.delete_standard_entry_wednesday(elem)
-                    print(elem, 'wurde gelöscht.')
-                    self.delete_rule(elem)
+                            print(elem, 'wurde gelöscht.')
+                            elem_id = elem.get_id()
+                            start = elem.get_start_time()
+                            end = elem.get_end_time()
+                            with WednesdayMapper() as mapper:
+                                mapper.insert(wednesday)
+                            standard_entry = WeeklyPlanTempBO()
+                            last_entry = self.get_latest_temp_standard_entry_wednesday()
+                            standard_entry.set_wednesday_id(last_entry.get_id())
+                            standard_entry.set_weekday(3)
+                            with WeeklyPlanTempMapper() as mapper:
+                                mapper.insert(standard_entry)
+                            return {"type": "1", "element": elem_id, "start": start, "end": end}
             with WednesdayMapper() as mapper:
                 mapper.insert(wednesday)
             standard_entry = WeeklyPlanTempBO()
@@ -952,7 +995,7 @@ class DeviceAdministration(object):
             standard_entry.set_wednesday_id(last_entry.get_id())
             standard_entry.set_weekday(3)
             with WeeklyPlanTempMapper() as mapper:
-                return mapper.insert(standard_entry)
+                mapper.insert(standard_entry)
 
     def get_all_temp_standard_entries_wednesday(self):
         with WednesdayMapper() as mapper:
@@ -977,7 +1020,9 @@ class DeviceAdministration(object):
                     message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
                     print(message)
-                    return message
+                    mindest_temp = elem.get_min()
+                    maximal_temp = elem.get_max()
+                    return {"type": "0", "min": mindest_temp, "max": maximal_temp}
                 else:
                     trigger = True
             else:
@@ -996,7 +1041,19 @@ class DeviceAdministration(object):
                         if y.get_thursday_id() == elem.get_id():
                             self.delete_entry_in_standard_weeklyplan_temp(y)
                             self.delete_standard_entry_thursday(elem)
-                    print(elem, 'wurde gelöscht.')
+                            print(elem, 'wurde gelöscht.')
+                            elem_id = elem.get_id()
+                            start = elem.get_start_time()
+                            end = elem.get_end_time()
+                            with ThursdayMapper() as mapper:
+                                mapper.insert(thursday)
+                            standard_entry = WeeklyPlanTempBO()
+                            last_entry = self.get_latest_temp_standard_entry_thursday()
+                            standard_entry.set_thursday_id(last_entry.get_id())
+                            standard_entry.set_weekday(4)
+                            with WeeklyPlanTempMapper() as mapper:
+                                mapper.insert(standard_entry)
+                            return {"type": "1", "element": elem_id, "start": start, "end": end}
 
             with ThursdayMapper() as mapper:
                 mapper.insert(thursday)
@@ -1005,7 +1062,7 @@ class DeviceAdministration(object):
             standard_entry.set_thursday_id(last_entry.get_id())
             standard_entry.set_weekday(4)
             with WeeklyPlanTempMapper() as mapper:
-                return mapper.insert(standard_entry)
+                mapper.insert(standard_entry)
 
     def get_all_temp_standard_entries_thursday(self):
         with ThursdayMapper() as mapper:
@@ -1030,7 +1087,9 @@ class DeviceAdministration(object):
                     message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
                     print(message)
-                    return message
+                    mindest_temp = elem.get_min()
+                    maximal_temp = elem.get_max()
+                    return {"type": "0", "min": mindest_temp, "max": maximal_temp}
                 else:
                     trigger = True
             else:
@@ -1050,6 +1109,19 @@ class DeviceAdministration(object):
                             self.delete_entry_in_standard_weeklyplan_temp(y)
                             self.delete_standard_entry_friday(elem)
                             print('wurden gelöscht.', elem, y)
+                            elem_id = elem.get_id()
+                            start = elem.get_start_time()
+                            end = elem.get_end_time()
+                            with FridayMapper() as mapper:
+                                mapper.insert(friday)
+                            standard_entry = WeeklyPlanTempBO()
+                            last_entry = self.get_latest_temp_standard_entry_friday()
+                            standard_entry.set_friday_id(last_entry.get_id())
+                            standard_entry.set_weekday(5)
+                            with WeeklyPlanTempMapper() as mapper:
+                                mapper.insert(standard_entry)
+                            return {"type": "1", "element": elem_id, "start": start, "end": end}
+
             with FridayMapper() as mapper:
                 mapper.insert(friday)
             standard_entry = WeeklyPlanTempBO()
@@ -1057,7 +1129,7 @@ class DeviceAdministration(object):
             standard_entry.set_friday_id(last_entry.get_id())
             standard_entry.set_weekday(5)
             with WeeklyPlanTempMapper() as mapper:
-                return mapper.insert(standard_entry)
+                mapper.insert(standard_entry)
 
     def get_all_temp_standard_entries_friday(self):
         with FridayMapper() as mapper:
