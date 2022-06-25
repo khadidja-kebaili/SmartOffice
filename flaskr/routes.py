@@ -703,6 +703,7 @@ def get_entries_temp_monday():
     }
 
     entries = adm.get_all_temp_standard_entries_monday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -729,6 +730,7 @@ def get_entries_temp_tuesday():
     }
 
     entries = adm.get_all_temp_standard_entries_tuesday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -755,6 +757,7 @@ def get_entries_temp_wednesday():
     }
 
     entries = adm.get_all_temp_standard_entries_wednesday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -781,6 +784,7 @@ def get_entries_temp_thursday():
     }
 
     entries = adm.get_all_temp_standard_entries_thursday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -807,6 +811,7 @@ def get_entries_temp_friday():
     }
 
     entries = adm.get_all_temp_standard_entries_friday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -831,12 +836,12 @@ def set_temp_standard_monday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
+    time.sleep(1)
     k = adm.set_temp_standard_entry_monday(start, end, value)
-    #if type(k) == tuple:
-    print(k)
-    print(type(k))
-    return k
+    if type(k) == dict:
+        return k
+    else:
+        return {'type': '2'}
     
 
 
@@ -853,14 +858,12 @@ def set_temp_standard_tuesday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
+    time.sleep(1)
     k = adm.set_temp_standard_entry_tuesday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        return ' ', 200
-
+        return {'type': '2'}
 
 @app.route('/SetThermostatStandardWednesday', methods=["POST"])
 def set_temp_standard_wednesday():
@@ -875,13 +878,12 @@ def set_temp_standard_wednesday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
+    time.sleep(1)
     k = adm.set_temp_standard_entry_wednesday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        return ' ', 200
+        return {'type': '2'}
 
 
 @app.route('/SetThermostatStandardThursday', methods=["POST"])
@@ -897,13 +899,12 @@ def set_temp_standard_thursday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
+    time.sleep(1)
     k = adm.set_temp_standard_entry_thursday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        return ' ', 200
+        return {'type': '2'}
 
 
 @app.route('/SetThermostatStandardFriday', methods=["POST"])
@@ -919,13 +920,12 @@ def set_temp_standard_friday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
+    time.sleep(1)
     k = adm.set_temp_standard_entry_friday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        return ' ', 200
+        return {'type': '2'}
 
 
 @app.route('/DeleteStandardThermoMonday', methods=["DELETE"])
