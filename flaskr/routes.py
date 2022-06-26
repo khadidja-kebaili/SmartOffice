@@ -72,15 +72,12 @@ def set_jal():
 
     data = request.form["value"]
     data = int(data)
-    #time.sleep(4)
+    time.sleep(1)
     k = adm.set_status_to_percentage_by_id(1, data)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        adm.set_status_to_percentage_by_id(1, data)
-        jal = adm.get_last_status()
-        return ' ', 200
+        return {"type": 1}
 
 
 
@@ -95,7 +92,7 @@ def get_jal_stats_per_hour_for_weekday():
     weekday = request.form["weekday"]
     von = request.form["von"]
     bis = request.form["bis"]
-    data = adm.get_median_jal_for_timespan(von, bis, weekday)
+    data = adm.get_median_ist_jal_for_timespan(von, bis, weekday)
 
     odata = {
         'd': {
@@ -109,7 +106,7 @@ def get_jal_stats_per_hour_for_weekday():
 
     return jsonify(odata)
 
-@app.route('/StatusPerDay', methods=["GET"])
+@app.route('/JalIstStatusPerDay', methods=["GET"])
 def status_per_day():
     """
     Return a simple odata container with date time information
@@ -122,8 +119,9 @@ def status_per_day():
 
     adm = DeviceAdministration()
 
-    day = request.form["day"]
-    stats = adm.get_median_values_jal(day)
+    day = request.args.get('day')
+    print(day)
+    stats = adm.get_median_ist_values_jal(day)
     print('Jal: ', stats)
 
     odata = {
@@ -132,11 +130,116 @@ def status_per_day():
         }
     }
 
+    count = 0
+
     for elem in stats:
         odata['d']['results'].append({
+            'tageszeit': count,
             'value': elem
         })
 
+    return odata
+
+@app.route('/TempIstStatusPerDay', methods=["GET"])
+def status_per_day():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    day = request.args.get('day')
+    print(day)
+    stats = adm.get_median_ist_values_temp(day)
+    print('Jal: ', stats)
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    count = 0
+
+    for elem in stats:
+        odata['d']['results'].append({
+            'tageszeit': count,
+            'value': elem
+        })
+
+    return odata
+
+@app.route('/JalSollStatusPerDay', methods=["GET"])
+def status_per_day():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    day = request.args.get('day')
+    print(day)
+    stats = adm.get_median_soll_values_jal(day)
+    print('Jal: ', stats)
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    count = 0
+
+    for elem in stats:
+        odata['d']['results'].append({
+            'tageszeit': count,
+            'value': elem
+        })
+
+    return odata
+
+@app.route('/TempSollStatusPerDay', methods=["GET"])
+def status_per_day():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    day = request.args.get('day')
+    print(day)
+    stats = adm.get_median_soll_values_temp(day)
+    print('Jal: ', stats)
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    count = 0
+
+    for elem in stats:
+        odata['d']['results'].append({
+            'tageszeit': count,
+            'value': elem
+        })
+        count = count + 1
     return odata
 
 @app.route('/StatusPerWeek', methods=["GET"])
@@ -230,6 +333,7 @@ def get_entries_jal_monday():
     }
 
     entries = adm.get_all_jal_standard_entries_monday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -256,6 +360,7 @@ def get_entries_jal_tuesday():
     }
 
     entries = adm.get_all_jal_standard_entries_tuesday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -282,6 +387,7 @@ def get_entries_jal_wednesday():
     }
 
     entries = adm.get_all_jal_standard_entries_wednesday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -308,6 +414,7 @@ def get_entries_jal_thursday():
     }
 
     entries = adm.get_all_jal_standard_entries_thursday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -334,6 +441,7 @@ def get_entries_jal_friday():
     }
 
     entries = adm.get_all_jal_standard_entries_friday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -358,14 +466,13 @@ def set_jal_standard_monday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
+    time.sleep(1)
 
     k = adm.set_jal_standard_entry_monday(start, end, value)
-    if type(k) == tuple:
-        test = str(k)
-        return "0"
+    if type(k) == dict:
+        return k
     else:
-        return ' ', 200
+        return {'type': '2'}
 
 
 @app.route('/SetJalousienStandardTuesday', methods=["POST"])
@@ -381,9 +488,12 @@ def set_jal_standard_tuesday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
-    adm.set_jal_standard_entry_tuesday(start, end, value)
-    return ' '
+    time.sleep(1)
+    k = adm.set_jal_standard_entry_tuesday(start, end, value)
+    if type(k) == dict:
+        return k
+    else:
+        return {'type': '2'}
 
 
 @app.route('/SetJalousienStandardWednesday', methods=["POST"])
@@ -399,9 +509,12 @@ def set_jal_standard_wednesday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
-    adm.set_jal_standard_entry_wednesday(start, end, value)
-    return ' '
+    time.sleep(1)
+    k = adm.set_jal_standard_entry_wednesday(start, end, value)
+    if type(k) == dict:
+        return k
+    else:
+        return {'type': '2'}
 
 
 @app.route('/SetJalousienStandardThursday', methods=["POST"])
@@ -417,9 +530,12 @@ def set_jal_standard_thursday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
-    adm.set_jal_standard_entry_thursday(start, end, value)
-    return ' '
+    time.sleep(1)
+    k = adm.set_jal_standard_entry_thursday(start, end, value)
+    if type(k) == dict:
+        return k
+    else:
+        return {'type': '2'}
 
 
 @app.route('/SetJalousienStandardFriday', methods=["POST"])
@@ -435,9 +551,12 @@ def set_jal_standard_friday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
-    adm.set_jal_standard_entry_friday(start, end, value)
-    return ' '
+    time.sleep(1)
+    k = adm.set_jal_standard_entry_friday(start, end, value)
+    if type(k) == dict:
+        return k
+    else:
+        return {'type': '2'}
 
 @app.route('/DeleteStandardJalousienMonday', methods=["DELETE"])
 def delete_entry_jal_monday():
@@ -552,9 +671,12 @@ def set_jal_rule():
     end = request.form["end"]
     min = request.form["min"]
     max = request.form["max"]
-    time.sleep(4)
-    adm.set_jal_rule(min, max, start, end)
-    return ' '
+    time.sleep(1)
+    k = adm.set_jal_rule(min, max, start, end)
+    if type(k) == dict:
+        return k
+    else:
+        return {'type': '1'}
 
 @app.route('/GetJalRule', methods=["GET"])
 def get_jal_rules():
@@ -684,6 +806,7 @@ def get_entries_temp_monday():
     }
 
     entries = adm.get_all_temp_standard_entries_monday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -710,6 +833,7 @@ def get_entries_temp_tuesday():
     }
 
     entries = adm.get_all_temp_standard_entries_tuesday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -736,6 +860,7 @@ def get_entries_temp_wednesday():
     }
 
     entries = adm.get_all_temp_standard_entries_wednesday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -762,6 +887,7 @@ def get_entries_temp_thursday():
     }
 
     entries = adm.get_all_temp_standard_entries_thursday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -788,6 +914,7 @@ def get_entries_temp_friday():
     }
 
     entries = adm.get_all_temp_standard_entries_friday()
+    entries.sort(key=lambda x: x._start_time, reverse=False)
     for elem in entries:
         odata['d']['results'].append({
             'id': elem.get_id(),
@@ -812,9 +939,13 @@ def set_temp_standard_monday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
-    adm.set_temp_standard_entry_monday(start, end, value)
-    return ' '
+    time.sleep(1)
+    k = adm.set_temp_standard_entry_monday(start, end, value)
+    if type(k) == dict:
+        return k
+    else:
+        return {'type': '2'}
+    
 
 
 @app.route('/SetThermostatStandardTuesday', methods=["POST"])
@@ -830,10 +961,12 @@ def set_temp_standard_tuesday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
-    adm.set_temp_standard_entry_tuesday(start, end, value)
-    return ' '
-
+    time.sleep(1)
+    k = adm.set_temp_standard_entry_tuesday(start, end, value)
+    if type(k) == dict:
+        return k
+    else:
+        return {'type': '2'}
 
 @app.route('/SetThermostatStandardWednesday', methods=["POST"])
 def set_temp_standard_wednesday():
@@ -848,9 +981,12 @@ def set_temp_standard_wednesday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
-    adm.set_temp_standard_entry_wednesday(start, end, value)
-    return ' '
+    time.sleep(1)
+    k = adm.set_temp_standard_entry_wednesday(start, end, value)
+    if type(k) == dict:
+        return k
+    else:
+        return {'type': '2'}
 
 
 @app.route('/SetThermostatStandardThursday', methods=["POST"])
@@ -866,9 +1002,12 @@ def set_temp_standard_thursday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
-    adm.set_temp_standard_entry_thursday(start, end, value)
-    return ' '
+    time.sleep(1)
+    k = adm.set_temp_standard_entry_thursday(start, end, value)
+    if type(k) == dict:
+        return k
+    else:
+        return {'type': '2'}
 
 
 @app.route('/SetThermostatStandardFriday', methods=["POST"])
@@ -884,8 +1023,110 @@ def set_temp_standard_friday():
     end = request.form["end"]
     value = request.form["value"]
     value = int(value)
-    time.sleep(4)
-    adm.set_temp_standard_entry_friday(start, end, value)
+    time.sleep(1)
+    k = adm.set_temp_standard_entry_friday(start, end, value)
+    if type(k) == dict:
+        return k
+    else:
+        return {'type': '2'}
+
+
+@app.route('/DeleteStandardThermoMonday', methods=["DELETE"])
+def delete_entry_thermo_monday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+    id_entry = request.form["id_entry"]
+    id_entry = int(id_entry)
+    liste = adm.get_all_standard_weekly_temp_entries_by_weekday(1)
+    for elem in liste:
+        if elem.get_monday_id() == id_entry:
+            adm.delete_entry_in_standard_weeklyplan_temp(elem)
+    monday = adm.get_all_temp_standard_entries_monday()
+    for elem in monday:
+        if elem.get_id() == id_entry:
+            adm.delete_standard_entry_monday(elem)
+
     return ' '
 
+@app.route('/DeleteStandardThermoTuesday', methods=["DELETE"])
+def delete_entry_thermo_tuesday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+    id_entry = request.form["id_entry"]
+    id_entry = int(id_entry)
+    liste = adm.get_all_standard_weekly_temp_entries_by_weekday(2)
+    for elem in liste:
+        if elem.get_tuesday_id() == id_entry:
+            adm.delete_entry_in_standard_weeklyplan_temp(elem)
+    tuesday = adm.get_all_temp_standard_entries_tuesday()
+    for elem in tuesday:
+        if elem.get_id() == id_entry:
+            adm.delete_standard_entry_tuesday(elem)
 
+    return ' '
+
+@app.route('/DeleteStandardThermoWednesday', methods=["DELETE"])
+def delete_entry_thermo_wednesday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+    id_entry = request.form["id_entry"]
+    id_entry = int(id_entry)
+    liste = adm.get_all_standard_weekly_temp_entries_by_weekday(3)
+    for elem in liste:
+        if elem.get_wednesday_id() == id_entry:
+            adm.delete_entry_in_standard_weeklyplan_temp(elem)
+    wednesday = adm.get_all_temp_standard_entries_wednesday()
+    for elem in wednesday:
+        if elem.get_id() == id_entry:
+            adm.delete_standard_entry_wednesday(elem)
+
+    return ' '
+
+@app.route('/DeleteStandardThermoThursday', methods=["DELETE"])
+def delete_entry_thermo_thursday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+    id_entry = request.form["id_entry"]
+    id_entry = int(id_entry)
+    liste = adm.get_all_standard_weekly_temp_entries_by_weekday(4)
+    for elem in liste:
+        if elem.get_thursday_id() == id_entry:
+            adm.delete_entry_in_standard_weeklyplan_temp(elem)
+    thursday = adm.get_all_temp_standard_entries_thursday()
+    for elem in thursday:
+        if elem.get_id() == id_entry:
+            adm.delete_standard_entry_thursday(elem)
+
+    return ' '
+
+@app.route('/DeleteStandardThermoFriday', methods=["DELETE"])
+def delete_entry_thermo_friday():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+    id_entry = request.form["id_entry"]
+    id_entry = int(id_entry)
+    liste = adm.get_all_standard_weekly_temp_entries_by_weekday(5)
+    for elem in liste:
+        if elem.get_friday_id() == id_entry:
+            adm.delete_entry_in_standard_weeklyplan_temp(elem)
+    friday = adm.get_all_temp_standard_entries_friday()
+    for elem in friday:
+        if elem.get_id() == id_entry:
+            adm.delete_standard_entry_friday(elem)
+
+    return ' '
