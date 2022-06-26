@@ -172,10 +172,10 @@ class DeviceAdministration(object):
         rules = self.get_all_jal_rules()
         for elem in rules:
             # if elem.get_min() is None and elem.get_max() is None:
-             #   if self.in_between_times(date, elem.get_start_time(), elem.get_end_time()):
-              #      message = 'Die No_Access Zeit ist eingetroffen'
-               #     print(message)
-                #    return message
+            #   if self.in_between_times(date, elem.get_start_time(), elem.get_end_time()):
+            #      message = 'Die No_Access Zeit ist eingetroffen'
+            #     print(message)
+            #    return message
             if elem.get_min() is not None and elem.get_max() is not None and self.in_between_times(datehour, elem.get_start_time(), elem.get_end_time()) is True:
                 if perc > elem.get_max() or perc < elem.get_min():
                     message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
@@ -215,8 +215,12 @@ class DeviceAdministration(object):
         with JalousienStatusMapper() as mapper:
             mapper.delete(status)
 
-    def get_last_status(self):
+    def get_last_jal_status(self):
         status = self.get_all_jal_status()
+        return status[-1]
+
+    def get_last_temp_status(self):
+        status = self.get_all_thermostat_status()
         return status[-1]
 
     def get_all_jal_status(self):
@@ -1636,15 +1640,4 @@ class DeviceAdministration(object):
 
     def get_all_temp_customized_entries_friday(self):
         with FridayMapper() as mapper:
-<<<<<<< HEAD
             return mapper.find_all()'''
-
-
-== == == =
-            return mapper.find_all()'''
-
-
-adm = DeviceAdministration()
-
-print(adm.get_min_temp())
->>>>>>> b34aac5f9f87e5ffe9bef43df0775c8c25353a24
