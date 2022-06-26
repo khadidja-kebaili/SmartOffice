@@ -96,7 +96,7 @@
                                     <Title level="H3" text="Datum eingeben:" />
                                     <DatePicker
 			                            id="DP2"
-			                            value="{/InputValue}"
+                                        placeholder="Datum auswählen"
                                         valueFormat="yyyy-MM-dd"
                                         displayFormat="short"
 			                            change="handleChange"
@@ -110,7 +110,28 @@
 					        <HBox alignItems="Center" justifyContent="SpaceBetween">
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
                                     <Title level="H3" text="Letzte Einträge:" />
-                                    <Text id ="text" text="{/data}" />
+                                    <Table id="tbl" items="{/data}">
+                                            <columns>
+                                                <Column>
+                                                    <Text text="Tageszeit" />
+                                                </Column>
+                                                <Column>
+                                                    <Text text="Status in %" />
+                                                </Column>
+                                            </columns>
+                                            <items>
+                                                <ColumnListItem>
+                                                    <cells>
+                                                        <HBox>
+                                                            <Text  text="{tageszeit}"/>
+                                                        </HBox>
+                                                        <HBox>
+                                                            <Text  text="{value}"/>
+                                                        </HBox>
+                                                    </cells>
+                                                </ColumnListItem>
+                                            </items>
+                                        </Table>
                                     <!--<Text id="supposedlvaluejalid" text="{InputValue'}" width="100%"/>-->
 						        </VBox>
                             </HBox>

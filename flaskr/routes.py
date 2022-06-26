@@ -136,7 +136,7 @@ def status_per_day():
             'tageszeit': count,
             'value': elem
         })
-
+        count = count + 1
     return odata
 
 @app.route('/StatusPerWeek', methods=["GET"])
