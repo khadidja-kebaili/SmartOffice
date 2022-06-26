@@ -241,7 +241,7 @@ class DeviceAdministration(object):
     #     else:
     #         return 0
 
-    def get_last_entry_of_hour_for_day(self, day, hour):
+    def get_last_jal_ist_entry_of_hour_for_day(self, day, hour):
         all_jal_stats = self.get_all_jal_status()
         stats_for_weekday = []
         hourly_rate = []
@@ -257,59 +257,239 @@ class DeviceAdministration(object):
         else:
             return 0
 
-    def get_jal_mean_per_day(self, day):
-        result = []
-        i = 6
-        while i <= 20:
-            x = self.get_last_entry_of_hour_for_day(day, i)
-            result.append(x)
-            i += 1
-        return statistics.mean(result)
-
-    def get_jal_median_per_week(self, week):
-        liste = self.get_all_jal_status()
-        stats_for_week = []
-        weekly_stats = []
-        for elem in liste:
-            if elem.get_date().isocalendar()[1] == week:
-                stats_for_week.append(elem)
-        for elem in stats_for_week:
-            elem_week = elem.get_date().isocalendar()[1]
-            day = elem.get_date().strftime('%Y-%m-%d')
-            if elem_week == week:
-                x = self.get_jal_mean_per_day(day)
-                weekly_stats.append(x)
-        if len(weekly_stats) > 1:
-            return statistics.median(weekly_stats)
-        elif len(weekly_stats) == 1:
-            return weekly_stats[0]
+    def get_last_ist_temp_entry_of_hour_for_day(self, day, hour):
+        all_temp_stats = self.get_all_thermostat_status()
+        stats_for_weekday = []
+        hourly_rate = []
+        for elem in all_temp_stats:
+            vergleich = elem.get_date().strftime('%Y-%m-%d')
+            if vergleich == day:
+                stats_for_weekday.append(elem)
+        for elem in stats_for_weekday:
+            if elem.get_date().hour == hour:
+                hourly_rate.append(elem.get_percentage())
+        if len(hourly_rate) >= 1:
+            return hourly_rate[-1]
         else:
             return 0
 
-    def get_median_jal_for_timespan(self, von, bis, day):
+    def get_last_soll_temp_entry_of_hour_for_day(self, day, hour):
+        stats_for_weekday = []
+        hourly_rate = []
+        weekday = datetime.strptime(day, '%Y-%m-%d %H:%M:%S').isoweekday()
+        if weekday == 1:
+            a = self.get_all_temp_standard_entries_monday()
+            for elem in a:
+                stats_for_weekday.append(elem)
+        if weekday == 2:
+            b = self.get_all_temp_standard_entries_tuesday()
+            for elem in b:
+                stats_for_weekday.append(elem)
+        if weekday == 3:
+            c = self.get_all_temp_standard_entries_wednesday()
+            for elem in c:
+                stats_for_weekday.append(elem)
+        if weekday == 4:
+            d = self.get_all_temp_standard_entries_thursday()
+            for elem in d:
+                stats_for_weekday.append(elem)
+        if weekday == 5:
+            e = self.get_all_temp_standard_entries_friday()
+            for elem in e:
+                stats_for_weekday.append(elem)
+        for elem in stats_for_weekday:
+            if elem.get_date().hour == hour:
+                hourly_rate.append(elem.get_percentage())
+        if len(hourly_rate) >= 1:
+            return hourly_rate[-1]
+        else:
+            return 0
+
+    def get_last_soll_jal_entry_of_hour_for_day(self, day, hour):
+        stats_for_weekday = []
+        hourly_rate = []
+        weekday = datetime.strptime(day, '%Y-%m-%d %H:%M:%S').isoweekday()
+        if weekday == 1:
+            a = self.get_all_jal_standard_entries_monday()
+            for elem in a:
+                stats_for_weekday.append(elem)
+        if weekday == 2:
+            b = self.get_all_jal_standard_entries_tuesday()
+            for elem in b:
+                stats_for_weekday.append(elem)
+        if weekday == 3:
+            c = self.get_all_jal_standard_entries_wednesday()
+            for elem in c:
+                stats_for_weekday.append(elem)
+        if weekday == 4:
+            d = self.get_all_jal_standard_entries_thursday()
+            for elem in d:
+                stats_for_weekday.append(elem)
+        if weekday == 5:
+            e = self.get_all_jal_standard_entries_friday()
+            for elem in e:
+                stats_for_weekday.append(elem)
+        for elem in stats_for_weekday:
+            if elem.get_date().hour == hour:
+                hourly_rate.append(elem.get_percentage())
+        if len(hourly_rate) >= 1:
+            return hourly_rate[-1]
+        else:
+            return 0
+
+
+    '''    def get_jal_mean_per_day(self, day):
+            result = []
+            i = 6
+            while i <= 20:
+                x = self.get_last_jal_ist_entry_of_hour_for_day(day, i)
+                result.append(x)
+                i += 1
+            return statistics.mean(result)
+    
+        def get_temp_mean_per_day(self, day):
+            result = []
+            i = 6
+            while i <= 20:
+                x = self.get_last_ist_temp_entry_of_hour_for_day(day, i)
+                result.append(x)
+                i += 1
+            return statistics.mean(result)
+
+        def get_jal_median_per_week(self, week):
+            liste = self.get_all_jal_status()
+            stats_for_week = []
+            weekly_stats = []
+            for elem in liste:
+                if elem.get_date().isocalendar()[1] == week:
+                    stats_for_week.append(elem)
+            for elem in stats_for_week:
+                elem_week = elem.get_date().isocalendar()[1]
+                day = elem.get_date().strftime('%Y-%m-%d')
+                if elem_week == week:
+                    x = self.get_jal_mean_per_day(day)
+                    weekly_stats.append(x)
+            if len(weekly_stats) > 1:
+                return statistics.median(weekly_stats)
+            elif len(weekly_stats) == 1:
+                return weekly_stats[0]
+            else:
+                return 0
+    
+        def get_temp_median_per_week(self, week):
+            liste = self.get_all_thermostat_status()
+            stats_for_week = []
+            weekly_stats = []
+            for elem in liste:
+                if elem.get_date().isocalendar()[1] == week:
+                    stats_for_week.append(elem)
+            for elem in stats_for_week:
+                elem_week = elem.get_date().isocalendar()[1]
+                day = elem.get_date().strftime('%Y-%m-%d')
+                if elem_week == week:
+                    x = self.get_temp_mean_per_day(day)
+                    weekly_stats.append(x)
+            if len(weekly_stats) > 1:
+                return statistics.median(weekly_stats)
+            elif len(weekly_stats) == 1:
+                return weekly_stats[0]
+            else:
+                return 0'''
+
+    def get_median_ist_jal_for_timespan(self, von, bis, day):
         values = []
-        delta = bis - von
-        week = datetime.datetime.strptime(day, '%Y-%m-%d').isocalendar()[1]
         for elem in range(von, bis + 1):
-            x = self.get_last_entry_of_hour_for_day(day, elem)
+            x = self.get_last_jal_ist_entry_of_hour_for_day(day, elem)
             values.append(x)
         return values
 
-    def get_median_values_jal(self, day):
+    def get_median_soll_jal_for_timespan(self, von, bis, day):
         values = []
-        k = self.get_median_jal_for_timespan(7, 10, day)
+        for elem in range(von, bis + 1):
+            x = self.get_last_soll_jal_entry_of_hour_for_day(day, elem)
+            values.append(x)
+        return values
+
+    def get_median_ist_temp_for_timespan(self, von, bis, day):
+        values = []
+        for elem in range(von, bis + 1):
+            x = self.get_last_ist_temp_entry_of_hour_for_day(day, elem)
+            values.append(x)
+        return values
+
+    def get_median_soll_temp_for_timespan(self, von, bis, day):
+        values = []
+        for elem in range(von, bis + 1):
+            x = self.get_last_soll_temp_entry_of_hour_for_day(day, elem)
+            values.append(x)
+        return values
+
+
+    def get_median_ist_values_jal(self, day):
+        values = []
+        k = self.get_median_ist_jal_for_timespan(7, 10, day)
         k = k[-1]
         values.append(k)
-        m = self.get_median_jal_for_timespan(10, 13, day)
+        m = self.get_median_ist_jal_for_timespan(10, 13, day)
         m = m[-1]
         values.append(m)
-        n = self.get_median_jal_for_timespan(13, 16, day)
+        n = self.get_median_ist_jal_for_timespan(13, 16, day)
         n = n[-1]
         values.append(n)
-        l = self.get_median_jal_for_timespan(16, 19, day)
+        l = self.get_median_ist_jal_for_timespan(16, 19, day)
         l = l[-1]
         values.append(l)
         return values
+
+    def get_median_soll_values_jal(self, day):
+        values = []
+        k = self.get_median_soll_jal_for_timespan(7, 10, day)
+        k = k[-1]
+        values.append(k)
+        m = self.get_median_soll_jal_for_timespan(10, 13, day)
+        m = m[-1]
+        values.append(m)
+        n = self.get_median_soll_jal_for_timespan(13, 16, day)
+        n = n[-1]
+        values.append(n)
+        l = self.get_median_soll_jal_for_timespan(16, 19, day)
+        l = l[-1]
+        values.append(l)
+        return values
+
+    def get_median_ist_values_temp(self, day):
+        values = []
+        k = self.get_median_ist_jal_for_timespan(7, 10, day)
+        k = k[-1]
+        values.append(k)
+        m = self.get_median_ist_jal_for_timespan(10, 13, day)
+        m = m[-1]
+        values.append(m)
+        n = self.get_median_ist_jal_for_timespan(13, 16, day)
+        n = n[-1]
+        values.append(n)
+        l = self.get_median_ist_jal_for_timespan(16, 19, day)
+        l = l[-1]
+        values.append(l)
+        return values
+
+    def get_median_soll_values_temp(self, day):
+        values = []
+        k = self.get_median_soll_temp_for_timespan(7, 10, day)
+        k = k[-1]
+        values.append(k)
+        m = self.get_median_soll_temp_for_timespan(10, 13, day)
+        m = m[-1]
+        values.append(m)
+        n = self.get_median_soll_temp_for_timespan(13, 16, day)
+        n = n[-1]
+        values.append(n)
+        l = self.get_median_soll_temp_for_timespan(16, 19, day)
+        l = l[-1]
+        values.append(l)
+        return values
+
+
 
     def in_between_times(self, searched_time, start, end):
         searched_time = datetime.datetime.strptime(searched_time, '%H:%M:%S')
@@ -476,13 +656,6 @@ class DeviceAdministration(object):
         data = res.read()
         data = data.decode("utf-8")
         return data
-
-    ####################################################################################
-    '''Für Statistik Soll , Ist (Durchschnitt der Stunden nehmen)'''
-
-    # dateofLastChange -> Lösche alle Einträge, die nicht von heute sind.
-    # Lösche alle Einträge bei denen es Überlappung gibt
-    # Er macht einen Check und wenn die neue Zeit sich mit einem anderen Timeintervall überlappt, wird der alte gelöscht.
 
     def set_jal_standard_entry_monday(self, start, end, perc):
         trigger = False

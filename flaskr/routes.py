@@ -91,7 +91,7 @@ def get_jal_stats_per_hour_for_weekday():
     weekday = request.form["weekday"]
     von = request.form["von"]
     bis = request.form["bis"]
-    data = adm.get_median_jal_for_timespan(von, bis, weekday)
+    data = adm.get_median_ist_jal_for_timespan(von, bis, weekday)
 
     odata = {
         'd': {
@@ -105,7 +105,7 @@ def get_jal_stats_per_hour_for_weekday():
 
     return jsonify(odata)
 
-@app.route('/StatusPerDay', methods=["GET"])
+@app.route('/JalIstStatusPerDay', methods=["GET"])
 def status_per_day():
     """
     Return a simple odata container with date time information
@@ -120,7 +120,109 @@ def status_per_day():
 
     day = request.args.get('day')
     print(day)
-    stats = adm.get_median_values_jal(day)
+    stats = adm.get_median_ist_values_jal(day)
+    print('Jal: ', stats)
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    count = 0
+
+    for elem in stats:
+        odata['d']['results'].append({
+            'tageszeit': count,
+            'value': elem
+        })
+
+    return odata
+
+@app.route('/TempIstStatusPerDay', methods=["GET"])
+def status_per_day():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    day = request.args.get('day')
+    print(day)
+    stats = adm.get_median_ist_values_temp(day)
+    print('Jal: ', stats)
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    count = 0
+
+    for elem in stats:
+        odata['d']['results'].append({
+            'tageszeit': count,
+            'value': elem
+        })
+
+    return odata
+
+@app.route('/JalSollStatusPerDay', methods=["GET"])
+def status_per_day():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    day = request.args.get('day')
+    print(day)
+    stats = adm.get_median_soll_values_jal(day)
+    print('Jal: ', stats)
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    count = 0
+
+    for elem in stats:
+        odata['d']['results'].append({
+            'tageszeit': count,
+            'value': elem
+        })
+
+    return odata
+
+@app.route('/TempSollStatusPerDay', methods=["GET"])
+def status_per_day():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+
+    adm = DeviceAdministration()
+
+    day = request.args.get('day')
+    print(day)
+    stats = adm.get_median_soll_values_temp(day)
     print('Jal: ', stats)
 
     odata = {
