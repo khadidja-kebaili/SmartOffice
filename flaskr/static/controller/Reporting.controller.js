@@ -3,11 +3,16 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
     "sap/ui/core/routing/History",
+    "sap/ui/core/Core",
+	"sap/ui/core/library",
+	"sap/ui/unified/library",
+	"sap/ui/unified/DateTypeRange"
     //"require",
     ],
-    function (SmartOfficeController, JSONModel, MessageToast, History, require) {
+    function (SmartOfficeController, JSONModel, MessageToast, History,  Core, CoreLibrary, UnifiedLibrary, DateTypeRange) {
         "use strict";
-
+        var CalendarDayType = UnifiedLibrary.CalendarDayType,
+		ValueState = CoreLibrary.ValueState;
         var self;
 
         return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Reporting",{
@@ -25,28 +30,46 @@ sap.ui.define([
                 //});
                 //this.getView().setModel(this.oModelSettings, "settings");
                 //this.getView().setModel(sap.ui.getCore().getModel("TestModel"), "TestModel");
-                var oModel = new sap.ui.model.json.JSONModel({"tageszeit": null, "value": null,});
+                var oModel = new sap.ui.model.json.JSONModel({"tageszeit": null, "value": null});
                 this.getView().setModel(oModel)
                 let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.getRoute("reporting").attachMatched(this._onRouteMatched, this);
 
+                // for the data binding example do not use the change event for check but the data binding parsing events
+                Core.attachParseError(
+                    function(oEvent) {
+                        var oElement = oEvent.getParameter("element");
+
+                        if (oElement.setValueState) {
+                            oElement.setValueState(ValueState.Error);
+                        }
+                    });
+
+                Core.attachValidationSuccess(
+                        function(oEvent) {
+                            var oElement = oEvent.getParameter("element");
+
+                            if (oElement.setValueState) {
+                                oElement.setValueState(ValueState.None);
+                            }
+                        });
                 //Bar Chart
-                //var Bar = this.getView().byId("vizBar");
-                //var dataset = new sap.viz.ui5.data.FlattenedDataset({
-                    //dimensions:[{
-                        //axis: 1,
-                        //name:"id",
-                        //value: "{Model>id}"
-                    //}],
-                    //measures: [{
-                        //name:"percentage",
-                        //value: "{Model>percentage}"
-                    //}],
-                    //data: {
-                        //path: "{Model>/value}"
-                    //}
-                //});
-                //Bar.setDataset(dataset);
+                var Bar = this.getView().byId("vizBar");
+                var dataset = new sap.viz.ui5.data.FlattenedDataset({
+                    dimensions:[{
+                        axis: 1,
+                        name:'Tageszeit',
+                        value: "{tageszeit}"
+                    }],
+                    measures: [{
+                        name:"Status in %",
+                        value: "{value}"
+                    }],
+                    data: {
+                        path: "/data"
+                    }
+                });
+                Bar.setDataset(dataset);
             },
 
             //Line Chart
@@ -79,21 +102,21 @@ sap.ui.define([
                     //}];
             //},
 
-            _onRouteMatched : function (oEvent){
-                var datareporting = []
-                this.getValue().done(function(result) {
+            //_onRouteMatched : function (oEvent){
+                //var datareporting = []
+                //this.getValue().done(function(result) {
 
-                    var data = result.d.results
-                    data.map(function(eintrag, index) {
-                        datareporting.push(eintrag)
-                    })
-                    console.log(datareporting)
-                    var oModel = new sap.ui.model.json.JSONModel({data: datareporting});
-                    self.getView().setModel(oModel);
-                    self.addObject();
-                    console.log("Jetzt bin ich am Ende")
-                })
-            },
+                    //var data = result.d.results
+                    //data.map(function(eintrag, index) {
+                        //datareporting.push(eintrag)
+                    //})
+                    //console.log(datareporting)
+                    //var oModel = new sap.ui.model.json.JSONModel({data: datareporting});
+                    //self.getView().setModel(oModel);
+                    //self.addObject();
+                    //console.log("Jetzt bin ich am Ende")
+                //})
+            //},
                 //this.getValues().done(function(result) {
                     //console.log(result.d.results[0])
                     //var dayvalue = result.d.results[0]
@@ -143,15 +166,45 @@ sap.ui.define([
               });
             },*/
 
-            handleChange: function (oEvent) {
+            //Jalousien GET
+            handleJalChange: function (oEvent) {
+                var datareporting = []
 			    var oText = this.byId("DP2"),
 				    oDP = oEvent.getSource(),
 				    sValue = oEvent.getParameter("value"),
-				    bValid = oEvent.getParameter("valid");
-
+                    bValid = oEvent.getParameter("valid");
+                //oText.setText(sValue)
+                if (bValid) {
+                    oDP.setValueState(ValueState.None);
+                } else {
+                    oDP.setValueState(ValueState.Error);
+                }
 			    console.log(sValue)
 			    var oData = {"day": sValue};
-			    this.getValue(oData)
+			    this.getValue(oData).done(function(result) {
+
+                    var data = result.d.results
+                    data.map(function(eintrag, index) {
+                        datareporting.push(eintrag)
+                    })
+                    datareporting.map(function(eintrag){
+                        if (eintrag.tageszeit == 0){
+                            eintrag.tageszeit = "10 Uhr"
+                        }
+                        if (eintrag.tageszeit == 1){
+                            eintrag.tageszeit = "13 Uhr"
+                        }
+                        if (eintrag.tageszeit == 2){
+                            eintrag.tageszeit = "16 Uhr"
+                        }
+                        if (eintrag.tageszeit == 3){
+                            eintrag.tageszeit = "19 Uhr"
+                        }
+                    })
+
+                    var oModel = new sap.ui.model.json.JSONModel({data: datareporting});
+                    self.getView().setModel(oModel);
+                })
 		    },
 
             getValue: function (oData) {
@@ -161,6 +214,64 @@ sap.ui.define([
                         dataType: "json",
                         async : true,
                         data : oData,
+                        success : function(response){
+                            //MessageToast.show(response.data.message);
+                            console.log(response)
+                            sap.ui.core.BusyIndicator.hide();
+                        },
+                        error: function(response){
+                            console.log(response);
+                        }
+                });
+            },
+
+            //Temperatur GET
+            handleTempChange: function (oEvent) {
+                var datareporting = []
+			    var oText = this.byId("DP1"),
+				    oDP = oEvent.getSource(),
+				    sValue = oEvent.getParameter("value"),
+                    bValid = oEvent.getParameter("valid");
+                //oText.setText(sValue)
+                if (bValid) {
+                    oDP.setValueState(ValueState.None);
+                } else {
+                    oDP.setValueState(ValueState.Error);
+                }
+			    console.log(sValue)
+			    var url = {"day": sValue};
+			    this.getValueTemp(url).done(function(result) {
+
+                    var data = result.d.results
+                    data.map(function(eintrag, index) {
+                        datareporting.push(eintrag)
+                    })
+                    datareporting.map(function(eintrag){
+                        if (eintrag.tageszeit == 0){
+                            eintrag.tageszeit = "10 Uhr"
+                        }
+                        if (eintrag.tageszeit == 1){
+                            eintrag.tageszeit = "13 Uhr"
+                        }
+                        if (eintrag.tageszeit == 2){
+                            eintrag.tageszeit = "16 Uhr"
+                        }
+                        if (eintrag.tageszeit == 3){
+                            eintrag.tageszeit = "19 Uhr"
+                        }
+                    })
+
+                    var oModel = new sap.ui.model.json.JSONModel({data: datareporting});
+                    self.getView().setModel(oModel);
+                })
+		    },
+
+            getValueTemp: function (url) {
+                return jQuery.ajax({
+                        url : url,
+                        type: "GET",
+                        dataType: "json",
+                        async : true,
                         success : function(response){
                             //MessageToast.show(response.data.message);
                             console.log(response)
