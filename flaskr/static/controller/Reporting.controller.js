@@ -54,22 +54,22 @@ sap.ui.define([
                             }
                         });
                 //Bar Chart
-                //var Bar = this.getView().byId("vizBar");
-                //var dataset = new sap.viz.ui5.data.FlattenedDataset({
-                    //dimensions:[{
-                        //axis: 1,
-                        //name:"id",
-                        //value: "{Model>id}"
-                    //}],
-                    //measures: [{
-                        //name:"percentage",
-                        //value: "{Model>percentage}"
-                    //}],
-                    //data: {
-                        //path: "{Model>/value}"
-                    //}
-                //});
-                //Bar.setDataset(dataset);
+                var Bar = this.getView().byId("vizBar");
+                var dataset = new sap.viz.ui5.data.FlattenedDataset({
+                    dimensions:[{
+                        axis: 1,
+                        name:'Tageszeit',
+                        value: "{tageszeit}"
+                    }],
+                    measures: [{
+                        name:"Status in %",
+                        value: "{value}"
+                    }],
+                    data: {
+                        path: "/data"
+                    }
+                });
+                Bar.setDataset(dataset);
             },
 
             //Line Chart
@@ -166,7 +166,8 @@ sap.ui.define([
               });
             },*/
 
-            handleChange: function (oEvent) {
+            //Jalousien GET
+            handleJalChange: function (oEvent) {
                 var datareporting = []
 			    var oText = this.byId("DP2"),
 				    oDP = oEvent.getSource(),
@@ -213,6 +214,64 @@ sap.ui.define([
                         dataType: "json",
                         async : true,
                         data : oData,
+                        success : function(response){
+                            //MessageToast.show(response.data.message);
+                            console.log(response)
+                            sap.ui.core.BusyIndicator.hide();
+                        },
+                        error: function(response){
+                            console.log(response);
+                        }
+                });
+            },
+
+            //Temperatur GET
+            handleTempChange: function (oEvent) {
+                var datareporting = []
+			    var oText = this.byId("DP1"),
+				    oDP = oEvent.getSource(),
+				    sValue = oEvent.getParameter("value"),
+                    bValid = oEvent.getParameter("valid");
+                //oText.setText(sValue)
+                if (bValid) {
+                    oDP.setValueState(ValueState.None);
+                } else {
+                    oDP.setValueState(ValueState.Error);
+                }
+			    console.log(sValue)
+			    var url = {"day": sValue};
+			    this.getValueTemp(url).done(function(result) {
+
+                    var data = result.d.results
+                    data.map(function(eintrag, index) {
+                        datareporting.push(eintrag)
+                    })
+                    datareporting.map(function(eintrag){
+                        if (eintrag.tageszeit == 0){
+                            eintrag.tageszeit = "10 Uhr"
+                        }
+                        if (eintrag.tageszeit == 1){
+                            eintrag.tageszeit = "13 Uhr"
+                        }
+                        if (eintrag.tageszeit == 2){
+                            eintrag.tageszeit = "16 Uhr"
+                        }
+                        if (eintrag.tageszeit == 3){
+                            eintrag.tageszeit = "19 Uhr"
+                        }
+                    })
+
+                    var oModel = new sap.ui.model.json.JSONModel({data: datareporting});
+                    self.getView().setModel(oModel);
+                })
+		    },
+
+            getValueTemp: function (url) {
+                return jQuery.ajax({
+                        url : url,
+                        type: "GET",
+                        dataType: "json",
+                        async : true,
                         success : function(response){
                             //MessageToast.show(response.data.message);
                             console.log(response)
