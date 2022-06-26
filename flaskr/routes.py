@@ -137,6 +137,7 @@ def status_per_day():
             'tageszeit': count,
             'value': elem
         })
+        count = count + 1
 
     return odata
 
@@ -171,6 +172,7 @@ def temp_ist_status_per_day():
             'tageszeit': count,
             'value': elem
         })
+        count = count + 1
 
     return odata
 
@@ -205,6 +207,7 @@ def jal_soll_status_per_day():
             'tageszeit': count,
             'value': elem
         })
+        count = count + 1
 
     return odata
 
@@ -240,6 +243,7 @@ def temp_soll_status_per_day():
             'value': elem
         })
         count = count + 1
+
     return odata
 
 @app.route('/StatusPerWeek', methods=["GET"])

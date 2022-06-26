@@ -209,7 +209,7 @@ sap.ui.define([
 
             getValue: function (oData) {
                 return jQuery.ajax({
-                        url :"/StatusPerDay",
+                        url :"/JalIstStatusPerDay",
                         type: "GET",
                         dataType: "json",
                         async : true,
