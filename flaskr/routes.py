@@ -6,6 +6,7 @@ import time
 from flaskr.server.bo.RulesBO import RulesBO
 
 
+
 @app.route('/')
 def index():
     return render_template("index.html")
@@ -53,7 +54,7 @@ def LastStatusJalousien():
         }
     }
 
-    last_status = adm.get_last_status()
+    last_status = adm.get_last_jal_status()
 
     odata['d']['results'].append(last_status.get_percentage())
 
@@ -140,7 +141,7 @@ def status_per_day():
     return odata
 
 @app.route('/TempIstStatusPerDay', methods=["GET"])
-def status_per_day():
+def temp_ist_status_per_day():
     """
     Return a simple odata container with date time information
     :return:
@@ -174,7 +175,7 @@ def status_per_day():
     return odata
 
 @app.route('/JalSollStatusPerDay', methods=["GET"])
-def status_per_day():
+def jal_soll_status_per_day():
     """
     Return a simple odata container with date time information
     :return:
@@ -208,7 +209,7 @@ def status_per_day():
     return odata
 
 @app.route('/TempSollStatusPerDay', methods=["GET"])
-def status_per_day():
+def temp_soll_status_per_day():
     """
     Return a simple odata container with date time information
     :return:
