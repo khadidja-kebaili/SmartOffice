@@ -17,20 +17,11 @@
                             <Text id="textThermo" text="Echtzeitsteuerung Temperatur" class="sapUiMediumMarginTop sapUiSmallMarginBottom" />
                             <StepInput
                                 id="currentTemp"
-                                value="{/InputValue}"
+                                value="{targetType: 'any'}"
+                                displayValuePrecision="1"
                                 width="100%"
                                 textAlign="Center"
-                                change="onChange"
-                            />
-                        </VBox>
-                        <VBox alignItems="Center" width="100%">
-                            <Text id="textMinTemp" text="Mindesttemperatur" class="sapUiMediumMarginTop sapUiSmallMarginBottom"/>
-                            <StepInput
-                                id="minTemp"
-                                value="{/InputValue}"
-                                width="100%"
-                                textAlign="Center"
-                                change="changeMinTemp"
+                                change="onCurrentTemp"
                             />
                         </VBox>
                         </layout:VerticalLayout>

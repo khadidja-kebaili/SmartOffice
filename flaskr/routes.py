@@ -137,6 +137,7 @@ def status_per_day():
             'tageszeit': count,
             'value': elem
         })
+        count = count + 1
 
     return odata
 
@@ -171,6 +172,7 @@ def temp_ist_status_per_day():
             'tageszeit': count,
             'value': elem
         })
+        count = count + 1
 
     return odata
 
@@ -205,6 +207,7 @@ def jal_soll_status_per_day():
             'tageszeit': count,
             'value': elem
         })
+        count = count + 1
 
     return odata
 
@@ -240,6 +243,7 @@ def temp_soll_status_per_day():
             'value': elem
         })
         count = count + 1
+
     return odata
 
 @app.route('/StatusPerWeek', methods=["GET"])
@@ -285,10 +289,11 @@ def set_temp():
     adm = DeviceAdministration()
 
     data = request.form["value"]
-    data = int(data)
+    data = float(data)
+    data = data * 10
     time.sleep(4)
     adm.set_temperature(data)
-    temp = adm.get_temperature()
+    temp = adm.get_temp_from_device()
     print('temp: ', temp)
     x = "Hi"
     return x
@@ -308,7 +313,9 @@ def get_temp():
         }
     }
 
-    temp = adm.get_temperature()
+    temp = adm.get_temp_from_device()
+    temp = int(temp)
+    temp = temp / 10
     odata['d']['results'].append({
         'temperature': temp
     })
@@ -727,9 +734,11 @@ def set_min_temp():
 
     adm = DeviceAdministration()
     data = request.form["value"]
+    data = float(data)
+    data = data * 10
     temp = adm.set_temp_rule_min(data)
     print('temp: ', temp)
-    return data
+    return ' '
 
 
 @app.route('/GetMinTemp', methods=["GET"])
@@ -748,6 +757,8 @@ def get_min_temp():
     }
 
     temp = adm.get_min_temp()
+    temp = int(temp)
+    temp = temp / 10
     odata['d']['results'].append({
         'min_temperature': temp
     })
@@ -764,9 +775,11 @@ def set_max_temp():
 
     adm = DeviceAdministration()
     data = request.form["value"]
+    data = float(data)
+    data = data * 10
     temp = adm.set_temp_rule_max(data)
     print('temp: ', temp)
-    return data
+    return ' '
 
 @app.route('/GetMaxTemp', methods=["GET"])
 # hier ist die get_Status Methode
@@ -784,6 +797,8 @@ def get_max_temp():
     }
 
     temp = adm.get_max_temp()
+    temp = int(temp)
+    temp = temp / 10
     odata['d']['results'].append({
         'max_temperature': temp
     })

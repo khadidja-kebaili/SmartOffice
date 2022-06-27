@@ -581,12 +581,18 @@ class DeviceAdministration(object):
                 if self.in_between_times(date, elem.get_start_time(), elem.get_end_time()):
                     message = 'Die No_Access Zeit ist eingetroffen'
                     return message
-            elif temp > elem.get_max() or temp < elem.get_min():
-                message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
-                ), 'Maxtemp:', elem.get_max()
-                return message
+            elif elem.get_min() is None:
+                if temp > elem.get_max():
+                    message = 'Das geht so nicht!', temp, 'Maxtemp:', elem.get_max()
+                    return message
+            elif elem.get_max() is None:
+                if temp < elem.get_min():
+                    message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
+                    )
+                    return message
             else:
                 trigger = True
+        print(trigger)
         if trigger:
             conn = http.client.HTTPSConnection(
                 "gmhn0evflkdlpmbw.myfritz.net", 8254)
@@ -1486,7 +1492,7 @@ class DeviceAdministration(object):
         if len(rules) > 0:
             for elem in rules:
                 if elem.get_max() is not None and elem.get_min() is None and elem.get_start_time() is None:
-                    max_of_db.append(elem.get_min())
+                    max_of_db.append(elem.get_max())
             if len(max_of_db) >= 1:
                 return max_of_db[0]
             else:

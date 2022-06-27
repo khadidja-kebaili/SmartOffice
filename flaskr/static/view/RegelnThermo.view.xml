@@ -28,8 +28,9 @@
                                             <HBox/>
                                             <HBox>
                                                 <Input
-                                                    id="minTemp1"
+                                                    id="minTemp"
                                                     value="{targetType: 'any'}"
+                                                    displayValuePrecision="1"
                                                     description="°C"
                                                     width="150px"
                                                     fieldWidth="80%"
@@ -42,6 +43,7 @@
                                                 <Input
                                                     id="maxTemp"
                                                     value="{targetType: 'any'}"
+                                                    displayValuePrecision="1"
                                                     description="°C"
                                                     width="150px"
                                                     fieldWidth="80%"

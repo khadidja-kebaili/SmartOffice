@@ -21,7 +21,7 @@ sap.ui.define([
           this.getMinTemp().done(function(result) {
             var minTemp = result.d.results[0].min_temperature
             console.log(minTemp)
-            self.byId("minTemp1").setValue(minTemp)
+            self.byId("minTemp").setValue(minTemp)
             
           })
 
