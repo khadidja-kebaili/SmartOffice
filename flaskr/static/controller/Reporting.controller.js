@@ -59,11 +59,11 @@ sap.ui.define([
                     dimensions:[{
                         axis: 1,
                         name:'Tageszeit',
-                        value: "{tageszeit}"
+                        value: "{tageszeitjalist}"
                     }],
                     measures: [{
                         name:"Status in %",
-                        value: "{value}"
+                        value: "{valuejalist}"
                     }],
                     data: {
                         path: "/data"
@@ -168,7 +168,7 @@ sap.ui.define([
 
             //Jalousien GET
             handleJalChange: function (oEvent) {
-                var datareporting = []
+                var datajalistreporting = []
 			    var oText = this.byId("DP2"),
 				    oDP = oEvent.getSource(),
 				    sValue = oEvent.getParameter("value"),
@@ -185,24 +185,24 @@ sap.ui.define([
 
                     var data = result.d.results
                     data.map(function(eintrag, index) {
-                        datareporting.push(eintrag)
+                        datajalistreporting.push(eintrag)
                     })
-                    datareporting.map(function(eintrag){
-                        if (eintrag.tageszeit == 0){
-                            eintrag.tageszeit = "10 Uhr"
+                    datajalistreporting.map(function(eintrag){
+                        if (eintrag.tageszeitjalist == 0){
+                            eintrag.tageszeitjalist = "10 Uhr"
                         }
-                        if (eintrag.tageszeit == 1){
-                            eintrag.tageszeit = "13 Uhr"
+                        if (eintrag.tageszeitjalist == 1){
+                            eintrag.tageszeitjalist = "13 Uhr"
                         }
-                        if (eintrag.tageszeit == 2){
-                            eintrag.tageszeit = "16 Uhr"
+                        if (eintrag.tageszeitjalist == 2){
+                            eintrag.tageszeitjalist = "16 Uhr"
                         }
-                        if (eintrag.tageszeit == 3){
-                            eintrag.tageszeit = "19 Uhr"
+                        if (eintrag.tageszeitjalist == 3){
+                            eintrag.tageszeitjalist = "19 Uhr"
                         }
                     })
 
-                    var oModel = new sap.ui.model.json.JSONModel({data: datareporting});
+                    var oModel = new sap.ui.model.json.JSONModel({data: datajalistreporting});
                     self.getView().setModel(oModel);
                 })
 		    },

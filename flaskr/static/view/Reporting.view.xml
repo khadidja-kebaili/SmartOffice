@@ -145,10 +145,10 @@
                                                 <ColumnListItem>
                                                     <cells>
                                                         <HBox>
-                                                            <Text  text="{tageszeit}"/>
+                                                            <Text  text="{tageszeitjalist}"/>
                                                         </HBox>
                                                         <HBox>
-                                                            <Text  text="{value}"/>
+                                                            <Text  text="{valuejalist}"/>
                                                         </HBox>
                                                     </cells>
                                                 </ColumnListItem>
@@ -245,8 +245,7 @@
                     </layout:Grid>
                 </Panel>-->
 
-
-                <viz:Bar id="vizBar" visible="true" width="70%" title="Jalousien Ist-Wert Diagramm"/>
+                <viz:Bar id="vizBar" title="Jalousien Ist-Wert Diagramm" visible="true" width="70%"/>
 
                 <!-- Viz Chart
                 <viz:ui5.Line id="outcome" width="600px" height="280px">

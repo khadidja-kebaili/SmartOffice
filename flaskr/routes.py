@@ -134,8 +134,8 @@ def status_per_day():
 
     for elem in stats:
         odata['d']['results'].append({
-            'tageszeit': count,
-            'value': elem
+            'tageszeitjalist': count,
+            'valuejalist': elem
         })
         count = count + 1
 
