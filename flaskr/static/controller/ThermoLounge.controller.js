@@ -55,7 +55,7 @@ sap.ui.define([
           }
         },
         
-        onCurrentTemp: function(oEvent) {
+        changeTargetTemp: function(oEvent) {
             sap.ui.core.BusyIndicator.hide(0);
             var oData = {
                 'value': oEvent.getParameter("value")
