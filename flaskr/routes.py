@@ -157,7 +157,7 @@ def temp_ist_status_per_day():
     day = request.args.get('day')
     print(day)
     stats = adm.get_median_ist_values_temp(day)
-    print('Jal: ', stats)
+    print('Temp: ', stats)
 
     odata = {
         'd': {
@@ -169,8 +169,8 @@ def temp_ist_status_per_day():
 
     for elem in stats:
         odata['d']['results'].append({
-            'tageszeit': count,
-            'value': elem
+            'tageszeittempist': count,
+            'valuetempist': elem
         })
         count = count + 1
 
@@ -204,8 +204,8 @@ def jal_soll_status_per_day():
 
     for elem in stats:
         odata['d']['results'].append({
-            'tageszeit': count,
-            'value': elem
+            'tageszeitjalsoll': count,
+            'valuejalsoll': elem
         })
         count = count + 1
 
