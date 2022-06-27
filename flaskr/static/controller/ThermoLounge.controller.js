@@ -23,7 +23,6 @@ sap.ui.define([
             this.getTemp().done(function(result) {
                 console.log(result.d.results[0].temperature)  
                 var currentTemp = result.d.results[0].temperature
-                //console.log(currentTemp.typeof())
                 self.byId("currentTemp").setValue(currentTemp)
             })
         },
