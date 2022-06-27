@@ -1521,3 +1521,7 @@ class DeviceAdministration(object):
             return True
         else:
             return False
+
+adm = DeviceAdministration()
+stats = adm.get_all_jal_standard_entries_monday()
+print(stats)
