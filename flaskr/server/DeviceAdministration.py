@@ -171,11 +171,11 @@ class DeviceAdministration(object):
         trigger = False
         rules = self.get_all_jal_rules()
         for elem in rules:
-            #if elem.get_min() is None and elem.get_max() is None:
-             #   if self.in_between_times(date, elem.get_start_time(), elem.get_end_time()):
-              #      message = 'Die No_Access Zeit ist eingetroffen'
-               #     print(message)
-                #    return message
+            # if elem.get_min() is None and elem.get_max() is None:
+            #   if self.in_between_times(date, elem.get_start_time(), elem.get_end_time()):
+            #      message = 'Die No_Access Zeit ist eingetroffen'
+            #     print(message)
+            #    return message
             if elem.get_min() is not None and elem.get_max() is not None and self.in_between_times(datehour, elem.get_start_time(), elem.get_end_time()) is True:
                 if perc > elem.get_max() or perc < elem.get_min():
                     message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
@@ -337,7 +337,6 @@ class DeviceAdministration(object):
         else:
             return 0
 
-
     '''    def get_jal_mean_per_day(self, day):
             result = []
             i = 6
@@ -424,7 +423,6 @@ class DeviceAdministration(object):
             values.append(x)
         return values
 
-
     def get_median_ist_values_jal(self, day):
         values = []
         k = self.get_median_ist_jal_for_timespan(7, 10, day)
@@ -488,8 +486,6 @@ class DeviceAdministration(object):
         l = l[-1]
         values.append(l)
         return values
-
-
 
     def in_between_times(self, searched_time, start, end):
         searched_time = datetime.datetime.strptime(searched_time, '%H:%M:%S')
@@ -571,6 +567,7 @@ class DeviceAdministration(object):
             mapper.update(thermostat)'''
 
     def set_temperature(self, temp, device_id=None):
+
         date = datetime.datetime.now()
         date_for_stat = date.strftime('%Y-%m-%d %H:%M:%S')
         date = date.strftime('%H:%M:%S')
@@ -593,19 +590,17 @@ class DeviceAdministration(object):
             else:
                 trigger = True
         if trigger:
-            conn = http.client.HTTPSConnection(
-                "gmhn0evflkdlpmbw.myfritz.net", 8254)
+            import http.client
+            conn = http.client.HTTPSConnection("192.168.2.254", 8254)
             payload = ''
             headers = {}
-            sid = self.generate_sid(
-                'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
             conn.request("GET",
                          "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param={}".format(
                              sid, temp),
                          payload, headers)
             res = conn.getresponse()
             data = res.read()
-            data = data.decode("utf-8")
+            print(data.decode("utf-8"))
             status = ThermostatStatusBO()
             status.set_temp(temp)
             status.set_date(date_for_stat)
@@ -638,7 +633,8 @@ class DeviceAdministration(object):
             'Content-Type': 'application/json'
         }
         conn.request("GET",
-                     "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=gettemperature".format(sid),
+                     "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=gethkrtsoll".format(
+                         sid),
                      payload, headers)
         res = conn.getresponse()
         data = res.read()
@@ -653,7 +649,7 @@ class DeviceAdministration(object):
         headers = {
             'Content-Type': 'application/json'
         }
-        conn.request("GET",
+        conn.request("POST",
                      "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param={}".format(
                          sid, temp),
                      payload, headers)
@@ -718,8 +714,6 @@ class DeviceAdministration(object):
             standard_entry.set_weekday(1)
             with WeeklyPlanJalMapper() as mapper:
                 mapper.insert(standard_entry)
-            
-
 
     def get_all_jal_standard_entries_monday(self):
         with MondayMapper() as mapper:
@@ -832,7 +826,8 @@ class DeviceAdministration(object):
                                 mapper.insert(wednesday)
                             standard_entry = WeeklyPlanTempBO()
                             last_entry = self.get_latest_jal_standard_entry_wednesday()
-                            standard_entry.set_wednesday_id(last_entry.get_id())
+                            standard_entry.set_wednesday_id(
+                                last_entry.get_id())
                             standard_entry.set_weekday(3)
                             with WeeklyPlanJalMapper() as mapper:
                                 mapper.insert(standard_entry)
@@ -1098,7 +1093,7 @@ class DeviceAdministration(object):
                             with WeeklyPlanTempMapper() as mapper:
                                 mapper.insert(standard_entry)
                             return {"type": "1", "element": elem_id, "start": start, "end": end}
-          
+
             with TuesdayMapper() as mapper:
                 mapper.insert(tuesday)
             standard_entry = WeeklyPlanTempBO()
@@ -1138,7 +1133,7 @@ class DeviceAdministration(object):
                     trigger = True
             else:
                 trigger = True
-        
+
         if trigger:
             wednesday = Wednesday()
             wednesday.set_type('T')
@@ -1161,7 +1156,8 @@ class DeviceAdministration(object):
                                 mapper.insert(wednesday)
                             standard_entry = WeeklyPlanTempBO()
                             last_entry = self.get_latest_temp_standard_entry_wednesday()
-                            standard_entry.set_wednesday_id(last_entry.get_id())
+                            standard_entry.set_wednesday_id(
+                                last_entry.get_id())
                             standard_entry.set_weekday(3)
                             with WeeklyPlanTempMapper() as mapper:
                                 mapper.insert(standard_entry)
@@ -1365,7 +1361,7 @@ class DeviceAdministration(object):
                 end = elem.get_end_time()
                 with RulesMapper() as mapper:
                     mapper.insert(rule)
-                return {"type": "0", "element": elem_id, "start": start, "end": end} 
+                return {"type": "0", "element": elem_id, "start": start, "end": end}
             else:
                 print('nichts passiert', start, end,
                       elem.get_start_time(), elem.get_end_time())
@@ -1391,7 +1387,7 @@ class DeviceAdministration(object):
             rules = self.get_all_temp_rules()
             for elem in rules:
                 if elem.get_start_time() is None and elem.get_end_time() is None and min is None and elem.get_min()
-                    
+
                     print(elem, 'wurde gelöscht.')
                     self.delete_rule(elem)
                 else:
@@ -1645,8 +1641,3 @@ class DeviceAdministration(object):
     def get_all_temp_customized_entries_friday(self):
         with FridayMapper() as mapper:
             return mapper.find_all()'''
-
-
-adm = DeviceAdministration()
-
-print(adm.get_min_temp())
