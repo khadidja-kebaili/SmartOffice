@@ -592,6 +592,7 @@ class DeviceAdministration(object):
                     return message
             else:
                 trigger = True
+        print(trigger)
         if trigger:
             conn = http.client.HTTPSConnection(
                 "gmhn0evflkdlpmbw.myfritz.net", 8254)

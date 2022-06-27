@@ -18,6 +18,7 @@
                             <StepInput
                                 id="currentTemp"
                                 value="{targetType: 'any'}"
+                                displayValuePrecision="1"
                                 width="100%"
                                 textAlign="Center"
                                 change="onCurrentTemp"
