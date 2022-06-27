@@ -28,7 +28,7 @@
                                             <HBox/>
                                             <HBox>
                                                 <Input
-                                                    id="minTemp1"
+                                                    id="minTemp"
                                                     value="{targetType: 'any'}"
                                                     description="°C"
                                                     width="150px"

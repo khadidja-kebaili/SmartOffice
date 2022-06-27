@@ -11,6 +11,10 @@ sap.ui.define([
 
     return Controller.extend("com.quanto.solutions.ui.smartoffice.controller.ThermoLounge", {
         onInit: function() {
+            self = this;
+            this.getView();
+            sap.ui.core.BusyIndicator.hide(0);
+
             let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.getRoute("thermoLounge").attachMatched(this._onRouteMatched, this);
         },
@@ -52,14 +56,11 @@ sap.ui.define([
           }
         },
         
-        onChange: function(oEvent) {
-            console.log("Neue Temperatur wurde eingestellt.");
+        onCurrentTemp: function(oEvent) {
             sap.ui.core.BusyIndicator.hide(0);
             var oData = {
                 'value': oEvent.getParameter("value")
             };
-            // console.log(oData);
-            // console.log(typeof(oData.value));
             jQuery.ajax({
                 url: "/SetTemp",
                 type: "POST",
