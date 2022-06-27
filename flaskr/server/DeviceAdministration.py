@@ -28,6 +28,7 @@ import http.client
 from datetime import datetime, timedelta
 import datetime
 import statistics
+import tinytuya
 
 
 class DeviceAdministration(object):
@@ -188,6 +189,7 @@ class DeviceAdministration(object):
                     trigger = True
             else:
                 trigger = True
+        trigger = True
         if trigger:
             jalousies = []
             status = JalousienStatusBO()
@@ -198,8 +200,12 @@ class DeviceAdministration(object):
             for elem in jalousies:
                 for x in elem:
                     if x.get_id() == id:
-                        x.set_device()
-                        dev = x.get_device()
+                        loc_key = x.get_local_key()
+                        ip = x.get_ip_address()
+                        dev_id = x.get_device_id()
+                        print(loc_key, ip, dev_id)
+                        dev = tinytuya.OutletDevice(dev_id=dev_id, address=ip, local_key=loc_key)
+                        dev.set_version(3.3)
                         dev.set_value(2, perc)
                         status.set_status(str(dev.status()))
                         status.set_device(id)
@@ -1515,135 +1521,3 @@ class DeviceAdministration(object):
             return True
         else:
             return False
-
-    ##### Customized Entries ######
-
-    '''def set_jal_customized_entry_monday(self, start, end, perc):
-        monday = Monday()
-        monday.set_type('J')
-        monday.set_start_time(start)
-        monday.set_end_time(end)
-        monday.set_value(perc)
-        with MondayMapper() as mapper:
-            return mapper.insert(monday)
-
-    def get_all_jal_customized_entries_monday(self):
-        with MondayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_jal_customized_entry_tuesday(self, start, end, perc):
-        tuesday = Tuesday()
-        tuesday.set_type('J')
-        tuesday.set_start_time(start)
-        tuesday.set_end_time(end)
-        tuesday.set_value(perc)
-        with TuesdayMapper() as mapper:
-            return mapper.insert(tuesday)
-
-    def get_all_jal_customized_entries_tuesday(self):
-        with TuesdayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_jal_customized_entry_wednesday(self, start, end, perc):
-        wednesday = Wednesday()
-        wednesday.set_type('J')
-        wednesday.set_start_time(start)
-        wednesday.set_end_time(end)
-        wednesday.set_value(perc)
-        with WednesdayMapper() as mapper:
-            return mapper.insert(wednesday)
-
-    def get_all_jal_customized_entries_wednesday(self):
-        with WednesdayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_jal_customized_entry_thursday(self, start, end, perc):
-        thursday = Thursday()
-        thursday.set_type('J')
-        thursday.set_start_time(start)
-        thursday.set_end_time(end)
-        thursday.set_value(perc)
-        with ThursdayMapper() as mapper:
-            return mapper.insert(thursday)
-
-    def get_all_jal_customized_entries_thursday(self):
-        with ThursdayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_jal_customized_entry_friday(self, start, end, perc):
-        friday = Friday()
-        friday.set_type('J')
-        friday.set_start_time(start)
-        friday.set_end_time(end)
-        friday.set_value(perc)
-        with FridayMapper() as mapper:
-            return mapper.insert(friday)
-
-    def get_all_jal_customized_entries_friday(self):
-        with FridayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_temp_customized_entry_monday(self, start, end, temp):
-        monday = Monday()
-        monday.set_type('T')
-        monday.set_start_time(start)
-        monday.set_end_time(end)
-        monday.set_value(temp)
-        with MondayMapper() as mapper:
-            return mapper.insert(monday)
-
-    def get_all_temp_customized_entries_monday(self):
-        with MondayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_temp_customized_entry_tuesday(self, start, end, temp):
-        tuesday = Tuesday()
-        tuesday.set_type('T')
-        tuesday.set_start_time(start)
-        tuesday.set_end_time(end)
-        tuesday.set_value(temp)
-        with TuesdayMapper() as mapper:
-            return mapper.insert(tuesday)
-
-    def get_all_temp_customized_entries_tuesday(self):
-        with TuesdayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_temp_customized_entry_wednesday(self, start, end, temp):
-        wednesday = Wednesday()
-        wednesday.set_type('T')
-        wednesday.set_start_time(start)
-        wednesday.set_end_time(end)
-        wednesday.set_value(temp)
-        with WednesdayMapper() as mapper:
-            return mapper.insert(wednesday)
-
-    def get_all_temp_customized_entries_wednesday(self):
-        with WednesdayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_temp_customized_entry_thursday(self, start, end, temp):
-        thursday = Thursday()
-        thursday.set_type('T')
-        thursday.set_start_time(start)
-        thursday.set_end_time(end)
-        thursday.set_value(temp)
-        with ThursdayMapper() as mapper:
-            return mapper.insert(thursday)
-
-    def get_all_temp_customized_entries_thursday(self):
-        with ThursdayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_temp_customized_entry_friday(self, start, end, temp):
-        friday = Friday()
-        friday.set_type('T')
-        friday.set_start_time(start)
-        friday.set_end_time(end)
-        friday.set_value(temp)
-        with FridayMapper() as mapper:
-            return mapper.insert(friday)
-
-    def get_all_temp_customized_entries_friday(self):
-        with FridayMapper() as mapper:
-            return mapper.find_all()'''

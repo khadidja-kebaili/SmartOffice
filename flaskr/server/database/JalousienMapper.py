@@ -50,10 +50,10 @@ class JalousienMapper(Mapper):
         result = []
         cursor = self._cnx.cursor()
         cursor.execute(
-            "SELECT id, device_id, ip_address, local_key from jalousien")
+            "SELECT * from smartoffice.jalousien")
         tuples = cursor.fetchall()
 
-        for (id, device_id, ip_address, local_key) in tuples:
+        for (id, ip_address, local_key, device_id) in tuples:
             jalousie = JalousienBO()
             jalousie.set_id(id)
             jalousie.set_device_id(device_id)
