@@ -306,7 +306,8 @@ class DeviceAdministration(object):
             for elem in e:
                 stats_for_weekday.append(elem)
         for elem in stats_for_weekday:
-            start_time_hour = datetime.datetime.strptime(elem.get_start_time(), '%H:%M:%S')
+            start_time_hour = datetime.datetime.strptime(
+                elem.get_start_time(), '%H:%M:%S')
             if start_time_hour == hour:
                 hourly_rate.append(elem.get_percentage())
         if len(hourly_rate) >= 1:
@@ -1664,3 +1665,5 @@ e = adm.get_all_thermostat_status()
 for elem in e:
     print(elem)
 print(adm.get_median_soll_values_temp("2022-06-20"))
+
+'''XX'''
