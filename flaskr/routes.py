@@ -92,7 +92,7 @@ def get_jal_stats_per_hour_for_weekday():
     weekday = request.form["weekday"]
     von = request.form["von"]
     bis = request.form["bis"]
-    data = adm.get_median_ist_jal_for_timespan(von, bis, weekday)
+    data = adm.get_ist_value_jal_for_timespan(von, bis, weekday)
 
     odata = {
         'd': {
@@ -121,7 +121,7 @@ def status_per_day():
 
     day = request.args.get('day')
     print(day)
-    stats = adm.get_median_ist_values_jal(day)
+    stats = adm.get_ist_values_jal(day)
     print('Jal: ', stats)
 
     odata = {

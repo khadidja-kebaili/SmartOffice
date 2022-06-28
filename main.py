@@ -63,7 +63,6 @@ def check_jal_stat(thread_name, delay):
             print('Hier ist die Datehour:', date_hour, 'hier ist elem_get_start_time:', elem.get_start_time())
             if adm.in_between_times(date_hour, elem.get_start_time(), elem.get_end_time()) is True:
                 print('It is overlapping!')
-                if 
                 adm.set_status_to_percentage_by_id(1, elem.get_value())
                 count += 1
             else:
@@ -144,7 +143,7 @@ def check_temp_stat(thread_name, delay):
 
 def something():
     if __name__ == "__main__":
-        app.run('192.168.2.187', debug=False, ssl_context='adhoc')
+        app.run('0.0.0.0', debug=False, ssl_context='adhoc')
 
 
 # Create new threads
