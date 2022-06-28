@@ -17,12 +17,12 @@ class myThread(threading.Thread):
     def run(self):
         print("Starting " + self.name)
         if self.name == 'Thread1':
-            check_jal_stat(self.name, 50)
+            check_jal_stat(self.name, 60)
             print("Exiting " + self.name)
         elif self.name == 'main_server_thread':
             something()
         elif self.name == 'Thread2':
-            check_temp_stat(self.name, 50)
+            check_temp_stat(self.name, 3550)
             print('nothings going on')
         else:
             print('Nothing is going on')
@@ -56,17 +56,20 @@ def check_jal_stat(thread_name, delay):
             stats.append(elem)
     else:
         print('It´s the weekend!')
-    count = True
-    while count:
+    count = 0
+    while count < len(stats):
         for elem in stats:
             date_hour = datetime.strftime(date, '%H:%M:%S')
             print('Hier ist die Datehour:', date_hour, 'hier ist elem_get_start_time:', elem.get_start_time())
             if adm.in_between_times(date_hour, elem.get_start_time(), elem.get_end_time()) is True:
                 print('It is overlapping!')
-                adm.set_status_to_percentage_by_id(1, 60)
+                if 
+                adm.set_status_to_percentage_by_id(1, elem.get_value())
+                count += 1
             else:
                 print('keine overlapping')
-                time.sleep(delay)
+                count += 1
+                
     if exitFlag:
         thread_name.exit()
     print("%s" % thread_name, count)
@@ -131,7 +134,7 @@ def check_temp_stat(thread_name, delay):
             elem_hour = datetime.strptime(elem.get_start_time(), '%H:%M:%S').hour
             if elem_hour == date.hour:
                 print('Geh runter!')
-            #dm.set_status_to_percentage_by_id(1, elem.get_value())
+            #adm.set_status_to_percentage_by_id(1, elem.get_value())
             else:
                 time.sleep(delay)
     if exitFlag:
@@ -141,17 +144,20 @@ def check_temp_stat(thread_name, delay):
 
 def something():
     if __name__ == "__main__":
-        app.run('0.0.0.0', debug=False, port=8100, ssl_context='adhoc')
+        app.run('192.168.2.187', debug=False, ssl_context='adhoc')
 
 
 # Create new threads
 checking_jal = myThread('Thread1', 0)
 checking_temp = myThread('Thread2', 0)
-main_server_thread = myThread('main_server_thready',0)
+main_server_thread = myThread('main_server_thread',0)
 
 #Start new Threads
 checking_jal.start()
-#checking_temp.start()
+checking_temp.start()
 main_server_thread.start()
 
 print("Exiting Main Thread")
+
+
+
