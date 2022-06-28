@@ -1,2 +1,15 @@
 .vscode/launch.json
 .vscode/settings.json
+node_modules/
+dist/
+.scp/
+.env
+Makefile*.mta
+mta_archives
+mta-*
+resources
+archive.zip
+.*_mta_build_tmp
+flaskr/server/bo/ZZZWochenplanJalBOAlt.py
+*.pyc
+*.pyo

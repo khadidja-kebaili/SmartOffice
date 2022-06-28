@@ -1,1 +1,0 @@
-print("server package initialisiert...")

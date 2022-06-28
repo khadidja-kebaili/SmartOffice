@@ -2,10 +2,12 @@
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/backend" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/backend/server" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/backend/static" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/flaskr" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/flaskr/server" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Python 3.8" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TestRunnerService">

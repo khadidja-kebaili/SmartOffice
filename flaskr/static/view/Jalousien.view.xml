@@ -1,0 +1,41 @@
+<mvc:View xmlns:core="sap.ui.core"
+		controllerName="com.quanto.solutions.ui.smartoffice.controller.Jalousien"
+		xmlns:mvc="sap.ui.core.mvc"
+		xmlns="sap.m"
+		xmlns:f="sap.f"
+		xmlns:layout="sap.ui.layout"
+		height="100%">
+	<Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page id="page" title="Jalousien" titleAlignment="Center" showNavButton="true" navButtonPress="onNavBack">
+                    <content> 
+						<layout:VerticalLayout id="verticallayoutcontent" width="100%">
+							<Text id="textjalousien" text="Auf wie viel Prozent sollen die Jalousien geöffnet werden?" textAlign="Center" width="100%" class="sapUiMediumMargin"/>            
+							<Slider id="sliderrealtime" value="{/InputValue}" width="100%"
+								enableTickmarks="true"
+								min="0" max="100"
+								showAdvancedTooltip="true"
+								showHandleTooltip="false"
+								inputsAsTooltips="true"
+								class="sapUiSmallMarginBottom" 
+								liveChange=".sendValue"/>
+							
+            </layout:VerticalLayout>
+            </content>
+                
+
+        <!-- DynamicPage Footer -->
+		    <footer>
+				<OverflowToolbar id="toolbarjalousien" class="sapUiMediumMarginTop">
+                    <ToolbarSpacer id="tbs1"/>
+                    <Button id="buttonregeln" text="Regeln" press="pressnavRegeln"/>
+                    <Button id="buttonwp" text="Wochenplan" press="pressnavWeeklyPlan"/>
+                    <ToolbarSpacer id="tbs2"/>
+                </OverflowToolbar>
+			</footer>
+        </Page>
+        </pages>
+        </App>
+    </Shell>
+</mvc:View>

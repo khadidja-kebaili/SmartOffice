@@ -1,0 +1,245 @@
+{
+  "_version": "1.12.0",
+  "sap.app": {
+    "id": "com.quanto.solutions.ui.smartoffice",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap-ux/fiori-freestyle-writer:basic",
+      "version": "0.11.6"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.100.2",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.suite.ui.generic.template": {},
+        "sap.ui.comp": {},
+        "sap.ui.generic.app": {},
+        "sap.ui.table": {},
+        "sap.suite.ui.microchart": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "com.quanto.solutions.ui.smartoffice.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true,
+          "groupId": "$direct"
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "async": true,
+        "viewPath": "com.quanto.solutions.ui.smartoffice.view",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "clearControlAggregation": false
+      },
+      "routes": [
+        {
+            "name": "home",
+            "pattern": "",
+            "target": [
+              "TargetHome"
+            ]
+          },
+          {
+              "name": "jalousien",
+              "pattern": "jalousien",
+              "target": [
+                "TargetJalousien"
+              ]
+            },
+            {
+              "name": "wochenplan",
+              "pattern": "wochenplan",
+              "target": [
+                "TargetWochenplan"
+              ]
+            },
+            {
+              "name": "wochenplanthermo",
+              "pattern": "wochenplanthermo",
+              "target": [
+                "TargetWochenplanThermo"
+              ]
+            },
+            {
+              "name": "regelnthermo",
+              "pattern": "regelnthermo",
+              "target": [
+                "TargetRegelnThermo"
+              ]
+            },
+            {
+              "name": "thermoMain",
+              "pattern": "thermoMain",
+              "target": [
+                "TargetThermoMain"
+              ]
+            },
+            {
+              "name": "thermoLounge",
+              "pattern": "thermoLounge",
+              "target": [
+                "TargetThermoLounge"
+              ]
+            },
+            {
+              "name": "reporting",
+              "pattern": "reporting",
+              "target": [
+                "TargetReporting"
+              ]
+            },
+            {
+              "name": "regelnjalousien",
+              "pattern": "regelnjalousien",
+              "target": [
+                "TargetRegelnJalousien"
+              ]
+            }
+      ],
+      "targets": {
+        "TargetSmartOffice": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "SmartOffice",
+          "viewName": "SmartOffice"
+        },
+        "TargetHome": {
+            "viewType": "XML",
+            "transition": "slide",
+            "clearControlAggregation": false,
+            "viewId": "home",
+            "viewName": "Home"
+          },
+          "TargetJalousien": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "jalousien",
+              "viewName": "Jalousien"
+            },
+            "TargetWochenplan": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "weeklyplan",
+              "viewName": "Weeklyplan"
+            },
+            "TargetWochenplanThermo": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "weeklyplanthermo",
+              "viewName": "WeeklyplanThermo"
+            },
+            "TargetRegelnThermo": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "regelnthermo",
+              "viewName": "RegelnThermo"
+            },
+            "TargetThermoMain": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "thermoMain",
+              "viewName": "ThermoMain"
+            },
+            "TargetThermoLounge": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "thermoLounge",
+              "viewName": "ThermoLounge"
+            },
+            "TargetReporting": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "reporting",
+              "viewName": "Reporting"
+            },
+            "TargetRegelnJalousien": {
+              "viewType": "XML",
+              "transition": "slide",
+              "clearControlAggregation": false,
+              "viewId": "regelnjalousien",
+              "viewName": "RegelnJalousien"
+            }
+      }
+    },
+    "rootView": {
+      "viewName": "com.quanto.solutions.ui.smartoffice.view.SmartOffice",
+      "type": "XML",
+      "async": true,
+      "id": "SmartOffice"
+    }
+  }
+}

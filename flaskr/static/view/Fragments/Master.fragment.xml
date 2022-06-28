@@ -1,0 +1,49 @@
+<core:FragmentDefinition
+        xmlns="sap.m"
+        xmlns:f="sap.f"
+        xmlns:core="sap.ui.core">
+	<f:DynamicPage toggleHeaderOnTitleClick="false" id="masterListAttachments">
+		<!-- DynamicPage Title -->
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
+					<Title text="User profiles ({= ${TestModel>/results}.length })"/>
+				</f:heading>
+			</f:DynamicPageTitle>
+		</f:title>
+		<!-- DynamicPage Content -->
+		<f:content>
+			<VBox>
+				<SearchField liveChange="onSearchChange" class="searchBar sapUiTinyMarginTop sapUiSmallMarginBottom" width="90%" search="onSearch" />
+				<HBox alignItems="Start" justifyContent="End">
+					<Button press="onSort" icon="sap-icon://sort"/>
+				</HBox>
+				<List
+					id="attachmentsList"
+					itemPress="masterListItemSelected"
+					items="{TestModel>/results}"
+					growing="true"
+					growingThreshold="50"
+					growingScrollToLoad="true">
+
+					<CustomListItem type="Active">
+						<HBox alignItems="Start" justifyContent="SpaceBetween">
+							<HBox>
+								<VBox class="sapUiTinyMarginTop sapUiTinyMarginBottom">
+
+									<Label text="Name:" />
+									<Text class="titleText" text="{TestModel>name}" />
+
+									<Label class="sapUiTinyMarginTop" text="Date:" />
+									<Text text="{TestModel>datetime}" />
+
+								</VBox>
+							</HBox>
+						</HBox>
+					</CustomListItem>
+				</List>
+
+			</VBox>
+		</f:content>
+	</f:DynamicPage>
+</core:FragmentDefinition>

@@ -1,0 +1,43 @@
+<mvc:View
+    xmlns:core="sap.ui.core"
+    controllerName="com.quanto.solutions.ui.smartoffice.controller.ThermoLounge"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:layout="sap.ui.layout"
+    height="100%"
+>
+    <Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page id="page" title="Thermostate" titleAlignment="Center" showNavButton="true" navButtonPress="onNavBack">
+                    <content> 
+                        <layout:VerticalLayout id="verticallayoutcontent" width="100%" alignItems="Center">
+                        <VBox alignItems="Center" width="100%">
+                            <Text id="textThermo" text="Echtzeitsteuerung Temperatur" class="sapUiMediumMarginTop sapUiSmallMarginBottom" />
+                            <StepInput
+                                id="currentTemp"
+                                value="{targetType: 'any'}"
+                                displayValuePrecision="1"
+                                width="100%"
+                                textAlign="Center"
+                                change="onCurrentTemp"
+                            />
+                        </VBox>
+                        </layout:VerticalLayout>
+                        </content>
+
+        <!-- DynamicPage Footer -->
+            <footer>
+                <OverflowToolbar id="toolbarjalousien" class="sapUiMediumMarginTop">
+                    <ToolbarSpacer id="tbs1"/>
+                    <Button id="Regeln" text="Regeln" press="pressNavRegelnThermo"/>
+                    <Button id="buttonWopl" text="Wochenplan" press="pressnavWeeklyPlanThermo"/>
+                    <ToolbarSpacer id="tbs2"/>
+                </OverflowToolbar>
+            </footer>
+        </Page>
+        </pages>
+        </App>
+    </Shell>
+</mvc:View>

@@ -1,0 +1,24 @@
+<core:FragmentDefinition
+		xmlns="sap.m"
+		xmlns:core="sap.ui.core">
+	<VBox renderType="Bare">
+		<HBox alignItems="Start" justifyContent="SpaceBetween" wrap="Wrap">
+			<VBox wrap="Wrap" >
+				<HBox wrap="Wrap" width="100%">
+					<VBox class="sapUiSmallMarginEnd">
+						<HBox>
+							<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Test1" subheader="Test2"
+								press="press('Test')">
+								<TileContent>
+									<NumericContent value="1" icon="sap-icon://multiple-line-chart" />
+								</TileContent>
+							</GenericTile>
+						</HBox>
+					</VBox>
+				</HBox>
+
+			</VBox>
+
+		</HBox>
+	</VBox>
+</core:FragmentDefinition>
