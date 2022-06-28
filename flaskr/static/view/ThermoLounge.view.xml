@@ -12,31 +12,60 @@
             <pages>
                 <Page id="page" title="Thermostate" titleAlignment="Center" showNavButton="true" navButtonPress="onNavBack">
                     <content> 
-                        <layout:VerticalLayout id="verticallayoutcontent" width="100%" alignItems="Center">
-                        <VBox alignItems="Center" width="100%">
-                            <Text id="textThermo" text="Echtzeitsteuerung Temperatur" class="sapUiMediumMarginTop sapUiSmallMarginBottom" />
-                            <StepInput
-                                id="currentTemp"
-                                value="{targetType: 'any'}"
-                                width="100%"
-                                textAlign="Center"
-                                change="onCurrentTemp"
-                            />
-                        </VBox>
-                        </layout:VerticalLayout>
-                        </content>
+                        <Table id="tbl">
+                            <columns>
+                                <Column />
+                                <Column>
+                                    <Text text="IST-Temperatur" />
+                                </Column>
+                                <Column>
+                                    <Text text="SOLL-Temperatur" />
+                                </Column>
+                            </columns>
+                                
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <HBox/>
+                                        <HBox>
+                                            <StepInput
+                                                id="currentTemp"
+                                                value="{targetType: 'any'}"
+                                                displayValuePrecision="1"
+                                                description="°C"
+                                                width="100%"
+                                                textAlign="Center"
+                                                editable="false"
+                                            />
+                                        </HBox>
+                                        <HBox>
+                                            <StepInput
+                                                id="targetTemp"
+                                                value="{targetType: 'any'}"
+                                                displayValuePrecision="1"
+                                                description="°C"
+                                                width="100%"
+                                                textAlign="Center"
+                                                change="changeTargetTemp"
+                                            />
+                                        </HBox>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </content>
 
-        <!-- DynamicPage Footer -->
-            <footer>
-                <OverflowToolbar id="toolbarjalousien" class="sapUiMediumMarginTop">
-                    <ToolbarSpacer id="tbs1"/>
-                    <Button id="Regeln" text="Regeln" press="pressNavRegelnThermo"/>
-                    <Button id="buttonWopl" text="Wochenplan" press="pressnavWeeklyPlanThermo"/>
-                    <ToolbarSpacer id="tbs2"/>
-                </OverflowToolbar>
-            </footer>
-        </Page>
-        </pages>
+                    <!-- DynamicPage Footer -->
+                    <footer>
+                        <OverflowToolbar id="toolbarjalousien" class="sapUiMediumMarginTop">
+                            <ToolbarSpacer id="tbs1"/>
+                                <Button id="Regeln" text="Regeln" press="pressNavRegelnThermo"/>
+                                <Button id="buttonWopl" text="Wochenplan" press="pressnavWeeklyPlanThermo"/>
+                            <ToolbarSpacer id="tbs2"/>
+                        </OverflowToolbar>
+                    </footer>
+                </Page>
+            </pages>
         </App>
     </Shell>
 </mvc:View>

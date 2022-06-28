@@ -54,13 +54,13 @@ class ThermostatStatusMapper(Mapper):
         result = []
         cursor = self._cnx.cursor()
         cursor.execute(
-            "SELECT id, percentage, status, device_id, date from thermostatstatus")
+            "SELECT id, temp, status, device_id, date from thermostatstatus")
         tuples = cursor.fetchall()
 
         for (id, temp, status, device_id, date) in tuples:
             thermostat = ThermostatStatusBO()
             thermostat.set_id(id)
-            thermostat.set_temp(temp),
+            thermostat.set_temp(temp)
             thermostat.set_status(status)
             thermostat.set_device(device_id)
             thermostat.set_date(date)
@@ -80,7 +80,7 @@ class ThermostatStatusMapper(Mapper):
         """
         result = None
         cursor = self._cnx.cursor()
-        command = "SELECT id, percentage, status, device_id, date FROM thermostatstatus WHERE id={} ORDER BY id".format(
+        command = "SELECT id, temp, status, device_id, date FROM thermostatstatus WHERE id={} ORDER BY id".format(
             id)
         cursor.execute(command)
         tuples = cursor.fetchall()
