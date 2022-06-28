@@ -324,6 +324,28 @@ def get_temp():
 
     return jsonify(odata)
 
+def get_soll_temp():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    temp = adm.get_soll_temp()
+    temp = int(temp)
+    temp = temp / 10
+    odata['d']['results'].append({
+        'temperature': temp
+    })
+
+    return jsonify(odata)
+
 
 @app.route('/GetStandardJalousienMonday', methods=["GET"])
 def get_entries_jal_monday():

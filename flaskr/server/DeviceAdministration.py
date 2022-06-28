@@ -700,6 +700,20 @@ class DeviceAdministration(object):
         data = data.decode("utf-8")
         return data
 
+    def get_soll_temp(self):
+        date = datetime.datetime.now()
+        weekday = date.isoweekday()
+        if weekday == 1:
+            return self.get_latest_temp_standard_entry_monday()
+        if weekday == 2:
+            return self.get_latest_temp_standard_entry_tuesday()
+        if weekday == 3:
+            return self.get_latest_temp_standard_entry_wednesday()
+        if weekday == 4:
+            return self.get_latest_temp_standard_entry_thursday()
+        if weekday == 5:
+            return self.get_latest_temp_standard_entry_friday()
+
     def set_min_temp_of_device(self, temp):
         conn = http.client.HTTPSConnection("192.168.2.254", 8254)
         payload = ''
@@ -1553,6 +1567,7 @@ class DeviceAdministration(object):
                 return self.get_temp_from_device()
         else:
             return self.get_temp_from_device()
+
 
     def overlapping(self, new_start, new_end, old_start, old_end):
         new_start = datetime.datetime.strptime(new_start, '%H:%M:%S').hour
