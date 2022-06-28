@@ -405,28 +405,28 @@ class DeviceAdministration(object):
 
     def get_median_ist_jal_for_timespan(self, von, bis, day):
         values = []
-        for elem in range(von, bis):
+        for elem in range(von, bis +1):
             x = self.get_last_jal_ist_entry_of_hour_for_day(day, elem)
             values.append(x)
         return values
 
     def get_median_soll_jal_for_timespan(self, von, bis, day):
         values = []
-        for elem in range(von, bis):
+        for elem in range(von, bis +1):
             x = self.get_last_soll_jal_entry_of_hour_for_day(day, elem)
             values.append(x)
         return values
 
     def get_median_ist_temp_for_timespan(self, von, bis, day):
         values = []
-        for elem in range(von, bis):
+        for elem in range(von, bis +1):
             x = self.get_last_ist_temp_entry_of_hour_for_day(day, elem)
             values.append(x)
         return values
 
     def get_median_soll_temp_for_timespan(self, von, bis, day):
         values = []
-        for elem in range(von, bis):
+        for elem in range(von, bis +1):
             x = self.get_last_soll_temp_entry_of_hour_for_day(day, elem)
             values.append(x)
         return values
@@ -1710,6 +1710,6 @@ adm = DeviceAdministration()
 #print(adm.get_median_ist_values_jal("2022-06-18"))
 #print(adm.get_median_ist_values_temp("2022-06-20"))
 #print(adm.get_median_soll_values_jal("2022-06-20"))
-print(adm.get_median_soll_values_temp("2022-06-20"))
+print(adm.get_median_ist_values_jal("2022-06-06"))
 
 '''XX'''
