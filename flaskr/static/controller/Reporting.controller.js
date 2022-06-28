@@ -43,7 +43,7 @@ sap.ui.define([
                         });
 
                 //Bar Chart JalousienStatus
-                var Bar = this.getView().byId("vizBarJal");
+                var JalBar = this.getView().byId("vizBarJal");
                 var dataset = new sap.viz.ui5.data.FlattenedDataset({
                     dimensions:[{
                         axis: 1,
@@ -58,7 +58,25 @@ sap.ui.define([
                         path: "/datajalist"
                     }
                 });
-                Bar.setDataset(dataset);
+                JalBar.setDataset(dataset);
+
+                   //Bar Chart ThermostatStatus
+                var TempBar = this.getView().byId("vizBarTemp");
+                var dataset = new sap.viz.ui5.data.FlattenedDataset({
+                    dimensions:[{
+                        axis: 1,
+                        name:'Tageszeit',
+                        value: "{tageszeittempist}"
+                    }],
+                    measures: [{
+                        name:"Status in °C",
+                        value: "{valuetempist}"
+                    }],
+                    data: {
+                        path: "/datatempist"
+                    }
+                });
+                TempBar.setDataset(dataset);
             },
 
             //Jalousien IST Status
