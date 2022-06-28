@@ -252,7 +252,7 @@ class DeviceAdministration(object):
         for elem in stats_for_weekday:
             if elem.get_date().hour == hour:
                 hourly_rate.append(elem.get_percentage())
-        if hourly_rate >= 1:
+        if len(hourly_rate) >= 1:
             return_value = 0
             for elem in hourly_rate:
                 if elem > return_value:
@@ -273,11 +273,7 @@ class DeviceAdministration(object):
             if elem.get_date().hour == hour:
                 hourly_rate.append(elem.get_temp())
         if len(hourly_rate) > 0:
-            return_value = 0
-            for elem in hourly_rate:
-                if elem > return_value:
-                    return_value = elem
-            return return_value
+            return hourly_rate[-1]
         else:
             return 0
 
@@ -307,9 +303,9 @@ class DeviceAdministration(object):
                 stats_for_weekday.append(elem)
         for elem in stats_for_weekday:
             start_time_hour = datetime.datetime.strptime(
-                elem.get_start_time(), '%H:%M:%S')
+                elem.get_start_time(), '%H:%M:%S').hour
             if start_time_hour == hour:
-                hourly_rate.append(elem.get_percentage())
+                hourly_rate.append(elem.get_value())
         if len(hourly_rate) >= 1:
             return hourly_rate[-1]
         else:
@@ -318,7 +314,7 @@ class DeviceAdministration(object):
     def get_last_soll_jal_entry_of_hour_for_day(self, day, hour):
         stats_for_weekday = []
         hourly_rate = []
-        weekday = datetime.strptime(day, '%Y-%m-%d').isoweekday()
+        weekday = datetime.datetime.strptime(day, '%Y-%m-%d').isoweekday()
         if weekday == 1:
             a = self.get_all_jal_standard_entries_monday()
             for elem in a:
@@ -340,9 +336,11 @@ class DeviceAdministration(object):
             for elem in e:
                 stats_for_weekday.append(elem)
         for elem in stats_for_weekday:
-            if elem.get_date().hour == hour:
-                hourly_rate.append(elem.get_percentage())
+            start_hour = datetime.datetime.strptime(elem.get_start_time(), '%H:%M:%S').hour
+            if start_hour == hour:
+                hourly_rate.append(elem.get_value())
         if len(hourly_rate) >= 1:
+
             return hourly_rate[-1]
         else:
             return 0
@@ -407,28 +405,28 @@ class DeviceAdministration(object):
 
     def get_median_ist_jal_for_timespan(self, von, bis, day):
         values = []
-        for elem in range(von, bis + 1):
+        for elem in range(von, bis):
             x = self.get_last_jal_ist_entry_of_hour_for_day(day, elem)
             values.append(x)
         return values
 
     def get_median_soll_jal_for_timespan(self, von, bis, day):
         values = []
-        for elem in range(von, bis + 1):
+        for elem in range(von, bis):
             x = self.get_last_soll_jal_entry_of_hour_for_day(day, elem)
             values.append(x)
         return values
 
     def get_median_ist_temp_for_timespan(self, von, bis, day):
         values = []
-        for elem in range(von, bis + 1):
+        for elem in range(von, bis):
             x = self.get_last_ist_temp_entry_of_hour_for_day(day, elem)
             values.append(x)
         return values
 
     def get_median_soll_temp_for_timespan(self, von, bis, day):
         values = []
-        for elem in range(von, bis + 1):
+        for elem in range(von, bis):
             x = self.get_last_soll_temp_entry_of_hour_for_day(day, elem)
             values.append(x)
         return values
@@ -436,67 +434,117 @@ class DeviceAdministration(object):
     def get_median_ist_values_jal(self, day):
         values = []
         k = self.get_median_ist_jal_for_timespan(7, 10, day)
-        k = k[-1]
-        values.append(k)
+        return_value_k = 0
+        for elem in k:
+            print(elem)
+            if elem > return_value_k:
+                return_value_k = elem
+        values.append(return_value_k)
         m = self.get_median_ist_jal_for_timespan(10, 13, day)
-        m = m[-1]
-        values.append(m)
+        return_value_m = 0
+        for elem in m:
+            print(elem)
+            if elem > return_value_m:
+                return_value_m = elem
+        values.append(return_value_m)
         n = self.get_median_ist_jal_for_timespan(13, 16, day)
-        n = n[-1]
-        values.append(n)
+        return_value_n = 0
+        for elem in n:
+            if elem > return_value_n:
+                return_value_n = elem
+        values.append(return_value_n)
         l = self.get_median_ist_jal_for_timespan(16, 19, day)
-        l = l[-1]
-        values.append(l)
+        return_value_l = 0
+        for elem in l:
+            if elem > return_value_l:
+                return_value_l = elem
+        values.append(return_value_l)
         return values
 
     def get_median_soll_values_jal(self, day):
         values = []
         k = self.get_median_soll_jal_for_timespan(7, 10, day)
-        k = k[-1]
-        values.append(k)
+        return_value_k = 0
+        for elem in k:
+            if elem > return_value_k:
+                return_value_k = elem
+        values.append(return_value_k)
         m = self.get_median_soll_jal_for_timespan(10, 13, day)
-        m = m[-1]
-        values.append(m)
+        return_value_m = 0
+        for elem in m:
+            if elem > return_value_m:
+                return_value_m = elem
+        values.append(return_value_m)
         n = self.get_median_soll_jal_for_timespan(13, 16, day)
-        n = n[-1]
-        values.append(n)
+        return_value_n = 0
+        for elem in n:
+            if elem > return_value_n:
+                return_value_n = elem
+        values.append(return_value_n)
         l = self.get_median_soll_jal_for_timespan(16, 19, day)
-        l = l[-1]
-        values.append(l)
+        return_value_l = 0
+        for elem in l:
+            if elem > return_value_l:
+                return_value_l = elem
+        values.append(return_value_l)
         return values
 
     def get_median_ist_values_temp(self, day):
         values = []
         k = self.get_median_ist_temp_for_timespan(7, 10, day)
-        k = k[-1]
-        values.append(k)
+        return_value_k = 0
+        for elem in k:
+            print(elem)
+            if elem > return_value_k:
+                return_value_k = elem
+        values.append(return_value_k)
         m = self.get_median_ist_temp_for_timespan(10, 13, day)
+        return_value_m = 0
         for elem in m:
             print(elem)
-        m = m[-1]
-        values.append(m)
+            if elem > return_value_m:
+                return_value_m = elem
+        values.append(return_value_m)
         n = self.get_median_ist_temp_for_timespan(13, 16, day)
-        n = n[-1]
-        values.append(n)
+        return_value_n = 0
+        for elem in n:
+            if elem > return_value_n:
+                return_value_n = elem
+        values.append(return_value_n)
         l = self.get_median_ist_temp_for_timespan(16, 19, day)
-        l = l[-1]
-        values.append(l)
+        return_value_l = 0
+        for elem in l:
+            if elem > return_value_l:
+                return_value_l = elem
+        values.append(return_value_l)
         return values
 
     def get_median_soll_values_temp(self, day):
         values = []
         k = self.get_median_soll_temp_for_timespan(7, 10, day)
-        k = k[-1]
-        values.append(k)
+        return_value_k = 0
+        for elem in k:
+            if elem > return_value_k:
+                return_value_k = elem
+        values.append(return_value_k)
         m = self.get_median_soll_temp_for_timespan(10, 13, day)
-        m = m[-1]
-        values.append(m)
+        return_value_m = 0
+        for elem in m:
+            if elem > return_value_m:
+                return_value_m = elem
+        values.append(return_value_m)
         n = self.get_median_soll_temp_for_timespan(13, 16, day)
-        n = n[-1]
-        values.append(n)
+        return_value_n = 0
+        for elem in n:
+            if elem > return_value_n:
+                return_value_n = elem
+        values.append(return_value_n)
         l = self.get_median_soll_temp_for_timespan(16, 19, day)
-        l = l[-1]
-        values.append(l)
+        return_value_l = 0
+        for elem in l:
+            if elem > return_value_l:
+                return_value_l = elem
+        values.append(return_value_l)
         return values
 
     def in_between_times(self, searched_time, start, end):
@@ -1659,11 +1707,9 @@ class DeviceAdministration(object):
 
 adm = DeviceAdministration()
 
-"""print(adm.get_median_ist_values_jal("2022-06-06"))"""
-print(adm.get_median_ist_values_temp("2022-06-20"))
-e = adm.get_all_thermostat_status()
-for elem in e:
-    print(elem)
+#print(adm.get_median_ist_values_jal("2022-06-18"))
+#print(adm.get_median_ist_values_temp("2022-06-20"))
+#print(adm.get_median_soll_values_jal("2022-06-20"))
 print(adm.get_median_soll_values_temp("2022-06-20"))
 
 '''XX'''
