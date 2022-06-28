@@ -704,15 +704,35 @@ class DeviceAdministration(object):
         date = datetime.datetime.now()
         weekday = date.isoweekday()
         if weekday == 1:
-            return self.get_latest_temp_standard_entry_monday()
+            mon = self.get_latest_temp_standard_entry_monday()
+            if mon is None or mon is 0:
+                return self.get_temp_from_device()
+            else:
+                return mon
         if weekday == 2:
-            return self.get_latest_temp_standard_entry_tuesday()
+            tue = self.get_latest_temp_standard_entry_tuesday()
+            if tue is None or tue is 0:
+                return self.get_temp_from_device()
+            else:
+                return tue
         if weekday == 3:
-            return self.get_latest_temp_standard_entry_wednesday()
+            wed = self.get_latest_temp_standard_entry_wednesday()
+            if wed is None or wed is 0:
+                return self.get_temp_from_device()
+            else:
+                return wed
         if weekday == 4:
-            return self.get_latest_temp_standard_entry_thursday()
+            thurs = self.get_latest_temp_standard_entry_thursday()
+            if thurs is None or thurs is 0:
+                return self.get_temp_from_device()
+            else:
+                return thurs
         if weekday == 5:
-            return self.get_latest_temp_standard_entry_friday()
+            fri = self.get_latest_temp_standard_entry_friday()
+            if fri is None or fri is 0:
+                return self.get_temp_from_device()
+            else:
+                return fri
 
     def set_min_temp_of_device(self, temp):
         conn = http.client.HTTPSConnection("192.168.2.254", 8254)
@@ -1516,6 +1536,7 @@ class DeviceAdministration(object):
                     print('nichts passiert')
                     if x == len(rules):
                         with RulesMapper() as mapper:
+                            mapper.insert(rule)
                             mapper.insert(rule)
                             return max
                     # return max
