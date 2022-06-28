@@ -252,8 +252,12 @@ class DeviceAdministration(object):
         for elem in stats_for_weekday:
             if elem.get_date().hour == hour:
                 hourly_rate.append(elem.get_percentage())
-        if len(hourly_rate) >= 1:
-            return hourly_rate[-1]
+        if hourly_rate >= 1:
+            return_value = 0
+            for elem in hourly_rate:
+                if elem > return_value:
+                    return_value = elem
+            return return_value
         else:
             return 0
 
@@ -269,14 +273,18 @@ class DeviceAdministration(object):
             if elem.get_date().hour == hour:
                 hourly_rate.append(elem.get_temp())
         if len(hourly_rate) > 0:
-            return hourly_rate[-1]
+            return_value = 0
+            for elem in hourly_rate:
+                if elem > return_value:
+                    return_value = elem
+            return return_value
         else:
             return 0
 
     def get_last_soll_temp_entry_of_hour_for_day(self, day, hour):
         stats_for_weekday = []
         hourly_rate = []
-        weekday = datetime.strptime(day, '%Y-%m-%d').isoweekday()
+        weekday = datetime.datetime.strptime(day, '%Y-%m-%d').isoweekday()
         if weekday == 1:
             a = self.get_all_temp_standard_entries_monday()
             for elem in a:
@@ -298,7 +306,8 @@ class DeviceAdministration(object):
             for elem in e:
                 stats_for_weekday.append(elem)
         for elem in stats_for_weekday:
-            if elem.get_date().hour == hour:
+            start_time_hour = datetime.datetime.strptime(elem.get_start_time(), '%H:%M:%S')
+            if start_time_hour == hour:
                 hourly_rate.append(elem.get_percentage())
         if len(hourly_rate) >= 1:
             return hourly_rate[-1]
@@ -569,7 +578,8 @@ class DeviceAdministration(object):
             mapper.update(thermostat)'''
 
     def set_temperature(self, temp, device_id=None):
-
+        sid = self.generate_sid(
+            'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
         date = datetime.datetime.now()
         date_for_stat = date.strftime('%Y-%m-%d %H:%M:%S')
         date = date.strftime('%H:%M:%S')
@@ -1653,4 +1663,4 @@ print(adm.get_median_ist_values_temp("2022-06-20"))
 e = adm.get_all_thermostat_status()
 for elem in e:
     print(elem)
-print(adm.get_last_soll_jal_entry_of_hour_for_day("2022-06-20"))
+print(adm.get_median_soll_values_temp("2022-06-20"))
