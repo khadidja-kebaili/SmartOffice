@@ -267,7 +267,7 @@ class DeviceAdministration(object):
                 stats_for_weekday.append(elem)
         for elem in stats_for_weekday:
             if elem.get_date().hour == hour:
-                hourly_rate.append(elem.get_percentage())
+                hourly_rate.append(elem.get_temp())
         if len(hourly_rate) >= 1:
             return hourly_rate[-1]
         else:
@@ -459,16 +459,16 @@ class DeviceAdministration(object):
 
     def get_median_ist_values_temp(self, day):
         values = []
-        k = self.get_median_ist_jal_for_timespan(7, 10, day)
+        k = self.get_median_ist_temp_for_timespan(7, 10, day)
         k = k[-1]
         values.append(k)
-        m = self.get_median_ist_jal_for_timespan(10, 13, day)
+        m = self.get_median_ist_temp_for_timespan(10, 13, day)
         m = m[-1]
         values.append(m)
-        n = self.get_median_ist_jal_for_timespan(13, 16, day)
+        n = self.get_median_ist_temp_for_timespan(13, 16, day)
         n = n[-1]
         values.append(n)
-        l = self.get_median_ist_jal_for_timespan(16, 19, day)
+        l = self.get_median_ist_temp_for_timespan(16, 19, day)
         l = l[-1]
         values.append(l)
         return values
@@ -1648,6 +1648,7 @@ class DeviceAdministration(object):
             return mapper.find_all()'''
 
 
-adm = DeviceAdministration()
+"""adm = DeviceAdministration()
 
-print(adm.get_min_temp())
+print(adm.get_median_ist_values_temp("2022-06-20"))
+print(adm.get_median_ist_values_jal("2022-06-06"))"""
