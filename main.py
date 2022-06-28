@@ -63,6 +63,10 @@ def check_jal_stat(thread_name, delay):
             print('Hier ist die Datehour:', date_hour, 'hier ist elem_get_start_time:', elem.get_start_time())
             if adm.in_between_times(date_hour, elem.get_start_time(), elem.get_end_time()) is True:
                 print('It is overlapping!')
+<<<<<<< HEAD
+=======
+        
+>>>>>>> cb82af137e4501091f5b7ede86f61106f69b9da2
                 adm.set_status_to_percentage_by_id(1, elem.get_value())
                 count += 1
             else:

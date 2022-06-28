@@ -165,7 +165,8 @@ class DeviceAdministration(object):
                         ip = x.get_ip_address()
                         dev_id = x.get_device_id()
                         print(loc_key, ip, dev_id)
-                        dev = tinytuya.OutletDevice(dev_id=dev_id, address=ip, local_key=loc_key)
+                        dev = tinytuya.OutletDevice(
+                            dev_id=dev_id, address=ip, local_key=loc_key)
                         dev.set_version(3.3)
                         dev.set_value(2, perc)
                         status.set_status(str(dev.status()))
@@ -200,7 +201,6 @@ class DeviceAdministration(object):
         '''
         status = self.get_all_jal_status()
         return status[-1]
-
 
     def get_all_jal_status(self):
         '''
@@ -333,7 +333,6 @@ class DeviceAdministration(object):
             return hourly_rate[-1]
         else:
             return 0
-
 
     def get_ist_value_jal_for_timespan(self, von, bis, day):
         """
@@ -548,6 +547,7 @@ class DeviceAdministration(object):
 
 
 ########Thermostat-spezifische Methoden########
+
 
     def generate_sid(self, box_url, user_name, password):
         sid = get_sid(box_url, user_name, password)
