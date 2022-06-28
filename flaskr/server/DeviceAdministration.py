@@ -268,7 +268,7 @@ class DeviceAdministration(object):
         for elem in stats_for_weekday:
             if elem.get_date().hour == hour:
                 hourly_rate.append(elem.get_temp())
-        if len(hourly_rate) >= 1:
+        if len(hourly_rate) > 0:
             return hourly_rate[-1]
         else:
             return 0
@@ -276,7 +276,7 @@ class DeviceAdministration(object):
     def get_last_soll_temp_entry_of_hour_for_day(self, day, hour):
         stats_for_weekday = []
         hourly_rate = []
-        weekday = datetime.strptime(day, '%Y-%m-%d %H:%M:%S').isoweekday()
+        weekday = datetime.strptime(day, '%Y-%m-%d').isoweekday()
         if weekday == 1:
             a = self.get_all_temp_standard_entries_monday()
             for elem in a:
@@ -308,7 +308,7 @@ class DeviceAdministration(object):
     def get_last_soll_jal_entry_of_hour_for_day(self, day, hour):
         stats_for_weekday = []
         hourly_rate = []
-        weekday = datetime.strptime(day, '%Y-%m-%d %H:%M:%S').isoweekday()
+        weekday = datetime.strptime(day, '%Y-%m-%d').isoweekday()
         if weekday == 1:
             a = self.get_all_jal_standard_entries_monday()
             for elem in a:
@@ -424,7 +424,6 @@ class DeviceAdministration(object):
             values.append(x)
         return values
 
-
     def get_median_ist_values_jal(self, day):
         values = []
         k = self.get_median_ist_jal_for_timespan(7, 10, day)
@@ -463,6 +462,8 @@ class DeviceAdministration(object):
         k = k[-1]
         values.append(k)
         m = self.get_median_ist_temp_for_timespan(10, 13, day)
+        for elem in m:
+            print(elem)
         m = m[-1]
         values.append(m)
         n = self.get_median_ist_temp_for_timespan(13, 16, day)
@@ -524,7 +525,7 @@ class DeviceAdministration(object):
             return mapper.find_by_key(id)
 
     def delete_thermostat_status_by_id(self, id):
-        status = self.get_status_of_jalousie_by_id(id)
+        status = self.get_status_of_thermostat_by_id(id)
         with ThermostatStatusMapper() as mapper:
             mapper.delete(status)
 
@@ -1648,7 +1649,11 @@ class DeviceAdministration(object):
             return mapper.find_all()'''
 
 
-"""adm = DeviceAdministration()
+adm = DeviceAdministration()
 
+"""print(adm.get_median_ist_values_jal("2022-06-06"))"""
 print(adm.get_median_ist_values_temp("2022-06-20"))
-print(adm.get_median_ist_values_jal("2022-06-06"))"""
+e = adm.get_all_thermostat_status()
+for elem in e:
+    print(elem)
+print(adm.get_last_soll_jal_entry_of_hour_for_day("2022-06-20"))
