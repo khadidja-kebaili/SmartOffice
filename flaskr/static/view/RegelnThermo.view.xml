@@ -13,37 +13,35 @@
                         <Text text="Hier können Sie Regeln für die min. und max. Temperatur der Thermostate festlegen. Diese sind nicht abhängig vom Wochentag und gelten immer." textAlign="Center" width="100%" class="sapUiMediumMargin"/>
                         <Table id="tbl">
                             <columns>
-                                <Column />
-                                <Column>
-                                    <Text text="Mindesttemperatur" />
+                                <Column hAlign="Center">
+                                    <Text text="Mindesttemperatur in °C" />
                                 </Column>
-                                <Column>
-                                    <Text text="Maximaltemperatur" />
+                                <Column hAlign="Center">
+                                    <Text text="Maximaltemperatur in °C" />
                                 </Column>
                             </columns>
                                 
                             <items>
                                 <ColumnListItem>
                                     <cells>
-                                        <HBox/>
-                                        <HBox>
+                                        <HBox justifyContent="Center">
                                             <StepInput
                                                 id="minTemp"
                                                 value="{targetType: 'any'}"
                                                 displayValuePrecision="1"
-                                                description="°C"
-                                                width="100%"
+                                                
+                                                width="80%"
                                                 textAlign="Center"
                                                 change="changeMinTemp"
                                             />
                                         </HBox>
-                                        <HBox>
+                                        <HBox justifyContent="Center">
                                             <StepInput
                                                 id="maxTemp"
                                                 value="{targetType: 'any'}"
                                                 displayValuePrecision="1"
-                                                description="°C"
-                                                width="100%"
+                                                
+                                                width="80%"
                                                 textAlign="Center"
                                                 change="changeMaxTemp"
                                             />

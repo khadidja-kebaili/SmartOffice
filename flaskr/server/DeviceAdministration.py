@@ -1563,5 +1563,5 @@ class DeviceAdministration(object):
             return False
 
 
-adm = DeviceAdministration()
-adm.get_soll_value_jal_for_timespan(7, 18, '2022-06-27')
+#adm = DeviceAdministration()
+#adm.get_soll_value_jal_for_timespan(7, 18, '2022-06-27')

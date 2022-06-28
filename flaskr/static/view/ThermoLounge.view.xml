@@ -14,37 +14,33 @@
                     <content> 
                         <Table id="tbl">
                             <columns>
-                                <Column />
-                                <Column>
-                                    <Text text="IST-Temperatur" />
+                                <Column hAlign="Center" >
+                                    <Text text="IST-Temperatur - °C" />
                                 </Column>
-                                <Column>
-                                    <Text text="SOLL-Temperatur" />
+                                <Column hAlign="Center">
+                                    <Text text="SOLL-Temperatur - °C" />
                                 </Column>
                             </columns>
                                 
                             <items>
                                 <ColumnListItem>
                                     <cells>
-                                        <HBox/>
-                                        <HBox>
+                                        <HBox justifyContent="Center">
                                             <StepInput
                                                 id="currentTemp"
                                                 value="{targetType: 'any'}"
                                                 displayValuePrecision="1"
-                                                description="°C"
-                                                width="100%"
+                                                width="60%"
                                                 textAlign="Center"
                                                 editable="false"
                                             />
                                         </HBox>
-                                        <HBox>
+                                        <HBox justifyContent="Center">
                                             <StepInput
                                                 id="targetTemp"
                                                 value="{targetType: 'any'}"
                                                 displayValuePrecision="1"
-                                                description="°C"
-                                                width="100%"
+                                                width="80%"
                                                 textAlign="Center"
                                                 change="changeTargetTemp"
                                             />
