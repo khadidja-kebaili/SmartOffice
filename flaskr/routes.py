@@ -292,11 +292,13 @@ def set_temp():
     data = float(data)
     data = data * 10
     time.sleep(4)
-    adm.set_temperature(data)
+    k = adm.set_temperature(data)
     temp = adm.get_temp_from_device()
     print('temp: ', temp)
-    x = "Hi"
-    return x
+    if type(k) == dict:
+        return k
+    else:
+        return {'type': '2'}
 
 
 @app.route('/GetTemp', methods=["GET"])

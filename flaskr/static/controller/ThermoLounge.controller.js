@@ -1,11 +1,13 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
-    "sap/ui/core/routing/History"
+    "sap/ui/core/routing/History",
+    "sap/m/MessageBox",
 ], function(
     Controller,
     MessageToast,
-    History
+    History,
+    MessageBox
 ) {
     "use strict";
 
@@ -67,11 +69,28 @@ sap.ui.define([
                 async: true,
                 data: oData,
                 success: function (response) {
-                    MessageToast.show(response.data.message);
                     sap.ui.core.BusyIndicator.hide();
                 },
                 error: function (response) {
                     console.log(response);
+                }
+            }).done(function(result) {
+                var errorcheck = result.type
+                var mindestwert = result.min / 10
+                var maximalwert = result.max / 10
+                console.log(errorcheck)
+                if (errorcheck === "0") {
+                    console.log('Temp zu hoch')
+                    MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Die Temperatur darf maximal " + maximalwert + "°C betragen. \n Bitte versuche eine andere Einstellung!");
+                    self.byId("targetTemp").setValue(null)
+                }
+                else if (errorcheck === "1") {
+                    console.log('Temp zu niedrig')
+                    MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Die Temperatur muss mindestens " + mindestwert + "°C betragen. \n Bitte versuche eine andere Einstellung!");
+                    self.byId("targetTemp").setValue(null)
+                }
+                else if (errorcheck === "2") {
+                    MessageToast.show('Die Temperatur wurde erfolgreich geändert.');
                 }
             });
         }

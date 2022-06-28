@@ -613,6 +613,10 @@ class DeviceAdministration(object):
         date = date.strftime('%H:%M:%S')
         trigger = False
         rules = self.get_all_temp_rules()
+        min = False
+        max = False
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.in_between_times(date, elem.get_start_time(), elem.get_end_time()):
@@ -620,36 +624,40 @@ class DeviceAdministration(object):
                     return message
             elif elem.get_min() is None:
                 if temp > elem.get_max():
-                    message = 'Das geht so nicht!', temp, 'Maxtemp:', elem.get_max()
-                    return message
+                    mindest_temp = elem.get_min()
+                    maximal_temp = elem.get_max()
+                    return {"type": "0", "max": maximal_temp}
+                else:
+                    max = True
             elif elem.get_max() is None:
                 if temp < elem.get_min():
-                    message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
-                    )
-                    return message
-            else:
+                    mindest_temp = elem.get_min()
+                    maximal_temp = elem.get_max()
+                    return {"type": "1", "min": mindest_temp}
+                else:
+                    min = True
+            elif elem.get_max() is None and elem.get_min() is None:
                 trigger = True
-        print(trigger)
-        if trigger:
-            conn = http.client.HTTPSConnection(
-                "gmhn0evflkdlpmbw.myfritz.net", 8254)
-            payload = ''
-            headers = {}
-            sid = self.generate_sid(
-                'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
-            conn.request("GET",
-                         "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param={}".format(
-                             sid, temp),
-                         payload, headers)
-            res = conn.getresponse()
-            data = res.read()
-            data = data.decode("utf-8")
-            status = ThermostatStatusBO()
-            status.set_temp(temp)
-            status.set_date(date_for_stat)
-            status.set_device(device_id)
-            with ThermostatStatusMapper() as mapper:
-                return mapper.insert(status)
+            if trigger or (min and max):
+                conn = http.client.HTTPSConnection(
+                    "gmhn0evflkdlpmbw.myfritz.net", 8254)
+                payload = ''
+                headers = {}
+                sid = self.generate_sid(
+                    'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
+                conn.request("GET",
+                            "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param={}".format(
+                                sid, temp),
+                            payload, headers)
+                res = conn.getresponse()
+                data = res.read()
+                data = data.decode("utf-8")
+                status = ThermostatStatusBO()
+                status.set_temp(temp)
+                status.set_date(date_for_stat)
+                status.set_device(device_id)
+                with ThermostatStatusMapper() as mapper:
+                    return mapper.insert(status)
 
     def get_comfort_temperature(self):
         """
