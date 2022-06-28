@@ -37,14 +37,6 @@
             <!-- Dect-Thermostat Card Control Content folgt, !muss angepasst werden!-->
                 <f:content>
                     <List>
-				        <CustomListItem>
-					        <HBox alignItems="Center" justifyContent="SpaceBetween">
-						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
-							        <Title level="H3" text="Ist-Wert der Temperatur:" />
-                                    <!--<<Text id="actualvaluetempid" text="{InputValue'}" width="100%"/>-->
-						        </VBox>
-                            </HBox>
-				        </CustomListItem>
                         <CustomListItem>
 					        <HBox alignItems="Center" justifyContent="SpaceBetween">
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
@@ -57,7 +49,6 @@
 			                            change="handleTempChange"
 			                            class="sapUiSmallMarginBottom"
                                     />
-                                    <!--<Text id="supposedlvaluejalid" text="{InputValue'}" width="100%"/>-->
 						        </VBox>
                             </HBox>
 				        </CustomListItem>
@@ -65,7 +56,7 @@
 					        <HBox alignItems="Center" justifyContent="SpaceBetween">
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
                                     <Title level="H3" text="Letzte Einträge:" />
-                                    <Table id="tbl1" items="{/data}">
+                                    <Table id="tbl1" items="{/datatempist}">
                                             <columns>
                                                 <Column>
                                                     <Text text="Tageszeit" />
@@ -78,16 +69,15 @@
                                                 <ColumnListItem>
                                                     <cells>
                                                         <HBox>
-                                                            <Text  text="{tageszeit}"/>
+                                                            <Text  text="{tageszeittempist}"/>
                                                         </HBox>
                                                         <HBox>
-                                                            <Text  text="{value}"/>
+                                                            <Text  text="{valuetempist}"/>
                                                         </HBox>
                                                     </cells>
                                                 </ColumnListItem>
                                             </items>
                                         </Table>
-                                    <!--<Text id="supposedlvaluetemp" text="{InputValue'}" width="100%"/>-->
 						        </VBox>
                             </HBox>
 				        </CustomListItem>
@@ -104,14 +94,6 @@
             <!-- WLAN-Jalousienmodul Card Control Content folgt, !muss angepasst werden!-->
                 <f:content>
                     <List>
-				        <CustomListItem>
-					        <HBox alignItems="Center" justifyContent="SpaceBetween">
-						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
-							        <Title level="H3" text="Ist-Wert in Prozent:" />
-                                    <!--<Text id="actualvaluejalid" text="{InputValue'}" width="100%"/>>-->
-						        </VBox>
-                            </HBox>
-				        </CustomListItem>
                         <CustomListItem>
 					        <HBox alignItems="Center" justifyContent="SpaceBetween">
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
@@ -124,7 +106,6 @@
 			                            change="handleJalChange"
 			                            class="sapUiSmallMarginBottom"
                                     />
-                                    <!--<Text id="supposedlvaluejalid" text="{InputValue'}" width="100%"/>-->
 						        </VBox>
                             </HBox>
 				        </CustomListItem>
@@ -132,7 +113,7 @@
 					        <HBox alignItems="Center" justifyContent="SpaceBetween">
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
                                     <Title level="H3" text="Letzte Einträge:" />
-                                    <Table id="tbl2" items="{/data}">
+                                    <Table id="tbl2" items="{/datajalist}">
                                             <columns>
                                                 <Column>
                                                     <Text text="Tageszeit" />
@@ -145,16 +126,15 @@
                                                 <ColumnListItem>
                                                     <cells>
                                                         <HBox>
-                                                            <Text  text="{tageszeit}"/>
+                                                            <Text  text="{tageszeitjalist}"/>
                                                         </HBox>
                                                         <HBox>
-                                                            <Text  text="{value}"/>
+                                                            <Text  text="{valuejalist}"/>
                                                         </HBox>
                                                     </cells>
                                                 </ColumnListItem>
                                             </items>
                                         </Table>
-                                    <!--<Text id="supposedlvaluejalid" text="{InputValue'}" width="100%"/>-->
 						        </VBox>
                             </HBox>
 				        </CustomListItem>
@@ -162,111 +142,8 @@
                 </f:content>
             </f:Card>
 
-            <!--<m:Text
-				text="Absolute and Percentage values" class="sapUiSmallMargin">
-			    <layoutData>
-				    <layout:GridData span="XL12 L12 M12 S12"/>
-			    </layoutData>
-		    </m:Text>
-		    <m:FlexBox width="20rem" height="10rem" alignItems="Center" class="sapUiSmallMargin">
-			    <m:items>
-				    <InteractiveLineChart selectionChanged="selectionChanged" press="press" precedingPoint="15"
-									    succeedingPoint="89">
-					    <points>
-						    <InteractiveLineChartPoint value="33.1" label="May" secondaryLabel="Q2"/>
-						    <InteractiveLineChartPoint value="12" label="June"/>
-						    <InteractiveLineChartPoint value="51.4" label="July" secondaryLabel="Q3"/>
-						    <InteractiveLineChartPoint value="52" label="Aug"/>
-						    <InteractiveLineChartPoint value="69.9" label="Sep"/>
-						    <InteractiveLineChartPoint value="0.9" label="Oct" secondaryLabel="Q4"/>
-					    </points>
-				    </InteractiveLineChart>
-			    </m:items>
-		    </m:FlexBox>
-		    <m:FlexBox width="20rem" height="10rem" alignItems="Center" class="sapUiSmallMargin">
-			    <m:items>
-				    <InteractiveLineChart selectionChanged="selectionChanged" press="press" precedingPoint="-20">
-					    <points>
-						    <InteractiveLineChartPoint value="33.1" displayedValue="33.1%" label="May"
-												   secondaryLabel="2015"/>
-						    <InteractiveLineChartPoint value="2.2" displayedValue="2.2%" label="June"
-												   secondaryLabel="2015"/>
-						    <InteractiveLineChartPoint value="51.4" displayedValue="51.4%" label="July"
-												   secondaryLabel="2015"/>
-						    <InteractiveLineChartPoint value="19.9" displayedValue="19.9%" label="Aug"/>
-						    <InteractiveLineChartPoint value="69.9" displayedValue="69.9%" label="Sep"/>
-						    <InteractiveLineChartPoint value="0.9" displayedValue="0.9%" label="Oct"/>
-					    </points>
-				    </InteractiveLineChart>
-			    </m:items>
-		    </m:FlexBox>-->
+                <viz:Bar id="vizBarJal" title="Jalousien Ist-Wert Diagramm" visible="true" width="70%"/>
 
-            <!--<Multiple Line Chart für DECT-Thermostat muss noch angepasst werden
-                    <Panel
-                        headerText="Temperaturverlauf vom DECT-Thermostat">
-                    <layout:Grid
-                            defaultSpan="XL6 L6 M6 S12"
-                            content="{/multiline}">
-                        <layout:VerticalLayout class="sapUiTinyMargin">
-                            <Text text="{description}" width="17rem"/>
-                            <mc:LineMicroChart
-                                    color="{color}"
-                                    showPoints="{showPoints}"
-                                    size="{/size}"
-                                    threshold="{threshold}"
-                                    showThresholdLine="{showThresholdLine}"
-                                    leftTopLabel="{leftTopLabel}"
-                                    leftBottomLabel="{leftBottomLabel}"
-                                    rightTopLabel="{rightTopLabel}"
-                                    rightBottomLabel="{rightBottomLabel}"
-                                    showTopLabels="{showTopLabels}"
-                                    showBottomLabels="{showBottomLabels}"
-                                    press="press"
-                                    class="sapUiTinyMarginTop"
-                                    lines="{
-                                        path: 'lines',
-                                        templateShareable: true
-                                    }">
-                                <mc:lines>
-                                    <mc:LineMicroChartLine
-                                            points="{
-                                            path: 'points',
-                                            templateShareable: true
-                                        }"
-                                            color="{color}"
-                                            showPoints="{showPoints}"
-                                            type="{type}"
-                                            >
-                                        <mc:LineMicroChartPoint x="{x}" y="{y}"/>
-                                    </mc:LineMicroChartLine>
-                                </mc:lines>
-                            </mc:LineMicroChart>
-                        </layout:VerticalLayout>
-                    </layout:Grid>
-                </Panel>-->
-
-
-                <viz:Bar id="vizBar" visible="true" width="70%" title="Jalousien Ist-Wert Diagramm"/>
-
-                <!-- Viz Chart
-                <viz:ui5.Line id="outcome" width="600px" height="280px">
-                    <viz:plotArea>
-                        <viz:ui5.types.Line/>
-                    </viz:plotArea>
-                    <viz:dataset>
-                        <viz:ui5.data.FlattenedDateset data="{/}">
-                            <viz:dimensions>
-                                <viz:ui5.data.DimensionDefinition axis="1" name="Name" value="{Name}">
-                                </viz:ui5.data.DimensionDefinition>
-                            </viz:dimensions>
-                            <viz:measures>
-                                <viz:ui5.data.MeasureDefinition group="1" name="2015" value="{2015}">
-                                </viz:ui5.data.MeasureDefinition>
-                            </viz:measures>
-                        </viz:ui5.data.FlattenedDateset>
-                    </viz:dataset>
-                </viz:ui5.Line>
-                -->
                 </Page>
             </pages>
         </App>
