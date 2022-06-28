@@ -1710,6 +1710,6 @@ adm = DeviceAdministration()
 #print(adm.get_median_ist_values_jal("2022-06-18"))
 #print(adm.get_median_ist_values_temp("2022-06-20"))
 #print(adm.get_median_soll_values_jal("2022-06-20"))
-print(adm.get_median_ist_values_jal("2022-06-06"))
+#print(adm.get_median_ist_values_jal("2022-06-06"))
 
 '''XX'''

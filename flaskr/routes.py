@@ -239,8 +239,8 @@ def temp_soll_status_per_day():
 
     for elem in stats:
         odata['d']['results'].append({
-            'tageszeit': count,
-            'value': elem
+            'tageszeittempsoll': count,
+            'valuetempsoll': elem
         })
         count = count + 1
 

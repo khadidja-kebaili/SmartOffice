@@ -50,10 +50,16 @@ sap.ui.define([
                         name:'Tageszeit',
                         value: "{tageszeitjalist}"
                     }],
-                    measures: [{
-                        name:"Status in %",
-                        value: "{valuejalist}"
-                    }],
+                    measures: [
+                        {
+                            name:"Status in %",
+                            value: "{valuejalist}"
+                        },
+                        /*{
+                            name:"Status in %",
+                            value: "{valuejasoll}"
+                        }*/
+                    ],
                     data: {
                         path: "/datajalist"
                     }
@@ -82,6 +88,8 @@ sap.ui.define([
             //Jalousien IST Status
             handleJalChange: function (oEvent) {
                 var datajalistreporting = []
+                var datajalsollreporting = []
+
 			    var oText = this.byId("DP2"),
 				    oDP = oEvent.getSource(),
 				    sValue = oEvent.getParameter("value"),
@@ -117,12 +125,54 @@ sap.ui.define([
 
                     var oModel = new sap.ui.model.json.JSONModel({datajalist: datajalistreporting});
                     self.getView().setModel(oModel);
+
+			    /*this.getValueSoll(oData).done(function(result) {
+
+                    var datajalsoll = result.d.results
+                    datajalsoll.map(function(eintrag, index) {
+                        datajalsollreporting.push(eintrag)
+                    })
+                    datajalsollreporting.map(function(eintrag){
+                        if (eintrag.tageszeitjalsoll == 0){
+                            eintrag.tageszeitjalsoll = "10 Uhr"
+                        }
+                        if (eintrag.tageszeitjalsoll == 1){
+                            eintrag.tageszeitjalsoll = "13 Uhr"
+                        }
+                        if (eintrag.tageszeitjalsoll == 2){
+                            eintrag.tageszeitjalsoll = "16 Uhr"
+                        }
+                        if (eintrag.tageszeitjalsoll == 3){
+                            eintrag.tageszeitjalsoll = "19 Uhr"
+                        }
+                    })
+
+                    var oModel = new sap.ui.model.json.JSONModel({datajalsoll: datajalsollreporting});
+                    self.getView().setModel(oModel);*/
                 })
 		    },
 
             getValue: function (oData) {
                 return jQuery.ajax({
                         url :"/JalIstStatusPerDay",
+                        type: "GET",
+                        dataType: "json",
+                        async : true,
+                        data : oData,
+                        success : function(response){
+                            //MessageToast.show(response.data.message);
+                            console.log(response)
+                            sap.ui.core.BusyIndicator.hide();
+                        },
+                        error: function(response){
+                            console.log(response);
+                        }
+                });
+            },
+
+            getValueSoll: function (oData) {
+                return jQuery.ajax({
+                        url :"/JalSollStatusPerDay",
                         type: "GET",
                         dataType: "json",
                         async : true,
