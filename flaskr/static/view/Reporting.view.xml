@@ -55,8 +55,8 @@
 						<CustomListItem>
 					        <HBox alignItems="Center" justifyContent="SpaceBetween">
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
-                                    <Title level="H3" text="Letzte Einträge:" />
-                                    <Table id="tbl1" items="{/datatempist}">
+                                    <Title level="H3" text="Letzte Ist Einträge:" />
+                                    <Table id="tbl1" items="{TempIstModel>/datatempist}">
                                             <columns>
                                                 <Column>
                                                     <Text text="Tageszeit" />
@@ -69,10 +69,37 @@
                                                 <ColumnListItem>
                                                     <cells>
                                                         <HBox>
-                                                            <Text  text="{tageszeittempist}"/>
+                                                            <Text  text="{TempIstModel>tageszeittempist}"/>
                                                         </HBox>
                                                         <HBox>
-                                                            <Text  text="{valuetempist}"/>
+                                                            <Text  text="{TempIstModel>valuetempist}"/>
+                                                        </HBox>
+                                                    </cells>
+                                                </ColumnListItem>
+                                            </items>
+                                        </Table>
+						        </VBox>
+                            </HBox>
+                            <HBox alignItems="Center" justifyContent="SpaceBetween">
+						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+                                    <Title level="H3" text="Letzte Soll Einträge:" />
+                                    <Table id="tbl4" items="{TempSollModel>/datatempsoll}">
+                                            <columns>
+                                                <Column>
+                                                    <Text text="Tageszeit" />
+                                                </Column>
+                                                <Column>
+                                                    <Text text="Status in °C" />
+                                                </Column>
+                                            </columns>
+                                            <items>
+                                                <ColumnListItem>
+                                                    <cells>
+                                                        <HBox>
+                                                            <Text  text="{TempSollModel>tageszeittempsoll}"/>
+                                                        </HBox>
+                                                        <HBox>
+                                                            <Text  text="{TempSollModel>valuetempsoll}"/>
                                                         </HBox>
                                                     </cells>
                                                 </ColumnListItem>
@@ -112,8 +139,8 @@
 						<CustomListItem>
 					        <HBox alignItems="Center" justifyContent="SpaceBetween">
 						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
-                                    <Title level="H3" text="Letzte Einträge:" />
-                                    <Table id="tbl2" items="{/datajalist}">
+                                    <Title level="H3" text="Letzte Ist Einträge:" />
+                                    <Table id="tbl2" items="{JalIstModel>/datajalist}">
                                             <columns>
                                                 <Column>
                                                     <Text text="Tageszeit" />
@@ -126,10 +153,37 @@
                                                 <ColumnListItem>
                                                     <cells>
                                                         <HBox>
-                                                            <Text  text="{tageszeitjalist}"/>
+                                                            <Text  text="{JalIstModel>tageszeitjalist}"/>
                                                         </HBox>
                                                         <HBox>
-                                                            <Text  text="{valuejalist}"/>
+                                                            <Text  text="{JalIstModel>valuejalist}"/>
+                                                        </HBox>
+                                                    </cells>
+                                                </ColumnListItem>
+                                            </items>
+                                        </Table>
+						        </VBox>
+                            </HBox>
+                            <HBox alignItems="Center" justifyContent="SpaceBetween">
+						        <VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom" >
+                                    <Title level="H3" text="Letzte Soll Einträge:" />
+                                    <Table id="tbl3" items="{JalSollModel>/datajalsoll}">
+                                            <columns>
+                                                <Column>
+                                                    <Text text="Tageszeit" />
+                                                </Column>
+                                                <Column>
+                                                    <Text text="Status in %" />
+                                                </Column>
+                                            </columns>
+                                            <items>
+                                                <ColumnListItem>
+                                                    <cells>
+                                                        <HBox>
+                                                            <Text  text="{JalSollModel>tageszeitjalsoll}"/>
+                                                        </HBox>
+                                                        <HBox>
+                                                            <Text  text="{JalSollModel>valuejalsoll}"/>
                                                         </HBox>
                                                     </cells>
                                                 </ColumnListItem>

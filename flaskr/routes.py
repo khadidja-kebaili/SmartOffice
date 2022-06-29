@@ -225,9 +225,7 @@ def temp_soll_status_per_day():
     adm = DeviceAdministration()
 
     day = request.args.get('day')
-    print(day)
     stats = adm.get_median_soll_values_temp(day)
-    print('Jal: ', stats)
 
     odata = {
         'd': {
