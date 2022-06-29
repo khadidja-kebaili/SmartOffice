@@ -54,7 +54,7 @@ def LastStatusJalousien():
         }
     }
 
-    last_status = adm.get_last_jal_status()
+    last_status = adm.get_last_status()
 
     odata['d']['results'].append(last_status.get_percentage())
 
@@ -754,6 +754,7 @@ def get_jal_rules():
         }
     }
     rules = adm.get_all_jal_rules()
+    rules.sort(key=lambda x: x._start, reverse=False)
     for elem in rules:
         odata['d']['results'].append({
             'id': elem.get_id(),
