@@ -11,14 +11,14 @@ sap.ui.define([
 ) {
     "use strict";
 
-    return Controller.extend("com.quanto.solutions.ui.smartoffice.controller.ThermoLounge", {
+    return Controller.extend("com.quanto.solutions.ui.smartoffice.controller.ThermoMain", {
         onInit: function() {
             self = this;
             this.getView();
             sap.ui.core.BusyIndicator.hide(0);
 
             let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.getRoute("thermoLounge").attachMatched(this._onRouteMatched, this);
+            oRouter.getRoute("thermoMain").attachMatched(this._onRouteMatched, this);
         },
         
         _onRouteMatched : function (oEvent){

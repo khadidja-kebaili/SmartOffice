@@ -2,7 +2,7 @@
     <Page id="p1" title="Smart Office" class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer" showNavButton="false">
 		
 		<content>
-			<GenericTile id="gt1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Thermostate" subheader="Einstellungen" press="goToThermoLounge">
+			<GenericTile id="gt1" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Thermostate" subheader="Einstellungen" press="goToThermoMain">
                 <TileContent id="tc1"/>
             </GenericTile>
             <GenericTile id="gt2" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Jalousien" subheader="Einstellungen" press="pressnav">
