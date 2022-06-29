@@ -244,6 +244,62 @@ def temp_soll_status_per_day():
 
     return odata
 
+@app.route('/JalCombinedPerDay', methods=["GET"])
+def jalstatuscombined_per_day():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+
+    day = request.args.get('day')
+    statsist = adm.get_median_ist_values_jal(day)
+    statssoll = adm.get_median_soll_values_jal(day)
+    
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+    count = 0
+    for elem1, elem2 in zip(statsist, statssoll):
+        odata['d']['results'].append({
+            'tageszeitjal': count,
+            'valuejalist': elem1,
+            'valuejalsoll': elem2
+        })
+        count = count + 1
+
+    return odata
+
+@app.route('/TempCombinedPerDay', methods=["GET"])
+def tempstatuscombined_per_day():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+
+    day = request.args.get('day')
+    statsist = adm.get_median_ist_values_temp(day)
+    statssoll = adm.get_median_soll_values_temp(day)
+    
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+    count = 0
+    for elem1, elem2 in zip(statsist, statssoll):
+        odata['d']['results'].append({
+            'tageszeittemp': count,
+            'valuetempist': elem1,
+            'valuetempsoll': elem2
+        })
+        count = count + 1
+
+    return odata
+    
 @app.route('/StatusPerWeek', methods=["GET"])
 def status_for_week():
     """

@@ -52,7 +52,7 @@ sap.ui.define([
                     dimensions:[{
                         axis: 1,
                         name:'Tageszeit',
-                        value: "{tageszeitjalist}"
+                        value: "{tageszeitjal}"
                     }],
                     measures: [
                         {
@@ -61,11 +61,11 @@ sap.ui.define([
                         },
                         {
                             name:"Soll-Status in %",
-                            value: {path: "JalSollModel>/valuejalsoll"}
+                            value: "{valuejalsoll}"
                         }
                     ],
                     data: {
-                        path: "JalIstModel>/datajalist"
+                        path: "JalCombinedModel>/datajalcombined",
                     }
                 });
                 JalBar.setDataset(dataset);
@@ -76,20 +76,20 @@ sap.ui.define([
                     dimensions:[{
                         axis: 1,
                         name:'Tageszeit',
-                        value: "{tageszeittempist}"
+                        value: "{tageszeittemp}"
                     }],
                     measures: [
                         {
-                            name:"Status in °C",
+                            name:"Ist-Status in °C",
                             value: "{valuetempist}"
                         },
                         {
                             name:"Soll-Status in °C",
-                            value: {path: "TempSollModel>/valuetempsoll"}
+                            value: "{valuetempsoll}"
                         }
                     ],
                     data: {
-                        path: "TempIstModel>/datatempist"
+                        path: "TempCombinedModel>/datatempcombined"
                     }
                 });
                 TempBar.setDataset(dataset);
@@ -128,6 +128,7 @@ sap.ui.define([
 			    var oData = {"day": sValue};
                 this.getJalIst(oData)
                 this.getJalSoll(oData)
+                this.getJalCombined(oData)
 		    },
             //Get Jalousien IST
             getJalIst: function (oData) {
@@ -194,6 +195,39 @@ sap.ui.define([
                     self.getView().setModel(oModelJalSoll, "JalSollModel");
                 })
             },
+            getJalCombined: function(oData) {
+                var datajalcombinedreporting = []
+                this.getValue(oData, "/JalCombinedPerDay").done(function(result) {
+
+                    var datajalcombined = result.d.results
+                    datajalcombined.map(function(eintrag, index) {
+                        datajalcombinedreporting.push(eintrag)
+                    })
+                    console.log(datajalcombinedreporting)
+                    datajalcombinedreporting.map(function(eintrag){
+                        if (eintrag.tageszeitjal == 0){
+                            eintrag.tageszeitjal = "10 Uhr"
+                        }
+                        if (eintrag.tageszeitjal == 1){
+                            eintrag.tageszeitjal = "13 Uhr"
+                        }
+                        if (eintrag.tageszeitjal == 2){
+                            eintrag.tageszeitjal = "16 Uhr"
+                        }
+                        if (eintrag.tageszeitjal == 3){
+                            eintrag.tageszeitjal = "19 Uhr"
+                        }
+                        if (eintrag.valuejalist == 0){
+                            eintrag.valuejalist = "Kein Eintrag vorhanden"
+                        }
+                        if (eintrag.valuejalsoll == 0){
+                            eintrag.valuejalsoll = "Kein Eintrag vorhanden"
+                        }
+                    })
+                    var oModelJalCombined = new sap.ui.model.json.JSONModel({datajalcombined: datajalcombinedreporting});
+                    self.getView().setModel(oModelJalCombined, "JalCombinedModel");
+                })
+            },
 
             //Handle Datum Change Temp
             handleTempChange: function (oEvent) {
@@ -212,6 +246,7 @@ sap.ui.define([
 			    var oData = {"day": sValue};
                 this.getTempIst(oData)
                 this.getTempSoll(oData)
+                this.getTempCombined(oData)
             },
             //Get Temp Ist
             getTempIst: function(oData){
@@ -278,6 +313,41 @@ sap.ui.define([
 
                     var oModelTempSoll= new sap.ui.model.json.JSONModel({datatempsoll: datatempsollreporting});
                     self.getView().setModel(oModelTempSoll, "TempSollModel");
+                })
+            },
+            getTempCombined: function(oData) {
+                var datatempcombinedreporting = []
+                this.getValue(oData, "/TempCombinedPerDay").done(function(result) {
+
+                    var datatempcombined = result.d.results
+                    datatempcombined.map(function(eintrag, index) {
+                        datatempcombinedreporting.push(eintrag)
+                    })
+                    console.log(datatempcombinedreporting)
+                    datatempcombinedreporting.map(function(eintrag){
+                        eintrag.valuetempist = (eintrag.valuetempist / 10)
+                        eintrag.valuetempsoll = (eintrag.valuetempsoll / 10)
+                        if (eintrag.tageszeittemp == 0){
+                            eintrag.tageszeittemp = "10 Uhr"
+                        }
+                        if (eintrag.tageszeittemp == 1){
+                            eintrag.tageszeittemp = "13 Uhr"
+                        }
+                        if (eintrag.tageszeittemp == 2){
+                            eintrag.tageszeittemp = "16 Uhr"
+                        }
+                        if (eintrag.tageszeittemp == 3){
+                            eintrag.tageszeittemp = "19 Uhr"
+                        }
+                        if (eintrag.valuetempist == 0){
+                            eintrag.valuetempist = "Kein Eintrag vorhanden"
+                        }
+                        if (eintrag.valuetempsoll == 0){
+                            eintrag.valuetempsoll = "Kein Eintrag vorhanden"
+                        }
+                    })
+                    var oModelTempCombined = new sap.ui.model.json.JSONModel({datatempcombined: datatempcombinedreporting});
+                    self.getView().setModel(oModelTempCombined, "TempCombinedModel");
                 })
             },
 

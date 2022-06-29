@@ -196,7 +196,8 @@
                 </f:content>
             </f:Card>
                 <!-- Bar Charts folgen-->
-                <viz:Bar id="vizBarJal" visible="true" width="70%"/>
+                <viz:Bar id="vizBarJal" visible="true" width="70%"/> 
+
                 <viz:Bar id="vizBarTemp" visible="true" width="70%"/>
                 </Page>
             </pages>
