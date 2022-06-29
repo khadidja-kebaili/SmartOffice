@@ -6,8 +6,7 @@
     xmlns:f="sap.f"
     xmlns:card="sap.f.cards"
 	xmlns:core="sap.ui.core"
-    xmlns:mc="sap.suite.ui.microchart"
-    xmlns:layout="sap.ui.layout"
+    xmlns:l="sap.ui.layout"
     xmlns:viz="sap.viz.ui5"
     height="100%">
     
@@ -28,6 +27,19 @@
                     <Text text="Diese Seite enthält Berichte zur Energie- und Raummnutzung des DECT-Thermostates und dem WLAN-Jalousienmodel." />
                 </VBox>
             </content>
+
+            <content>
+                <VBox>
+                    <Text text="" visible="true"/>
+                </VBox>
+            </content>
+
+            	<l:DynamicSideContent
+				id="DynamicSideContent"
+				class="sapUiDSCExplored sapUiContentPadding"
+				containerQuery="true"
+				equalSplit="true"
+				breakpointChanged="handleBreakpointChanged">
             <!-- Dect-Thermostat Card Control Header folgt-->
             <f:Card class="sapUiMediumMargin" width="300px">
                 <f:header>
@@ -111,7 +123,8 @@
 			        </List>
                 </f:content>
             </f:Card>
-
+            <viz:Bar id="vizBarTemp" visible="true" width="90%"/>
+            <l:sideContent>
             <!-- WLAN-Jalousienmodul Card Control Header folgt-->
             <f:Card class="sapUiMediumMargin" width="300px">
                 <f:header>
@@ -195,10 +208,9 @@
 			        </List>
                 </f:content>
             </f:Card>
-                <!-- Bar Charts folgen-->
-                <viz:Bar id="vizBarJal" visible="true" width="70%"/> 
-
-                <viz:Bar id="vizBarTemp" visible="true" width="70%"/>
+            <viz:Bar id="vizBarJal" visible="true" width="90%"/>
+            </l:sideContent>
+			</l:DynamicSideContent>
                 </Page>
             </pages>
         </App>
