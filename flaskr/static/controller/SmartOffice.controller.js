@@ -71,9 +71,9 @@ sap.ui.define([
 				self.getRouter().navTo(tile, {});
 
 			},
-			goToThermoMain: function(oEvent) {
+			goToThermoLounge: function(oEvent) {
 				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-				oRouter.navTo("thermoMain")
+				oRouter.navTo("thermoLounge")
 			},
 			pressnavtoReporting: function(oEvent) {
 				var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
