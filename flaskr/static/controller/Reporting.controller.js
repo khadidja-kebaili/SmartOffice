@@ -56,22 +56,21 @@ sap.ui.define([
                     }],
                     measures: [
                         {
-                            name:"Status in %",
+                            name:"Ist-Status in %",
                             value: "{valuejalist}"
-                        }
-                        /*,
+                        },
                         {
-                            name:"Status in %",
-                            value: "{valuejasoll}"
-                        }*/
+                            name:"Soll-Status in %",
+                            value: {path: "JalSollModel>/valuejalsoll"}
+                        }
                     ],
                     data: {
-                        path: "/datajalist"
+                        path: "JalIstModel>/datajalist"
                     }
                 });
                 JalBar.setDataset(dataset);
 
-                   //Bar Chart ThermostatStatus
+                //Bar Chart ThermostatStatus
                 var TempBar = this.getView().byId("vizBarTemp");
                 var dataset = new sap.viz.ui5.data.FlattenedDataset({
                     dimensions:[{
@@ -79,12 +78,18 @@ sap.ui.define([
                         name:'Tageszeit',
                         value: "{tageszeittempist}"
                     }],
-                    measures: [{
-                        name:"Status in °C",
-                        value: "{valuetempist}"
-                    }],
+                    measures: [
+                        {
+                            name:"Status in °C",
+                            value: "{valuetempist}"
+                        },
+                        {
+                            name:"Soll-Status in °C",
+                            value: {path: "TempSollModel>/valuetempsoll"}
+                        }
+                    ],
                     data: {
-                        path: "/datatempist"
+                        path: "TempIstModel>/datatempist"
                     }
                 });
                 TempBar.setDataset(dataset);

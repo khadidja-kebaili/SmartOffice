@@ -34,7 +34,7 @@
                     <card:Header title="Dect-Thermostat" subtitle="Reporting" />
                 </f:header>
 
-            <!-- Dect-Thermostat Card Control Content folgt, !muss angepasst werden!-->
+            <!-- Dect-Thermostat Card Control Content folgt-->
                 <f:content>
                     <List>
                         <CustomListItem>
@@ -118,7 +118,7 @@
                     <card:Header title="WLAN-Jalousienmodul" subtitle="Reporting" />
                 </f:header>
 
-            <!-- WLAN-Jalousienmodul Card Control Content folgt, !muss angepasst werden!-->
+            <!-- WLAN-Jalousienmodul Card Control Content folgt-->
                 <f:content>
                     <List>
                         <CustomListItem>
@@ -195,6 +195,7 @@
 			        </List>
                 </f:content>
             </f:Card>
+                <!-- Bar Charts folgen-->
                 <viz:Bar id="vizBarJal" visible="true" width="70%"/>
                 <viz:Bar id="vizBarTemp" visible="true" width="70%"/>
                 </Page>
