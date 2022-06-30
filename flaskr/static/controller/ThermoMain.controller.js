@@ -27,12 +27,26 @@ sap.ui.define([
                 var currentTemp = result.d.results[0].temperature
                 self.byId("currentTemp").setValue(currentTemp)
             })
+
+            this.getSollTemp().done(function(result) {
+                console.log(result.d.results[0].temperature)  
+                var targetTemp = result.d.results[0].temperature
+                self.byId("targetTemp").setValue(targetTemp)
+            })
         },
         getTemp: function () {
             console.log('Get data für Thermo')
             return jQuery.ajax({
-            url: "/GetTemp",
-            type: "GET"
+                url: "/GetTemp",
+                type: "GET"
+            });
+        },
+
+        getSollTemp: function() {
+            console.log('Get soll temp')
+            return jQuery.ajax({
+                url: "/GetSollTemp",
+                type: "GET"
             });
         },
         
