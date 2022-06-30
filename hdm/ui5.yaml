@@ -22,7 +22,6 @@ server:
           - path: /Jalousien
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-
           - path: /GetJalRule
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
@@ -32,7 +31,6 @@ server:
           - path: /DeleteJalRule
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-
           - path: /GetStandardJalousienMonday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
@@ -48,7 +46,6 @@ server:
           - path: /GetStandardJalousienFriday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-
           - path: /SetStandardJalousienMonday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
@@ -64,7 +61,6 @@ server:
           - path: /SetStandardJalousienFriday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-
           - path: /DeleteStandardJalousienMonday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
@@ -80,7 +76,6 @@ server:
           - path: /DeleteStandardJalousienFriday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-
           - path: /GetTemp
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
@@ -90,7 +85,6 @@ server:
           - path: /SetTemp
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-          
           - path: /GetMinTemp
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
@@ -103,7 +97,6 @@ server:
           - path: /SetMaxTemp
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-
           - path: /GetStandardThermostatMonday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
@@ -119,7 +112,6 @@ server:
           - path: /GetStandardThermostatFriday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-
           - path: /SetThermostatStandardMonday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
@@ -135,7 +127,6 @@ server:
           - path: /SetThermostatStandardFriday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-
           - path: /DeleteStandardThermoMonday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
@@ -151,7 +142,6 @@ server:
           - path: /DeleteStandardThermoFriday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-          
           - path: /JalIstStatusPerDay
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
@@ -170,7 +160,6 @@ server:
           - path: /TempCombinedPerDay
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:

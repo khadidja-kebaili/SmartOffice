@@ -54,7 +54,7 @@ sap.ui.define([
 							"comquantosolutionsuismartoffice-display": {
 								"semanticObject": "comquantosolutionsuismartoffice",
 								"action": "display",
-								"description": "A Fiori application.",
+								"description": "Admin",
 								"title": "Smart Office",
 								"signature": {
 									"parameters": {}

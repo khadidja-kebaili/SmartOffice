@@ -2,7 +2,7 @@
   "name": "smartoffice",
   "version": "0.0.1",
   "private": true,
-  "description": "A Fiori application.",
+  "description": "Admin",
   "keywords": [
     "ui5",
     "openui5",
