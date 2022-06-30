@@ -646,9 +646,9 @@ class DeviceAdministration(object):
                 sid = self.generate_sid(
                     'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
                 conn.request("GET",
-                            "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param={}".format(
-                                sid, temp),
-                            payload, headers)
+                             "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param={}".format(
+                                 sid, temp),
+                             payload, headers)
                 res = conn.getresponse()
                 data = res.read()
                 data = data.decode("utf-8")
@@ -706,33 +706,33 @@ class DeviceAdministration(object):
         if weekday == 1:
             mon = self.get_latest_temp_standard_entry_monday()
             if mon is None or mon is 0:
-                return self.get_temp_from_device()
+                return self.get_min_temp()
             else:
-                return mon
+                return mon.get_value()
         if weekday == 2:
             tue = self.get_latest_temp_standard_entry_tuesday()
             if tue is None or tue is 0:
-                return self.get_temp_from_device()
+                return self.get_min_temp()
             else:
-                return tue
+                return tue.get_value()
         if weekday == 3:
             wed = self.get_latest_temp_standard_entry_wednesday()
             if wed is None or wed is 0:
-                return self.get_temp_from_device()
+                return self.get_min_temp()
             else:
-                return wed
+                return wed.get_value()
         if weekday == 4:
             thurs = self.get_latest_temp_standard_entry_thursday()
             if thurs is None or thurs is 0:
-                return self.get_temp_from_device()
+                return self.self.get_min_temp()
             else:
-                return thurs
+                return thurs.get_value()
         if weekday == 5:
             fri = self.get_latest_temp_standard_entry_friday()
             if fri is None or fri is 0:
-                return self.get_temp_from_device()
+                return self.get_min_temp()
             else:
-                return fri
+                return fri.get_value()
 
     def set_min_temp_of_device(self, temp):
         conn = http.client.HTTPSConnection("192.168.2.254", 8254)
@@ -1588,7 +1588,6 @@ class DeviceAdministration(object):
                 return self.get_temp_from_device()
         else:
             return self.get_temp_from_device()
-
 
     def overlapping(self, new_start, new_end, old_start, old_end):
         new_start = datetime.datetime.strptime(new_start, '%H:%M:%S').hour
