@@ -141,13 +141,6 @@
               ]
             },
             {
-              "name": "thermoLounge",
-              "pattern": "thermoLounge",
-              "target": [
-                "TargetThermoLounge"
-              ]
-            },
-            {
               "name": "reporting",
               "pattern": "reporting",
               "target": [
@@ -211,13 +204,6 @@
               "clearControlAggregation": false,
               "viewId": "thermoMain",
               "viewName": "ThermoMain"
-            },
-            "TargetThermoLounge": {
-              "viewType": "XML",
-              "transition": "slide",
-              "clearControlAggregation": false,
-              "viewId": "thermoLounge",
-              "viewName": "ThermoLounge"
             },
             "TargetReporting": {
               "viewType": "XML",

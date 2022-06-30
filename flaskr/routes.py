@@ -324,6 +324,7 @@ def get_temp():
 
     return jsonify(odata)
 
+@app.route('/GetSollTemp', methods=["GET"])
 def get_soll_temp():
     """
     Return a simple odata container with date time information
