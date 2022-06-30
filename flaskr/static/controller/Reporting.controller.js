@@ -18,20 +18,12 @@ sap.ui.define([
         return SmartOfficeController.extend("com.quanto.solutions.ui.smartoffice.controller.Reporting",{
             onInit: function () {
                 self=this;
-                // set mock data
-			    //var sPath = require.toUrl("./SampleData.json");
-			    //var oModel = new JSONModel(sPath);
-			    //this.getView().setModel(oModel);
-                //this.oModelSettings = new JSONModel({
-                    //maxIterations: 200,
-                    //maxTime: 500,
-                    //initialTemperature: 200,
-                    //coolDownStep: 1
-                //});
-                //this.getView().setModel(this.oModelSettings, "settings");
-                //this.getView().setModel(sap.ui.getCore().getModel("TestModel"), "TestModel");
-                var oModel = new sap.ui.model.json.JSONModel({"tageszeit": null, "value": null});
-                this.getView().setModel(oModel)
+                var oModelJalIst = new sap.ui.model.json.JSONModel({"tageszeit": null, "value": null});
+                this.getView().setModel(oModelJalIst, "JalIstModel")
+
+                var oModelJalSoll = new sap.ui.model.json.JSONModel({"tageszeit": null, "value": null});
+                this.getView().setModel(oModelJalSoll, "JalSollModel")
+
                 let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.getRoute("reporting").attachMatched(this._onRouteMatched, this);
 
@@ -53,163 +45,58 @@ sap.ui.define([
                                 oElement.setValueState(ValueState.None);
                             }
                         });
-                //Bar Chart
-                var Bar = this.getView().byId("vizBar");
+
+                //Bar Chart JalousienStatus
+                var JalBar = this.getView().byId("vizBarJal");
                 var dataset = new sap.viz.ui5.data.FlattenedDataset({
                     dimensions:[{
                         axis: 1,
                         name:'Tageszeit',
-                        value: "{tageszeit}"
+                        value: "{tageszeitjal}"
                     }],
-                    measures: [{
-                        name:"Status in %",
-                        value: "{value}"
-                    }],
+                    measures: [
+                        {
+                            name:"Ist-Status in %",
+                            value: "{valuejalist}"
+                        },
+                        {
+                            name:"Soll-Status in %",
+                            value: "{valuejalsoll}"
+                        }
+                    ],
                     data: {
-                        path: "/data"
+                        path: "JalCombinedModel>/datajalcombined",
                     }
                 });
-                Bar.setDataset(dataset);
+                JalBar.setDataset(dataset);
+
+                //Bar Chart ThermostatStatus
+                var TempBar = this.getView().byId("vizBarTemp");
+                var dataset = new sap.viz.ui5.data.FlattenedDataset({
+                    dimensions:[{
+                        axis: 1,
+                        name:'Tageszeit',
+                        value: "{tageszeittemp}"
+                    }],
+                    measures: [
+                        {
+                            name:"Ist-Status in °C",
+                            value: "{valuetempist}"
+                        },
+                        {
+                            name:"Soll-Status in °C",
+                            value: "{valuetempsoll}"
+                        }
+                    ],
+                    data: {
+                        path: "TempCombinedModel>/datatempcombined"
+                    }
+                });
+                TempBar.setDataset(dataset);
             },
-
-            //Line Chart
-            //onAfterRendering: function() {
-                //var oBusinessData =
-                    //[{
-                        //Name: "Arav",
-                        //2015 : 93.4,
-                      // 2015: 96
-                    //},
-                    //{
-                        //Name: "Brij",
-                        //2015 : 75.7,
-                      // 2015: 93
-                    //},
-                    //{
-                        //Name: "Sia",
-                        //2015 : 92.5,
-                      // 2015: 98
-                    //},
-                    //{
-                        //Name: "Preya",
-                        //2015 : 98.1,
-                      //2015: 98
-                    //},
-                    //{
-                        //Name: "Avi",
-                        //2015 : 85.3,
-                      // 2015: 101
-                    //}];
-            //},
-
-            //_onRouteMatched : function (oEvent){
-                //var datareporting = []
-                //this.getValue().done(function(result) {
-
-                    //var data = result.d.results
-                    //data.map(function(eintrag, index) {
-                        //datareporting.push(eintrag)
-                    //})
-                    //console.log(datareporting)
-                    //var oModel = new sap.ui.model.json.JSONModel({data: datareporting});
-                    //self.getView().setModel(oModel);
-                    //self.addObject();
-                    //console.log("Jetzt bin ich am Ende")
-                //})
-            //},
-                //this.getValues().done(function(result) {
-                    //console.log(result.d.results[0])
-                    //var dayvalue = result.d.results[0]
-                    //self.byId("InputData").setValue(dayvalue)
-                //})
-                //Jal
-                //this.getActualValueJal().done(function(result) {
-
-                    //console.log(result.d.results[0])
-                    //var actualValueJal = result.d.results[0]
-                    //self.byId("actualvaluejalid").setText(actualValueJal)
-                //})
-                /*this.getSupposedValueJal().done(function(result)
-
-                    console.log(result.d.results[0])
-                    var supposedValueJal = result.d.results[0]
-                    self.byId("supposedvaluejalid").setText(supposedValueJal)
-                })*/
-
-                //Temp
-                /*this.getActualValueTemp().done(function(result) {
-
-                    console.log(result.d.results[0])
-                    var actualValueTemp = result.d.results[0]
-                    self.byId("actualvaluetempid").setText(actualValueTemp)
-                })*/
-                /*this.getSupposedValueTemp().done(function(result)
-
-                    console.log(result.d.results[0])
-                    var supposedValueTemp = result.d.results[0]
-                    self.byId("supposedvaluetempid").setText(supposedValueTemp)
-                })*/
-
-            //Jal
-            //getActualValueJal: function() {
-            //return jQuery.ajax({
-                //url: "/LastStatusJalousien",
-                //type: "GET"
-              //});
-
-            //},
-
-            /*getSupposedValueJal: function() {
-            return jQuery.ajax({
-                url: "",
-                type: "GET"
-              });
-            },*/
-
-            //Jalousien GET
-            handleJalChange: function (oEvent) {
-                var datareporting = []
-			    var oText = this.byId("DP2"),
-				    oDP = oEvent.getSource(),
-				    sValue = oEvent.getParameter("value"),
-                    bValid = oEvent.getParameter("valid");
-                //oText.setText(sValue)
-                if (bValid) {
-                    oDP.setValueState(ValueState.None);
-                } else {
-                    oDP.setValueState(ValueState.Error);
-                }
-			    console.log(sValue)
-			    var oData = {"day": sValue};
-			    this.getValue(oData).done(function(result) {
-
-                    var data = result.d.results
-                    data.map(function(eintrag, index) {
-                        datareporting.push(eintrag)
-                    })
-                    datareporting.map(function(eintrag){
-                        if (eintrag.tageszeit == 0){
-                            eintrag.tageszeit = "10 Uhr"
-                        }
-                        if (eintrag.tageszeit == 1){
-                            eintrag.tageszeit = "13 Uhr"
-                        }
-                        if (eintrag.tageszeit == 2){
-                            eintrag.tageszeit = "16 Uhr"
-                        }
-                        if (eintrag.tageszeit == 3){
-                            eintrag.tageszeit = "19 Uhr"
-                        }
-                    })
-
-                    var oModel = new sap.ui.model.json.JSONModel({data: datareporting});
-                    self.getView().setModel(oModel);
-                })
-		    },
-
-            getValue: function (oData) {
+            getValue: function (oData, url) {
                 return jQuery.ajax({
-                        url :"/JalIstStatusPerDay",
+                        url : url,
                         type: "GET",
                         dataType: "json",
                         async : true,
@@ -225,10 +112,9 @@ sap.ui.define([
                 });
             },
 
-            //Temperatur GET
-            handleTempChange: function (oEvent) {
-                var datareporting = []
-			    var oText = this.byId("DP1"),
+            //Handle Datum Change
+            handleJalChange: function (oEvent) {
+			    var oText = this.byId("DP2"),
 				    oDP = oEvent.getSource(),
 				    sValue = oEvent.getParameter("value"),
                     bValid = oEvent.getParameter("valid");
@@ -239,60 +125,231 @@ sap.ui.define([
                     oDP.setValueState(ValueState.Error);
                 }
 			    console.log(sValue)
-			    var url = {"day": sValue};
-			    this.getValueTemp(url).done(function(result) {
+			    var oData = {"day": sValue};
+                this.getJalIst(oData)
+                this.getJalSoll(oData)
+                this.getJalCombined(oData)
+		    },
+            //Get Jalousien IST
+            getJalIst: function (oData) {
+                var datajalistreporting = []
+                this.getValue(oData, "/JalIstStatusPerDay").done(function(result) {
+
+                    var datajalist = result.d.results
+                    datajalist.map(function(eintrag, index) {
+                        datajalistreporting.push(eintrag)
+                    })
+                    datajalistreporting.map(function(eintrag){
+                        if (eintrag.tageszeitjalist == 0){
+                            eintrag.tageszeitjalist = "10 Uhr"
+                        }
+                        if (eintrag.tageszeitjalist == 1){
+                            eintrag.tageszeitjalist = "13 Uhr"
+                        }
+                        if (eintrag.tageszeitjalist == 2){
+                            eintrag.tageszeitjalist = "16 Uhr"
+                        }
+                        if (eintrag.tageszeitjalist == 3){
+                            eintrag.tageszeitjalist = "19 Uhr"
+                        }
+                        if (eintrag.valuejalist == 0){
+                            eintrag.valuejalist = "Kein Eintrag vorhanden"
+                        }
+                    })
+
+                    var oModelJalIst = new sap.ui.model.json.JSONModel({datajalist: datajalistreporting});
+                    self.getView().setModel(oModelJalIst, "JalIstModel");
+                })
+
+            },
+            //Get Jalousien Soll
+            getJalSoll: function (oData) {
+                
+                var datajalsollreporting = []
+                this.getValue(oData, "/JalSollStatusPerDay").done(function(result) {
+
+                    var datajalsoll = result.d.results
+                    datajalsoll.map(function(eintrag, index) {
+                        datajalsollreporting.push(eintrag)
+                    })
+                    console.log(datajalsollreporting)
+                    datajalsollreporting.map(function(eintrag){
+                        if (eintrag.tageszeitjalsoll == 0){
+                            eintrag.tageszeitjalsoll = "10 Uhr"
+                        }
+                        if (eintrag.tageszeitjalsoll == 1){
+                            eintrag.tageszeitjalsoll = "13 Uhr"
+                        }
+                        if (eintrag.tageszeitjalsoll == 2){
+                            eintrag.tageszeitjalsoll = "16 Uhr"
+                        }
+                        if (eintrag.tageszeitjalsoll == 3){
+                            eintrag.tageszeitjalsoll = "19 Uhr"
+                        }
+                        if (eintrag.valuejalsoll == 0){
+                            eintrag.valuejalsoll = "Kein Eintrag vorhanden"
+                        }
+                    })
+
+                    var oModelJalSoll = new sap.ui.model.json.JSONModel({datajalsoll: datajalsollreporting});
+                    self.getView().setModel(oModelJalSoll, "JalSollModel");
+                })
+            },
+            getJalCombined: function(oData) {
+                var datajalcombinedreporting = []
+                this.getValue(oData, "/JalCombinedPerDay").done(function(result) {
+
+                    var datajalcombined = result.d.results
+                    datajalcombined.map(function(eintrag, index) {
+                        datajalcombinedreporting.push(eintrag)
+                    })
+                    console.log(datajalcombinedreporting)
+                    datajalcombinedreporting.map(function(eintrag){
+                        if (eintrag.tageszeitjal == 0){
+                            eintrag.tageszeitjal = "10 Uhr"
+                        }
+                        if (eintrag.tageszeitjal == 1){
+                            eintrag.tageszeitjal = "13 Uhr"
+                        }
+                        if (eintrag.tageszeitjal == 2){
+                            eintrag.tageszeitjal = "16 Uhr"
+                        }
+                        if (eintrag.tageszeitjal == 3){
+                            eintrag.tageszeitjal = "19 Uhr"
+                        }
+                        if (eintrag.valuejalist == 0){
+                            eintrag.valuejalist = "Kein Eintrag vorhanden"
+                        }
+                        if (eintrag.valuejalsoll == 0){
+                            eintrag.valuejalsoll = "Kein Eintrag vorhanden"
+                        }
+                    })
+                    var oModelJalCombined = new sap.ui.model.json.JSONModel({datajalcombined: datajalcombinedreporting});
+                    self.getView().setModel(oModelJalCombined, "JalCombinedModel");
+                })
+            },
+
+            //Handle Datum Change Temp
+            handleTempChange: function (oEvent) {
+                var datatempistreporting = []
+			    var oText = this.byId("DP2"),
+				    oDP = oEvent.getSource(),
+				    sValue = oEvent.getParameter("value"),
+                    bValid = oEvent.getParameter("valid");
+                //oText.setText(sValue)
+                if (bValid) {
+                    oDP.setValueState(ValueState.None);
+                } else {
+                    oDP.setValueState(ValueState.Error);
+                }
+			    console.log(sValue)
+			    var oData = {"day": sValue};
+                this.getTempIst(oData)
+                this.getTempSoll(oData)
+                this.getTempCombined(oData)
+            },
+            //Get Temp Ist
+            getTempIst: function(oData){
+                var datatempistreporting = []
+                this.getValue(oData, "/TempIstStatusPerDay").done(function(result) {
 
                     var data = result.d.results
                     data.map(function(eintrag, index) {
-                        datareporting.push(eintrag)
+                        datatempistreporting.push(eintrag)
                     })
-                    datareporting.map(function(eintrag){
-                        if (eintrag.tageszeit == 0){
-                            eintrag.tageszeit = "10 Uhr"
+                    datatempistreporting.map(function(eintrag){
+                        eintrag.valuetempist = (eintrag.valuetempist / 10)
+
+                        if (eintrag.tageszeittempist == 0){
+                            eintrag.tageszeittempist = "10 Uhr"
                         }
-                        if (eintrag.tageszeit == 1){
-                            eintrag.tageszeit = "13 Uhr"
+                        if (eintrag.tageszeittempist == 1){
+                            eintrag.tageszeittempist = "13 Uhr"
                         }
-                        if (eintrag.tageszeit == 2){
-                            eintrag.tageszeit = "16 Uhr"
+                        if (eintrag.tageszeittempist == 2){
+                            eintrag.tageszeittempist = "16 Uhr"
                         }
-                        if (eintrag.tageszeit == 3){
-                            eintrag.tageszeit = "19 Uhr"
+                        if (eintrag.tageszeittempist == 3){
+                            eintrag.tageszeittempist = "19 Uhr"
                         }
+                        if (eintrag.valuetempist == 0){
+                            eintrag.valuetempist = "Kein Eintrag vorhanden"
+                        }
+
                     })
 
-                    var oModel = new sap.ui.model.json.JSONModel({data: datareporting});
-                    self.getView().setModel(oModel);
+                    var oModelTempIst = new sap.ui.model.json.JSONModel({datatempist: datatempistreporting});
+                    self.getView().setModel(oModelTempIst, "TempIstModel");
                 })
-		    },
-
-            getValueTemp: function (url) {
-                return jQuery.ajax({
-                        url : url,
-                        type: "GET",
-                        dataType: "json",
-                        async : true,
-                        success : function(response){
-                            //MessageToast.show(response.data.message);
-                            console.log(response)
-                            sap.ui.core.BusyIndicator.hide();
-                        },
-                        error: function(response){
-                            console.log(response);
-                        }
-                });
             },
+            //Get Temp Soll
+            getTempSoll: function(oData){
+                var datatempsollreporting = []
+                this.getValue(oData, "/TempSollStatusPerDay").done(function(result) {
 
-            //LineChart
+                    var data = result.d.results
+                    data.map(function(eintrag, index) {
+                        datatempsollreporting.push(eintrag)
+                    })
+                    datatempsollreporting.map(function(eintrag){
+                        eintrag.valuetempsoll = (eintrag.valuetempsoll / 10)
 
-            press: function (oEvent) {
-			    MessageToast.show("The interactive line chart is pressed.");
-		    },
+                        if (eintrag.tageszeittempsoll == 0){
+                            eintrag.tageszeittempsoll = "10 Uhr"
+                        }
+                        if (eintrag.tageszeittempsoll == 1){
+                            eintrag.tageszeittempsoll = "13 Uhr"
+                        }
+                        if (eintrag.tageszeittempsoll == 2){
+                            eintrag.tageszeittempsoll = "16 Uhr"
+                        }
+                        if (eintrag.tageszeittempsoll == 3){
+                            eintrag.tageszeittempsoll = "19 Uhr"
+                        }
+                        if (eintrag.valuetempsoll== 0){
+                            eintrag.valuetempsoll = "Kein Eintrag vorhanden"
+                        }
+                    })
 
-		    selectionChanged: function (oEvent) {
-			    var oPoint = oEvent.getParameter("point");
-			    MessageToast.show("The selection changed: " + oPoint.getLabel() + " " + ((oPoint.getSelected()) ? "selected" : "deselected"));
-		    },
+                    var oModelTempSoll= new sap.ui.model.json.JSONModel({datatempsoll: datatempsollreporting});
+                    self.getView().setModel(oModelTempSoll, "TempSollModel");
+                })
+            },
+            getTempCombined: function(oData) {
+                var datatempcombinedreporting = []
+                this.getValue(oData, "/TempCombinedPerDay").done(function(result) {
+
+                    var datatempcombined = result.d.results
+                    datatempcombined.map(function(eintrag, index) {
+                        datatempcombinedreporting.push(eintrag)
+                    })
+                    console.log(datatempcombinedreporting)
+                    datatempcombinedreporting.map(function(eintrag){
+                        eintrag.valuetempist = (eintrag.valuetempist / 10)
+                        eintrag.valuetempsoll = (eintrag.valuetempsoll / 10)
+                        if (eintrag.tageszeittemp == 0){
+                            eintrag.tageszeittemp = "10 Uhr"
+                        }
+                        if (eintrag.tageszeittemp == 1){
+                            eintrag.tageszeittemp = "13 Uhr"
+                        }
+                        if (eintrag.tageszeittemp == 2){
+                            eintrag.tageszeittemp = "16 Uhr"
+                        }
+                        if (eintrag.tageszeittemp == 3){
+                            eintrag.tageszeittemp = "19 Uhr"
+                        }
+                        if (eintrag.valuetempist == 0){
+                            eintrag.valuetempist = "Kein Eintrag vorhanden"
+                        }
+                        if (eintrag.valuetempsoll == 0){
+                            eintrag.valuetempsoll = "Kein Eintrag vorhanden"
+                        }
+                    })
+                    var oModelTempCombined = new sap.ui.model.json.JSONModel({datatempcombined: datatempcombinedreporting});
+                    self.getView().setModel(oModelTempCombined, "TempCombinedModel");
+                })
+            },
 
             onNavBack: function () {
 

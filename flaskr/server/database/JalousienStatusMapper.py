@@ -57,7 +57,7 @@ class JalousienStatusMapper(Mapper):
         for (id, percentage, status, jalousieid, date) in tuples:
             jalousie = JalousienStatusBO()
             jalousie.set_id(id)
-            jalousie.set_percentage(percentage),
+            jalousie.set_percentage(percentage)
             jalousie.set_status(status)
             jalousie.set_device(jalousieid)
             jalousie.set_date(date)
