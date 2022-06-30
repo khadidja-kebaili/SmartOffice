@@ -237,23 +237,14 @@ class DeviceAdministration(object):
         else:
             return 0
 
-    def get_last_ist_temp_entry_of_hour_for_day(self, day, hour):
-        all_temp_stats = self.get_all_thermostat_status()
-        stats_for_weekday = []
-        hourly_rate = []
-        for elem in all_temp_stats:
-            vergleich = elem.get_date().strftime('%Y-%m-%d')
-            if vergleich == day:
-                stats_for_weekday.append(elem)
-        for elem in stats_for_weekday:
-            if elem.get_date().hour == hour:
-                hourly_rate.append(elem.get_temp())
-        if len(hourly_rate) > 0:
-            return hourly_rate[-1]
-        else:
-            return 0
-
-    def get_last_soll_temp_entry_of_hour_for_day(self, day, hour):
+    def get_last_soll_jal_entry_of_hour_for_day(self, day, hour):
+        '''
+        Gibt für eine angegebene Stunde eines angegebenen Tages den letzten Soll-Celsius-Wert zurück.
+        Beispielsweise: 26.06.2022 16 Uhr letzter SOLL-Wert des Thermostats beträgt 22.
+        :param day: gesuchter Tag
+        :param hour: gesuchte Stunde eines Tages
+        :return: Soll-Temperatur
+        '''
         stats_for_weekday = []
         hourly_rate = []
         weekday = datetime.datetime.strptime(day, '%Y-%m-%d').isoweekday()
@@ -278,11 +269,12 @@ class DeviceAdministration(object):
             for elem in e:
                 stats_for_weekday.append(elem)
         for elem in stats_for_weekday:
-            start_time_hour = datetime.datetime.strptime(
+            start_hour = datetime.datetime.strptime(
                 elem.get_start_time(), '%H:%M:%S').hour
-            if start_time_hour == hour:
+            if start_hour == hour:
                 hourly_rate.append(elem.get_value())
         if len(hourly_rate) >= 1:
+
             return hourly_rate[-1]
         else:
             return 0
@@ -304,7 +296,7 @@ class DeviceAdministration(object):
                 stats_for_weekday.append(elem)
         for elem in stats_for_weekday:
             if elem.get_date().hour == hour:
-                hourly_rate.append(elem.get_percentage())
+                hourly_rate.append(elem.get_temp())
         if len(hourly_rate) >= 1:
             return hourly_rate[-1]
         else:
@@ -497,25 +489,25 @@ class DeviceAdministration(object):
         :return: 4 Soll-Werte von gegebenen Tag
         """
         values = []
-        k = self.get_median_soll_jal_for_timespan(7, 10, day)
+        k = self.get_soll_value_jal_for_timespan(7, 10, day)
         return_value_k = 0
         for elem in k:
             if elem > return_value_k:
                 return_value_k = elem
         values.append(return_value_k)
-        m = self.get_median_soll_jal_for_timespan(10, 13, day)
+        m = self.get_soll_value_jal_for_timespan(10, 13, day)
         return_value_m = 0
         for elem in m:
             if elem > return_value_m:
                 return_value_m = elem
         values.append(return_value_m)
-        n = self.get_median_soll_jal_for_timespan(13, 16, day)
+        n = self.get_soll_value_jal_for_timespan(13, 16, day)
         return_value_n = 0
         for elem in n:
             if elem > return_value_n:
                 return_value_n = elem
         values.append(return_value_n)
-        l = self.get_median_soll_jal_for_timespan(16, 19, day)
+        l = self.get_soll_value_jal_for_timespan(16, 19, day)
         return_value_l = 0
         for elem in l:
             if elem > return_value_l:
@@ -531,27 +523,27 @@ class DeviceAdministration(object):
         :return: 4 Ist-Temperatur von gegebenen Tag
         """
         values = []
-        k = self.get_median_ist_temp_for_timespan(7, 10, day)
+        k = self.get_ist_temp_for_timespan(7, 10, day)
         return_value_k = 0
         for elem in k:
             print(elem)
             if elem > return_value_k:
                 return_value_k = elem
         values.append(return_value_k)
-        m = self.get_median_ist_temp_for_timespan(10, 13, day)
+        m = self.get_ist_temp_for_timespan(10, 13, day)
         return_value_m = 0
         for elem in m:
             print(elem)
             if elem > return_value_m:
                 return_value_m = elem
         values.append(return_value_m)
-        n = self.get_median_ist_temp_for_timespan(13, 16, day)
+        n = self.get_ist_temp_for_timespan(13, 16, day)
         return_value_n = 0
         for elem in n:
             if elem > return_value_n:
                 return_value_n = elem
         values.append(return_value_n)
-        l = self.get_median_ist_temp_for_timespan(16, 19, day)
+        l = self.get_ist_temp_for_timespan(16, 19, day)
         return_value_l = 0
         for elem in l:
             if elem > return_value_l:
@@ -567,25 +559,25 @@ class DeviceAdministration(object):
         :return: 4 Soll-Temperatur von gegebenen Tag
         """
         values = []
-        k = self.get_median_soll_temp_for_timespan(7, 10, day)
+        k = self.get_soll_temp_for_timespan(7, 10, day)
         return_value_k = 0
         for elem in k:
             if elem > return_value_k:
                 return_value_k = elem
         values.append(return_value_k)
-        m = self.get_median_soll_temp_for_timespan(10, 13, day)
+        m = self.get_soll_temp_for_timespan(10, 13, day)
         return_value_m = 0
         for elem in m:
             if elem > return_value_m:
                 return_value_m = elem
         values.append(return_value_m)
-        n = self.get_median_soll_temp_for_timespan(13, 16, day)
+        n = self.get_soll_temp_for_timespan(13, 16, day)
         return_value_n = 0
         for elem in n:
             if elem > return_value_n:
                 return_value_n = elem
         values.append(return_value_n)
-        l = self.get_median_soll_temp_for_timespan(16, 19, day)
+        l = self.get_soll_temp_for_timespan(16, 19, day)
         return_value_l = 0
         for elem in l:
             if elem > return_value_l:
