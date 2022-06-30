@@ -28,23 +28,27 @@ import http.client
 from datetime import datetime, timedelta
 import datetime
 import statistics
+import tinytuya
 
 
 class DeviceAdministration(object):
-    """Realisierung eines exemplarischen Bankkontos.
-
-    Ein Konto besitzt einen Inhaber sowie eine Reihe von Buchungen (vgl. Klasse Transaction),
-    mit deren Hilfe auch der Kontostand berechnet werden kann.
+    """
+    Realisierung einer DeviceManagement-Logik für Jalousien Klasse Tuya und Thermostate Klasse Dect 301.
     """
 
     def __init__(self):
         pass
 
-    """
-    Jalousie-spezifische Methoden
-    """
+######## Jalousie-spezifische Methoden ########
 
     def add_device(self, device_id, ip_address, local_key):
+        '''
+        Jalousie zur Datenbank hinzufügen'
+        :param device_id: 
+        :param ip_address: 
+        :param local_key: 
+        :return: JalousieBO
+        '''''
         j = JalousienBO()
         j.set_device_id(device_id)
         j.set_ip_address(ip_address)
@@ -54,117 +58,75 @@ class DeviceAdministration(object):
             return mapper.insert(j)
 
     def get_jalousie_by_device_id(self, device_id):
-        """Alle Benutzer mit Namen name auslesen."""
+        """
+        Jalousie aus der Datenbank holen mithilfe der Device_id.
+        :param device_id:
+        :return: JalousieBO
+        """
         with JalousienMapper() as mapper:
             return mapper.find_by_device_id(device_id)
 
     def get_jalousie_by_id(self, id):
-        pass
-        """Alle Benutzer mit Namen name auslesen."""
+        """
+        Jalousie mithilfe der in der Datenbank gespeicherten ID holen
+        :param id:
+        :return: JalousieBO
+        """
         with JalousienMapper() as mapper:
             return mapper.find_by_id(id)
 
     def get_jalousie_by_ip_address(self, ip_address):
-        """Alle Benutzer mit gegebener E-Mail-Adresse auslesen."""
+        """
+        Jalousie per IP-Adresse aus der Datenbank holen
+        :param ip_address:
+        :return: JalousieBO
+        """
         with JalousienMapper() as mapper:
             return mapper.find_by_ip_address(ip_address)
 
     def get_jalousie_by_local_key(self, local_key):
-        """Den Benutzer mit der gegebenen Google ID auslesen."""
+        """
+        Jalousie mithilfe des Local-Keys aus der Datenbank holen
+        :param local_key:
+        :return: JalousieBO
+        """
         with JalousienMapper() as mapper:
             return mapper.find_by_key(local_key)
 
     def get_all_jalousies(self):
-        """Alle Benutzer auslesen."""
+        """
+        Alle Jalousien, die in der Datenbank gespeichert sind, auslesen."
+        :return: Array (Liste) mit allen Jalousien aus der Datenbank
+        """""
         with JalousienMapper() as mapper:
             return mapper.find_all()
 
     def save_jalousie(self, jalousie):
-        """Den gegebenen Benutzer speichern."""
+        """
+        Eine Jalousie updaten.
+        :param jalousie: JalousieBO
+        """
         with JalousienMapper() as mapper:
             mapper.update(jalousie)
 
     def delete_jalousie(self, jalousie):
-        """Den gegebenen Benutzer aus unserem System löschen."""
+        """
+        Eine Jalousie aus der Datenbank löschen.
+        :param jalousie: JalousieBO
+        """
         with JalousienMapper() as mapper:
             mapper.delete(jalousie)
 
-    '''    def open_all_jalousies(self):
-            jalousies = []
-            status = []
-            with JalousienMapper() as mapper:
-                jalousies.append(mapper.find_all())
-            for elem in jalousies:
-                for x in elem:
-                    x.set_device()
-                    dev = x.get_device()
-                    dev.set_value(1, 'open')
-                    status.append(dev.status())
-            return status
-
-        def close_all_jalousies(self):
-            jalousies = []
-            status = JalousienStatusBO()
-            jalousies.append(self.get_all_jalousies())
-            for elem in jalousies:
-                for x in elem:
-                        x.set_device()
-                        dev = x.get_device()
-                        dev.set_value(1, 'close')
-                        time.sleep(10)
-                        status.set_status(str(dev.status()))
-                        status.set_device(id)
-            return status'''
-
-    '''    def open_jalousie_by_id(self, id):
-            jalousies = []
-            status = JalousienStatusBO()
-            jalousies.append(self.get_all_jalousies())
-            dev_stat = None
-            for elem in jalousies:
-                for x in elem:
-                    if x.get_id() == id:
-                        x.set_device()
-                        dev = x.get_device()
-                        dev.set_value(1, 'open')
-                        time.sleep(10)
-                        status.set_status(str(dev.status()))
-                        status.set_device(id)
-                        date = datetime.now()
-                        status.set_date(date)
-                        dev_stat = dev.status()
-            new_list = []
-            for key in dev_stat:
-                for elem in dev_stat[key].values():
-                    new_list.append(elem)
-            status.set_percentage(new_list[1])
-            return status
-    
-        def close_jalousie_by_id(self, id):
-            jalousies = []
-            status = JalousienStatusBO()
-            jalousies.append(self.get_all_jalousies())
-            dev_stat = None
-            for elem in jalousies:
-                for x in elem:
-                    if x.get_id() == id:
-                        x.set_device()
-                        dev = x.get_device()
-                        dev.set_value(1, 'close')
-                        time.sleep(10)
-                        status.set_status(str(dev.status()))
-                        status.set_device(id)
-                        date = datetime.now()
-                        status.set_date(date)
-                        dev_stat = dev.status()
-            new_list = []
-            for key in dev_stat:
-                for elem in dev_stat[key].values():
-                    new_list.append(elem)
-            status.set_percentage(new_list[1])
-            return status'''
+### Jalousie Steuerungsoperationen ###
 
     def set_status_to_percentage_by_id(self, id, perc):
+        '''
+         Eine Jalousie, die in der Datenbank gespeichert ist zu einem bestimmten Prozentsatz steigern oder senken.
+        Pro Steuerung wird ein Status in die Datenbank eingespeichert, für spätere Statistiken.
+        :param id: id der Jalousie
+        :param perc: Prozentsatz, wobei 100 ganz oben und 0 ganz unten ist
+        :return: JalousienStatusBO
+        '''
         date = datetime.datetime.now()
         datehour = date.strftime('%H:%M:%S')
         date2 = date.strftime('%Y-%m-%d %H:%M:%S')
@@ -188,6 +150,7 @@ class DeviceAdministration(object):
                     trigger = True
             else:
                 trigger = True
+        trigger = True
         if trigger:
             jalousies = []
             status = JalousienStatusBO()
@@ -198,50 +161,63 @@ class DeviceAdministration(object):
             for elem in jalousies:
                 for x in elem:
                     if x.get_id() == id:
-                        x.set_device()
-                        dev = x.get_device()
+                        loc_key = x.get_local_key()
+                        ip = x.get_ip_address()
+                        dev_id = x.get_device_id()
+                        print(loc_key, ip, dev_id)
+                        dev = tinytuya.OutletDevice(
+                            dev_id=dev_id, address=ip, local_key=loc_key)
+                        dev.set_version(3.3)
                         dev.set_value(2, perc)
                         status.set_status(str(dev.status()))
                         status.set_device(id)
             with JalousienStatusMapper() as mapper:
                 return mapper.insert(status)
 
+### Jalousien Status-Operationen ###
+
     def get_status_of_jalousie_by_id(self, id):
+        '''
+        Status einer Jalousie mithilfe der Status-Id aus der Datenbank laden.
+        :param id: StatusId
+        :return: JalousienStatusBO
+        '''
         with JalousienStatusMapper() as mapper:
             return mapper.find_by_key(id)
 
     def delete_status_by_id(self, id):
+        '''
+        Status einer Jalousie mithilfe der Status-Id aus der Datenbank löschen.
+        :param id: StatusId
+        '''
         status = self.get_status_of_jalousie_by_id(id)
         with JalousienStatusMapper() as mapper:
             mapper.delete(status)
 
-    def get_last_status(self):
+    def get_last_jal_status(self):
+        '''
+        Letzten Status einer Jalousie aus der Datenbank laden.
+        :return: letzter Listeneintrag
+        '''
         status = self.get_all_jal_status()
         return status[-1]
 
     def get_all_jal_status(self):
+        '''
+        Alle Jalousienstatuse zurückbekommen
+        :return: Array (Liste) mit allen Statusen
+        '''
         with JalousienStatusMapper() as mapper:
             return mapper.find_all()
 
-    # def get_jal_median_of_hours_for_day(self, day, hour):
-    #     all_jal_stats = self.get_all_jal_status()
-    #     stats_for_weekday = []
-    #     hourly_rate = []
-    #     for elem in all_jal_stats:
-    #         vergleich = elem.get_date().strftime('%Y-%m-%d')
-    #         if vergleich == day:
-    #             stats_for_weekday.append(elem)
-    #     for elem in stats_for_weekday:
-    #         if elem.get_date().hour == hour:
-    #             hourly_rate.append(elem.get_percentage())
-    #     if len(hourly_rate) > 1:
-    #         return statistics.median(hourly_rate)
-    #     elif len(hourly_rate) == 1:
-    #         return hourly_rate[0]
-    #     else:
-    #         return 0
-
     def get_last_jal_ist_entry_of_hour_for_day(self, day, hour):
+        '''
+        Gibt für eine angegebene Stunde eines angegebenen Tages den letzten Ist-Wert zurück.
+        Beispielsweise: 26.06.2022 16 Uhr letzter ISt-Wert der Jalousie beträgt 70.
+        :param day: gesuchter Tag
+        :param hour: gesuchte Stunde eines Tages
+        :return: Prozentsatz des Jalousienstand
+        '''
         all_jal_stats = self.get_all_jal_status()
         stats_for_weekday = []
         hourly_rate = []
@@ -282,40 +258,6 @@ class DeviceAdministration(object):
         hourly_rate = []
         weekday = datetime.datetime.strptime(day, '%Y-%m-%d').isoweekday()
         if weekday == 1:
-            a = self.get_all_temp_standard_entries_monday()
-            for elem in a:
-                stats_for_weekday.append(elem)
-        if weekday == 2:
-            b = self.get_all_temp_standard_entries_tuesday()
-            for elem in b:
-                stats_for_weekday.append(elem)
-        if weekday == 3:
-            c = self.get_all_temp_standard_entries_wednesday()
-            for elem in c:
-                stats_for_weekday.append(elem)
-        if weekday == 4:
-            d = self.get_all_temp_standard_entries_thursday()
-            for elem in d:
-                stats_for_weekday.append(elem)
-        if weekday == 5:
-            e = self.get_all_temp_standard_entries_friday()
-            for elem in e:
-                stats_for_weekday.append(elem)
-        for elem in stats_for_weekday:
-            start_time_hour = datetime.datetime.strptime(
-                elem.get_start_time(), '%H:%M:%S').hour
-            if start_time_hour == hour:
-                hourly_rate.append(elem.get_value())
-        if len(hourly_rate) >= 1:
-            return hourly_rate[-1]
-        else:
-            return 0
-
-    def get_last_soll_jal_entry_of_hour_for_day(self, day, hour):
-        stats_for_weekday = []
-        hourly_rate = []
-        weekday = datetime.datetime.strptime(day, '%Y-%m-%d').isoweekday()
-        if weekday == 1:
             a = self.get_all_jal_standard_entries_monday()
             for elem in a:
                 stats_for_weekday.append(elem)
@@ -336,7 +278,72 @@ class DeviceAdministration(object):
             for elem in e:
                 stats_for_weekday.append(elem)
         for elem in stats_for_weekday:
-            start_hour = datetime.datetime.strptime(elem.get_start_time(), '%H:%M:%S').hour
+            start_time_hour = datetime.datetime.strptime(
+                elem.get_start_time(), '%H:%M:%S').hour
+            if start_time_hour == hour:
+                hourly_rate.append(elem.get_value())
+        if len(hourly_rate) >= 1:
+            return hourly_rate[-1]
+        else:
+            return 0
+
+    def get_last_ist_temp_entry_of_hour_for_day(self, day, hour):
+        """
+        Gibt für eine angegebene Stunde eines angegebenen Tages den letzten Ist-Celsius-Wert zurück.
+        Beispielsweise: 26.06.2022 16 Uhr letzter ISt-Wert des Thermostats beträgt 22.
+        :param day: gesuchter Tag
+        :param hour: gesuchte Stunde eines Tages
+        :return: Ist-Temperatur
+        """
+        all_temp_stats = self.get_all_thermostat_status()
+        stats_for_weekday = []
+        hourly_rate = []
+        for elem in all_temp_stats:
+            vergleich = elem.get_date().strftime('%Y-%m-%d')
+            if vergleich == day:
+                stats_for_weekday.append(elem)
+        for elem in stats_for_weekday:
+            if elem.get_date().hour == hour:
+                hourly_rate.append(elem.get_percentage())
+        if len(hourly_rate) >= 1:
+            return hourly_rate[-1]
+        else:
+            return 0
+
+    def get_last_soll_temp_entry_of_hour_for_day(self, day, hour):
+        '''
+        Gibt für eine angegebene Stunde eines angegebenen Tages den letzten Soll-Celsius-Wert zurück.
+        Beispielsweise: 26.06.2022 16 Uhr letzter SOLL-Wert des Thermostats beträgt 22.
+        :param day: gesuchter Tag
+        :param hour: gesuchte Stunde eines Tages
+        :return: Soll-Temperatur
+        '''
+        stats_for_weekday = []
+        hourly_rate = []
+        weekday = datetime.datetime.strptime(day, '%Y-%m-%d').isoweekday()
+        if weekday == 1:
+            a = self.get_all_temp_standard_entries_monday()
+            for elem in a:
+                stats_for_weekday.append(elem)
+        if weekday == 2:
+            b = self.get_all_temp_standard_entries_tuesday()
+            for elem in b:
+                stats_for_weekday.append(elem)
+        if weekday == 3:
+            c = self.get_all_temp_standard_entries_wednesday()
+            for elem in c:
+                stats_for_weekday.append(elem)
+        if weekday == 4:
+            d = self.get_all_temp_standard_entries_thursday()
+            for elem in d:
+                stats_for_weekday.append(elem)
+        if weekday == 5:
+            e = self.get_all_temp_standard_entries_friday()
+            for elem in e:
+                stats_for_weekday.append(elem)
+        for elem in stats_for_weekday:
+            start_hour = datetime.datetime.strptime(
+                elem.get_start_time(), '%H:%M:%S').hour
             if start_hour == hour:
                 hourly_rate.append(elem.get_value())
         if len(hourly_rate) >= 1:
@@ -405,28 +412,49 @@ class DeviceAdministration(object):
 
     def get_median_ist_jal_for_timespan(self, von, bis, day):
         values = []
-        for elem in range(von, bis +1):
+        for elem in range(von, bis + 1):
             x = self.get_last_jal_ist_entry_of_hour_for_day(day, elem)
             values.append(x)
         return values
 
-    def get_median_soll_jal_for_timespan(self, von, bis, day):
+    def get_soll_value_jal_for_timespan(self, von, bis, day):
+        """
+          Gibt pro Stunde einer angegebenen Zeitspanne (bspw. 14 -18 Uhr) den letzten Soll-Wert zurück
+          :param von: Ab wann soll Zeitspanne beginnen
+          :param bis: Wann endet Zeitspanne
+          :param day: Von welchem Tag soll berechnet werden
+          :return: Soll-Werte für angegebene Zeitspanne
+        """
         values = []
-        for elem in range(von, bis +1):
+        for elem in range(von, bis + 1):
             x = self.get_last_soll_jal_entry_of_hour_for_day(day, elem)
             values.append(x)
         return values
 
-    def get_median_ist_temp_for_timespan(self, von, bis, day):
+    def get_ist_temp_for_timespan(self, von, bis, day):
+        """
+          Gibt pro Stunde einer angegebenen Zeitspanne (bspw. 14 -18 Uhr) die letzte Ist-Temperatur zurück
+          :param von: Ab wann soll Zeitspanne beginnen
+          :param bis: Wann endet Zeitspanne
+          :param day: Von welchem Tag soll berechnet werden
+          :return: Ist-Temperatur für angegebene Zeitspanne
+          """
         values = []
-        for elem in range(von, bis +1):
+        for elem in range(von, bis + 1):
             x = self.get_last_ist_temp_entry_of_hour_for_day(day, elem)
             values.append(x)
         return values
 
-    def get_median_soll_temp_for_timespan(self, von, bis, day):
+    def get_soll_temp_for_timespan(self, von, bis, day):
+        """
+          Gibt pro Stunde einer angegebenen Zeitspanne (bspw. 14 -18 Uhr) die letzte Soll-Temperatur zurück
+          :param von: Ab wann soll Zeitspanne beginnen
+          :param bis: Wann endet Zeitspanne
+          :param day: Von welchem Tag soll berechnet werden
+          :return: Soll-Temperatur für angegebene Zeitspanne
+          """
         values = []
-        for elem in range(von, bis +1):
+        for elem in range(von, bis + 1):
             x = self.get_last_soll_temp_entry_of_hour_for_day(day, elem)
             values.append(x)
         return values
@@ -462,6 +490,12 @@ class DeviceAdministration(object):
         return values
 
     def get_median_soll_values_jal(self, day):
+        """
+        Gibt für jeweils die Zeitspannen 7-10 Uhr, 10-13 Uhr, 13-16 Uhr und 16-19 Uhr die letzten Soll-Werte der
+        Jalousien-Statuse an.
+        :param day: Tag, welcher angezeigt werden soll
+        :return: 4 Soll-Werte von gegebenen Tag
+        """
         values = []
         k = self.get_median_soll_jal_for_timespan(7, 10, day)
         return_value_k = 0
@@ -490,6 +524,12 @@ class DeviceAdministration(object):
         return values
 
     def get_median_ist_values_temp(self, day):
+        """
+        Gibt für jeweils die Zeitspannen 7-10 Uhr, 10-13 Uhr, 13-16 Uhr und 16-19 Uhr die letzten Ist-Temperaturen der
+        Thermostat-Statuse an.
+        :param day: Tag, welcher angezeigt werden soll
+        :return: 4 Ist-Temperatur von gegebenen Tag
+        """
         values = []
         k = self.get_median_ist_temp_for_timespan(7, 10, day)
         return_value_k = 0
@@ -520,6 +560,12 @@ class DeviceAdministration(object):
         return values
 
     def get_median_soll_values_temp(self, day):
+        """
+        Gibt für jeweils die Zeitspannen 7-10 Uhr, 10-13 Uhr, 13-16 Uhr und 16-19 Uhr die letzten Soll-Temperaturen der
+        Thermostat-Statuse an.
+        :param day: Tag, welcher angezeigt werden soll
+        :return: 4 Soll-Temperatur von gegebenen Tag
+        """
         values = []
         k = self.get_median_soll_temp_for_timespan(7, 10, day)
         return_value_k = 0
@@ -548,6 +594,14 @@ class DeviceAdministration(object):
         return values
 
     def in_between_times(self, searched_time, start, end):
+        """
+        Hilfsfunktion.
+        Checkt ob sich eine gesuchte Zeit innerhalb einer Zeitspanne befinden.
+        :param searched_time: Zeit, die gesucht wird
+        :param start: Beginn Zeitspanne
+        :param end: Ende der Zeitspanne
+        :return: Boolean Wert, True wenn es sich in der Zeitspanne befindet, False wenn nicht.
+        """
         searched_time = datetime.datetime.strptime(searched_time, '%H:%M:%S')
         searched_time = searched_time.strftime('%H%M%S')
         searched_time = float(searched_time)
@@ -562,7 +616,13 @@ class DeviceAdministration(object):
         else:
             return False
 
-    def get_all_stats_by_timeperiod(self, start, end):
+    def get_all_jal_stats_by_timeperiod(self, start, end):
+        """
+        Alle Jalousienstatuse innerhalb einer bestimmten Zeitspanne
+        :param start: Beginn Zeitspanne
+        :param end: Ende Zeitspanne
+        :return: Liste von JalousienStatusBOs
+        """
         enddate = datetime.now().fromisoformat(str(end))
         startdate = datetime.now().fromisoformat(str(start))
         stats = self.get_all_jal_status()
@@ -579,6 +639,14 @@ class DeviceAdministration(object):
         with ThermostatStatusMapper() as mapper:
             return mapper.find_by_key(id)
 
+    def get_last_temp_status(self):
+        '''
+
+        :return:
+        '''
+        status = self.get_all_thermostat_status()
+        return status[-1]
+
     def delete_thermostat_status_by_id(self, id):
         status = self.get_status_of_thermostat_by_id(id)
         with ThermostatStatusMapper() as mapper:
@@ -592,48 +660,77 @@ class DeviceAdministration(object):
         with ThermostatStatusMapper() as mapper:
             return mapper.find_all()
 
-    """
-    Thermostat-spezifische Methoden
-    """
+
+########Thermostat-spezifische Methoden########
 
     def generate_sid(self, box_url, user_name, password):
         sid = get_sid(box_url, user_name, password)
         return sid
 
-    '''    def add_thermostat(self, ain, box_url, user_name, password):
-        """Einen Kunden anlegen."""
+    def add_thermostat(self, ain):
+        """
+        Thermostat hinzufügen und in die Datenbank laden
+        :param ain: AIN des Geräts
+        :return: ThermostatBO
+        """
         thermostat = ThermostatBO()
         thermostat.set_ain(ain)
         with ThermostatMapper() as mapper:
-            return mapper.insert(thermostat)'''
+            return mapper.insert(thermostat)
 
     def get_thermostat_by_ain(self, ain):
-        """Alle Kunden mit übergebenem Nachnamen auslesen."""
+        """
+        Thermostat mithilfe der AIN aus der Datenbank laden.
+        :param ain: AIN des Thermostats
+        :return: ThermostatBO
+        """
         with ThermostatMapper() as mapper:
             return mapper.find_by_ain(ain)
 
     def get_thermostat_by_id(self, id):
-        """Alle Kunden mit übergebenem Nachnamen auslesen."""
+        """
+        Thermostat mithilfe der Datenbank-ID aus der Datenbank laden
+        :param id: ID des Thermostats
+        :return: ThermostatBO
+        """
         with ThermostatMapper() as mapper:
             return mapper.find_by_key(id)
 
-    '''    def get_all_thermostats(self):
+    def get_all_thermostats(self):
+        """
+        Alle Thermostate aus der Datenbank laden
+        :return: Array (Liste) von Thermostaten
+        """
         with ThermostatMapper() as mapper:
             return mapper.find_all()
 
     def save_thermostat(self, thermostat):
-        """Den gegebenen Kunden speichern."""
+        """
+        Thermostat updaten
+        :param thermostat: ThermostatBO
+        """
         with ThermostatMapper() as mapper:
-            mapper.update(thermostat)'''
+            mapper.update(thermostat)
 
-    def set_temperature(self, temp, device_id=None):
-        sid = self.generate_sid(
-            'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
+### Thermostat Steuerungsoperationen ###
+
+    def set_temperature(self, temp, device_id=1):
+        """
+        Setzen der Temperatur an einem bestimmten Thermostat. Für jede Verwendung wird automatisch ein neuer Eintrag
+        im Thermostat-Status hinzugefügt.
+        :param temp: einzustellende Temperatur
+        :param device_id: Datenbank-ID des Thermostats
+        :return: ThermostatStatusBO
+        """
         date = datetime.datetime.now()
         date_for_stat = date.strftime('%Y-%m-%d %H:%M:%S')
         date = date.strftime('%H:%M:%S')
         trigger = False
         rules = self.get_all_temp_rules()
+        min = False
+        max = False
+        if len(rules) == 0:
+            trigger = True
         for elem in rules:
             if elem.get_min() is None and elem.get_max() is None:
                 if self.in_between_times(date, elem.get_start_time(), elem.get_end_time()):
@@ -641,36 +738,46 @@ class DeviceAdministration(object):
                     return message
             elif elem.get_min() is None:
                 if temp > elem.get_max():
-                    message = 'Das geht so nicht!', temp, 'Maxtemp:', elem.get_max()
-                    return message
+                    mindest_temp = elem.get_min()
+                    maximal_temp = elem.get_max()
+                    return {"type": "0", "max": maximal_temp}
+                else:
+                    max = True
             elif elem.get_max() is None:
                 if temp < elem.get_min():
-                    message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
-                    )
-                    return message
-            else:
+                    mindest_temp = elem.get_min()
+                    maximal_temp = elem.get_max()
+                    return {"type": "1", "min": mindest_temp}
+                else:
+                    min = True
+            elif elem.get_max() is None and elem.get_min() is None:
                 trigger = True
-        print(trigger)
-        if trigger:
-            import http.client
-            conn = http.client.HTTPSConnection("192.168.2.254", 8254)
-            payload = ''
-            headers = {}
-            conn.request("GET",
-                         "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param={}".format(
-                             sid, temp),
-                         payload, headers)
-            res = conn.getresponse()
-            data = res.read()
-            print(data.decode("utf-8"))
-            status = ThermostatStatusBO()
-            status.set_temp(temp)
-            status.set_date(date_for_stat)
-            status.set_device(device_id)
-            with ThermostatStatusMapper() as mapper:
-                return mapper.insert(status)
+            if trigger or (min and max):
+                conn = http.client.HTTPSConnection(
+                    "gmhn0evflkdlpmbw.myfritz.net", 8254)
+                payload = ''
+                headers = {}
+                sid = self.generate_sid(
+                    'https://192.168.2.254:8254/', 'admin', 'QUANTO_Solutions')
+                conn.request("GET",
+                             "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=sethkrtsoll&param={}".format(
+                                 sid, temp),
+                             payload, headers)
+                res = conn.getresponse()
+                data = res.read()
+                data = data.decode("utf-8")
+                status = ThermostatStatusBO()
+                status.set_temp(temp)
+                status.set_date(date_for_stat)
+                status.set_device(device_id)
+                with ThermostatStatusMapper() as mapper:
+                    return mapper.insert(status)
 
     def get_comfort_temperature(self):
+        """
+        Komfort-Temperatur des Geräts auslesen
+        :return: Temperatur in Celcius
+        """
         conn = http.client.HTTPSConnection("192.168.2.254", 8254)
         payload = ''
         headers = {}
@@ -687,6 +794,10 @@ class DeviceAdministration(object):
         return data
 
     def get_temp_from_device(self):
+        """
+        Ist-Temperatur aus dem Gerät laden
+        :return: Ist-Temperatur in Celcius
+        """
         conn = http.client.HTTPSConnection("192.168.2.254", 8254)
         payload = ''
         sid = self.generate_sid(
@@ -695,13 +806,47 @@ class DeviceAdministration(object):
             'Content-Type': 'application/json'
         }
         conn.request("GET",
-                     "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=gethkrtsoll".format(
+                     "/webservices/homeautoswitch.lua?sid={}&ain=139790057201&switchcmd=gettemperature".format(
                          sid),
                      payload, headers)
         res = conn.getresponse()
         data = res.read()
         data = data.decode("utf-8")
         return data
+
+    def get_soll_temp(self):
+        date = datetime.datetime.now()
+        weekday = date.isoweekday()
+        if weekday == 1:
+            mon = self.get_latest_temp_standard_entry_monday()
+            if mon is None or mon is 0:
+                return self.get_min_temp()
+            else:
+                return mon.get_value()
+        if weekday == 2:
+            tue = self.get_latest_temp_standard_entry_tuesday()
+            if tue is None or tue is 0:
+                return self.get_min_temp()
+            else:
+                return tue.get_value()
+        if weekday == 3:
+            wed = self.get_latest_temp_standard_entry_wednesday()
+            if wed is None or wed is 0:
+                return self.get_min_temp()
+            else:
+                return wed.get_value()
+        if weekday == 4:
+            thurs = self.get_latest_temp_standard_entry_thursday()
+            if thurs is None or thurs is 0:
+                return self.self.get_min_temp()
+            else:
+                return thurs.get_value()
+        if weekday == 5:
+            fri = self.get_latest_temp_standard_entry_friday()
+            if fri is None or fri is 0:
+                return self.get_min_temp()
+            else:
+                return fri.get_value()
 
     def set_min_temp_of_device(self, temp):
         conn = http.client.HTTPSConnection("192.168.2.254", 8254)
@@ -719,6 +864,8 @@ class DeviceAdministration(object):
         data = res.read()
         data = data.decode("utf-8")
         return data
+
+######## Standardwochenplan Operationen ########
 
     def set_jal_standard_entry_monday(self, start, end, perc):
         trigger = False
@@ -767,7 +914,6 @@ class DeviceAdministration(object):
                             with WeeklyPlanJalMapper() as mapper:
                                 mapper.insert(standard_entry)
                             return {"type": "1", "element": elem_id, "start": start, "end": end}
-
             with MondayMapper() as mapper:
                 mapper.insert(monday)
             standard_entry = WeeklyPlanTempBO()
@@ -1505,6 +1651,7 @@ class DeviceAdministration(object):
                     if x == len(rules):
                         with RulesMapper() as mapper:
                             mapper.insert(rule)
+                            mapper.insert(rule)
                             return max
                     # return max
         else:
@@ -1571,145 +1718,3 @@ class DeviceAdministration(object):
             return True
         else:
             return False
-
-    ##### Customized Entries ######
-
-    '''def set_jal_customized_entry_monday(self, start, end, perc):
-        monday = Monday()
-        monday.set_type('J')
-        monday.set_start_time(start)
-        monday.set_end_time(end)
-        monday.set_value(perc)
-        with MondayMapper() as mapper:
-            return mapper.insert(monday)
-
-    def get_all_jal_customized_entries_monday(self):
-        with MondayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_jal_customized_entry_tuesday(self, start, end, perc):
-        tuesday = Tuesday()
-        tuesday.set_type('J')
-        tuesday.set_start_time(start)
-        tuesday.set_end_time(end)
-        tuesday.set_value(perc)
-        with TuesdayMapper() as mapper:
-            return mapper.insert(tuesday)
-
-    def get_all_jal_customized_entries_tuesday(self):
-        with TuesdayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_jal_customized_entry_wednesday(self, start, end, perc):
-        wednesday = Wednesday()
-        wednesday.set_type('J')
-        wednesday.set_start_time(start)
-        wednesday.set_end_time(end)
-        wednesday.set_value(perc)
-        with WednesdayMapper() as mapper:
-            return mapper.insert(wednesday)
-
-    def get_all_jal_customized_entries_wednesday(self):
-        with WednesdayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_jal_customized_entry_thursday(self, start, end, perc):
-        thursday = Thursday()
-        thursday.set_type('J')
-        thursday.set_start_time(start)
-        thursday.set_end_time(end)
-        thursday.set_value(perc)
-        with ThursdayMapper() as mapper:
-            return mapper.insert(thursday)
-
-    def get_all_jal_customized_entries_thursday(self):
-        with ThursdayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_jal_customized_entry_friday(self, start, end, perc):
-        friday = Friday()
-        friday.set_type('J')
-        friday.set_start_time(start)
-        friday.set_end_time(end)
-        friday.set_value(perc)
-        with FridayMapper() as mapper:
-            return mapper.insert(friday)
-
-    def get_all_jal_customized_entries_friday(self):
-        with FridayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_temp_customized_entry_monday(self, start, end, temp):
-        monday = Monday()
-        monday.set_type('T')
-        monday.set_start_time(start)
-        monday.set_end_time(end)
-        monday.set_value(temp)
-        with MondayMapper() as mapper:
-            return mapper.insert(monday)
-
-    def get_all_temp_customized_entries_monday(self):
-        with MondayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_temp_customized_entry_tuesday(self, start, end, temp):
-        tuesday = Tuesday()
-        tuesday.set_type('T')
-        tuesday.set_start_time(start)
-        tuesday.set_end_time(end)
-        tuesday.set_value(temp)
-        with TuesdayMapper() as mapper:
-            return mapper.insert(tuesday)
-
-    def get_all_temp_customized_entries_tuesday(self):
-        with TuesdayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_temp_customized_entry_wednesday(self, start, end, temp):
-        wednesday = Wednesday()
-        wednesday.set_type('T')
-        wednesday.set_start_time(start)
-        wednesday.set_end_time(end)
-        wednesday.set_value(temp)
-        with WednesdayMapper() as mapper:
-            return mapper.insert(wednesday)
-
-    def get_all_temp_customized_entries_wednesday(self):
-        with WednesdayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_temp_customized_entry_thursday(self, start, end, temp):
-        thursday = Thursday()
-        thursday.set_type('T')
-        thursday.set_start_time(start)
-        thursday.set_end_time(end)
-        thursday.set_value(temp)
-        with ThursdayMapper() as mapper:
-            return mapper.insert(thursday)
-
-    def get_all_temp_customized_entries_thursday(self):
-        with ThursdayMapper() as mapper:
-            return mapper.find_all()
-
-    def set_temp_customized_entry_friday(self, start, end, temp):
-        friday = Friday()
-        friday.set_type('T')
-        friday.set_start_time(start)
-        friday.set_end_time(end)
-        friday.set_value(temp)
-        with FridayMapper() as mapper:
-            return mapper.insert(friday)
-
-    def get_all_temp_customized_entries_friday(self):
-        with FridayMapper() as mapper:
-            return mapper.find_all()'''
-
-
-adm = DeviceAdministration()
-
-#print(adm.get_median_ist_values_jal("2022-06-18"))
-#print(adm.get_median_ist_values_temp("2022-06-20"))
-#print(adm.get_median_soll_values_jal("2022-06-20"))
-#print(adm.get_median_ist_values_jal("2022-06-06"))
-
-'''XX'''

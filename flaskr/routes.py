@@ -92,7 +92,7 @@ def get_jal_stats_per_hour_for_weekday():
     weekday = request.form["weekday"]
     von = request.form["von"]
     bis = request.form["bis"]
-    data = adm.get_median_ist_jal_for_timespan(von, bis, weekday)
+    data = adm.get_ist_value_jal_for_timespan(von, bis, weekday)
 
     odata = {
         'd': {
@@ -121,7 +121,7 @@ def status_per_day():
 
     day = request.args.get('day')
     print(day)
-    stats = adm.get_median_ist_values_jal(day)
+    stats = adm.get_ist_values_jal(day)
     print('Jal: ', stats)
 
     odata = {
@@ -346,11 +346,13 @@ def set_temp():
     data = float(data)
     data = data * 10
     time.sleep(4)
-    adm.set_temperature(data)
+    k = adm.set_temperature(data)
     temp = adm.get_temp_from_device()
     print('temp: ', temp)
-    x = "Hi"
-    return x
+    if type(k) == dict:
+        return k
+    else:
+        return {'type': '2'}
 
 
 @app.route('/GetTemp', methods=["GET"])
@@ -368,6 +370,29 @@ def get_temp():
     }
 
     temp = adm.get_temp_from_device()
+    temp = int(temp)
+    temp = temp / 10
+    odata['d']['results'].append({
+        'temperature': temp
+    })
+
+    return jsonify(odata)
+
+@app.route('/GetSollTemp', methods=["GET"])
+def get_soll_temp():
+    """
+    Return a simple odata container with date time information
+    :return:
+    """
+    adm = DeviceAdministration()
+
+    odata = {
+        'd': {
+            'results': []
+        }
+    }
+
+    temp = adm.get_soll_temp()
     temp = int(temp)
     temp = temp / 10
     odata['d']['results'].append({
