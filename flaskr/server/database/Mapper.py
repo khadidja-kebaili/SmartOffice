@@ -15,7 +15,7 @@ class Mapper (AbstractContextManager, ABC):
 
         self._cnx = connector.connect(user='root', password='hdmsw201920',
                                       host='localhost',
-                                      database='smartoffice')
+                                      database='Smartoffice')
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):

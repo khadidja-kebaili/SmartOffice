@@ -811,31 +811,31 @@ class DeviceAdministration(object):
         weekday = date.isoweekday()
         if weekday == 1:
             mon = self.get_latest_temp_standard_entry_monday()
-            if mon is None or mon is 0:
+            if mon is None or mon == 0:
                 return self.get_min_temp()
             else:
                 return mon.get_value()
         if weekday == 2:
             tue = self.get_latest_temp_standard_entry_tuesday()
-            if tue is None or tue is 0:
+            if tue == None or tue == 0:
                 return self.get_min_temp()
             else:
                 return tue.get_value()
         if weekday == 3:
             wed = self.get_latest_temp_standard_entry_wednesday()
-            if wed is None or wed is 0:
+            if wed == None or wed == 0:
                 return self.get_min_temp()
             else:
                 return wed.get_value()
         if weekday == 4:
             thurs = self.get_latest_temp_standard_entry_thursday()
-            if thurs is None or thurs is 0:
+            if thurs == None or thurs == 0:
                 return self.self.get_min_temp()
             else:
                 return thurs.get_value()
         if weekday == 5:
             fri = self.get_latest_temp_standard_entry_friday()
-            if fri is None or fri is 0:
+            if fri == None or fri == 0:
                 return self.get_min_temp()
             else:
                 return fri.get_value()
