@@ -17,7 +17,8 @@ server:
           url: https://ui5.sap.com
         backend:
           - path: /sap
-            url: http://localhost
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS_2
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:
