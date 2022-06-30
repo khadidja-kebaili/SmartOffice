@@ -32,7 +32,7 @@ sap.ui.define([
         },
         getStatus: function() {
             return jQuery.ajax({
-                url: "/sap/LastStatusJalousien",
+                url: "/LastStatusJalousien",
                 type: "GET"
               });
         },
@@ -57,7 +57,7 @@ sap.ui.define([
             };
             console.log(oData),
                 jQuery.ajax({
-                    url: "/sap/Jalousien",
+                    url: "/Jalousien",
                     type: "POST",
                     dataType: "json",
                     async: true,
