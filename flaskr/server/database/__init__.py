@@ -1,1 +1,0 @@
-print("database package initialisiert...")
