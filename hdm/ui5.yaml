@@ -46,19 +46,19 @@ server:
           - path: /GetStandardJalousienFriday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-          - path: /SetStandardJalousienMonday
+          - path: /SetJalousienStandardMonday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-          - path: /SetStandardJalousienTuesday
+          - path: /SetJalousienStandardTuesday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-          - path: /SetStandardJalousienWednesday
+          - path: /SetJalousienStandardWednesday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-          - path: /SetStandardJalousienThursday
+          - path: /SetJalousienStandardThursday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
-          - path: /SetStandardJalousienFriday
+          - path: /SetJalousienStandardFriday
             url: https://192.168.2.187:5000
             destination: QOfficeGruppeA_HTTPS
           - path: /DeleteStandardJalousienMonday
