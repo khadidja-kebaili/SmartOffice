@@ -402,7 +402,7 @@ class DeviceAdministration(object):
             else:
                 return 0'''
 
-    def get_median_ist_jal_for_timespan(self, von, bis, day):
+    def get_ist_value_jal_for_timespan(self, von, bis, day):
         values = []
         for elem in range(von, bis + 1):
             x = self.get_last_jal_ist_entry_of_hour_for_day(day, elem)
@@ -451,29 +451,29 @@ class DeviceAdministration(object):
             values.append(x)
         return values
 
-    def get_median_ist_values_jal(self, day):
+    def get_ist_values_jal(self, day):
         values = []
-        k = self.get_median_ist_jal_for_timespan(7, 10, day)
+        k = self.get_ist_value_jal_for_timespan(7, 10, day)
         return_value_k = 0
         for elem in k:
             print(elem)
             if elem > return_value_k:
                 return_value_k = elem
         values.append(return_value_k)
-        m = self.get_median_ist_jal_for_timespan(10, 13, day)
+        m = self.get_ist_value_jal_for_timespan(10, 13, day)
         return_value_m = 0
         for elem in m:
             print(elem)
             if elem > return_value_m:
                 return_value_m = elem
         values.append(return_value_m)
-        n = self.get_median_ist_jal_for_timespan(13, 16, day)
+        n = self.get_ist_value_jal_for_timespan(13, 16, day)
         return_value_n = 0
         for elem in n:
             if elem > return_value_n:
                 return_value_n = elem
         values.append(return_value_n)
-        l = self.get_median_ist_jal_for_timespan(16, 19, day)
+        l = self.get_ist_value_jal_for_timespan(16, 19, day)
         return_value_l = 0
         for elem in l:
             if elem > return_value_l:

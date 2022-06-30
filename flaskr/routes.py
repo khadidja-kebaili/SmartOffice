@@ -54,7 +54,7 @@ def LastStatusJalousien():
         }
     }
 
-    last_status = adm.get_last_status()
+    last_status = adm.get_last_jal_status()
 
     odata['d']['results'].append(last_status.get_percentage())
 
@@ -253,7 +253,7 @@ def jalstatuscombined_per_day():
     adm = DeviceAdministration()
 
     day = request.args.get('day')
-    statsist = adm.get_median_ist_values_jal(day)
+    statsist = adm.get_ist_values_jal(day)
     statssoll = adm.get_median_soll_values_jal(day)
     
     odata = {
