@@ -23,17 +23,6 @@
 							
             </layout:VerticalLayout>
             </content>
-                
-
-        <!-- DynamicPage Footer -->
-		    <footer>
-				<OverflowToolbar id="toolbarjalousien" class="sapUiMediumMarginTop">
-                    <ToolbarSpacer id="tbs1"/>
-                    <Button id="buttonregeln" text="Regeln" press="pressnavRegeln"/>
-                    <Button id="buttonwp" text="Wochenplan" press="pressnavWeeklyPlan"/>
-                    <ToolbarSpacer id="tbs2"/>
-                </OverflowToolbar>
-			</footer>
         </Page>
         </pages>
         </App>
