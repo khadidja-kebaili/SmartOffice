@@ -20,21 +20,18 @@ sap.ui.define([
         _onRouteMatched : function (oEvent){
           this.getMinTemp().done(function(result) {
             var minTemp = result.d.results[0].min_temperature
-            console.log(minTemp)
             self.byId("minTemp").setValue(minTemp)
             
           })
 
           this.getMaxTemp().done(function(result) {
             var maxTemp = result.d.results[0].max_temperature
-            console.log(maxTemp)
             self.byId("maxTemp").setValue(maxTemp)
           })
 
         },
 
         getMinTemp: function() {
-          console.log('Get min temp')
           return jQuery.ajax({
               url: "/GetMinTemp",
               type: "GET"
@@ -42,7 +39,6 @@ sap.ui.define([
         },
 
         getMaxTemp: function() {
-          console.log('Get max temp')
           return jQuery.ajax({
             url: "/GetMaxTemp",
             type: "GET"
@@ -54,21 +50,17 @@ sap.ui.define([
           var oData = {
               'value': oEvent.getParameter("value")
           };
-          console.log(oData);
-          console.log(typeof(oData.value));
           jQuery.ajax({
               url: "/SetMinTemp",
               type: "POST",
               dataType: "json",
               async: true,
               data: oData,
-              success: function (response) {
-                  MessageToast.show(response.data.message);
-                  sap.ui.core.BusyIndicator.hide();
+              statusCode: {
+                200: function() {
+                  MessageToast.show('Die min. Temperatur wurde erfolgreich geändert.');
+                }
               },
-              error: function (response) {
-                  console.log(response);
-              }
           });
         },
         changeMaxTemp: function(oEvent) {
@@ -76,21 +68,17 @@ sap.ui.define([
           var oData = {
               'value': oEvent.getParameter("value")
           };
-          console.log(oData);
-          console.log(typeof(oData.value));
           jQuery.ajax({
               url: "/SetMaxTemp",
               type: "POST",
               dataType: "json",
               async: true,
               data: oData,
-              success: function (response) {
-                  MessageToast.show(response.data.message);
-                  sap.ui.core.BusyIndicator.hide();
+              statusCode: {
+                200: function() {
+                  MessageToast.show('Die max. Temperatur wurde erfolgreich geändert.');
+                }
               },
-              error: function (response) {
-                  console.log(response);
-              }
           });
         },
           
