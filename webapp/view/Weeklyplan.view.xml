@@ -14,6 +14,7 @@
                     <content>
                     <FlexBox id="WochentageContainer" width="100%" alignItems="Center" class="sapUiLargeMarginTop" justifyContent="Center" direction="Column">
                         <Label text="Wähle den Wochentag aus"/>
+            <!-- Auswahl des Wochentags -->
 			<SegmentedButton width="115%" id="SB1" selectionChange="onSelectionChange">
 				<items>
 					<SegmentedButtonItem text="Mo" />
@@ -28,6 +29,7 @@
 						press="addEmptyObject"
 						ariaDescribedBy="defaultButtonDescription genericButtonDescription">
 				</Button>
+                    <!--Tabelle, die Items hinter /data anzeigt-->
                     <Table id="tbl" items="{/data}">
                                 <columns>
                                     <Column />
@@ -44,6 +46,7 @@
                                 <items>
                                     <ColumnListItem>
                                         <cells>
+                                            <!-- Buttons werden je nach path angezeigt oder nicht -->
                                             <HBox>
                                                 <core:Icon src="sap-icon://add"    visible="{path: 'createNew', formatter: '.enableControl'}" press="addEntry" />
                                                 <core:Icon src="sap-icon://save"   visible="{path: 'saveNew',   formatter: '.enableControl'}" press="saveEntry" />

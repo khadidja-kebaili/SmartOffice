@@ -11,10 +11,7 @@
                 <Page id="page" title="Regeln für Jalousien verwalten" titleAlignment="Center" showNavButton="true" navButtonPress="onNavBack">
                     <content> 
 					<Text text="Hier können Sie Regeln für die Steuerung der Jalousien festlegen. Diese sind nicht abhängig vom Wochentag und gelten immer." textAlign="Center" width="100%" class="sapUiMediumMargin"/>
-                    <!--<Button text="Neuer Eintrag" type="Emphasized" class="sapUiTinyMarginBottom sapUiSmallMarginBegin"
-						press="addEmptyObject"
-						ariaDescribedBy="defaultButtonDescription genericButtonDescription">
-					</Button> -->
+                    <!--Tabelle, die Items hinter /data anzeigt-->
 					<Table id="tbl" items="{/data}">
                                 <columns>
                                     <Column />
@@ -34,6 +31,7 @@
                                 <items>
                                     <ColumnListItem>
                                         <cells>
+                                            <!-- Buttons werden je nach path angezeigt oder nicht -->
                                             <HBox>
                                                 <core:Icon src="sap-icon://add"    visible="{path: 'createNew', formatter: '.enableControl'}" press="addEntry" />
                                                 <core:Icon src="sap-icon://save"   visible="{path: 'saveNew',   formatter: '.enableControl'}" press="saveEntry" />

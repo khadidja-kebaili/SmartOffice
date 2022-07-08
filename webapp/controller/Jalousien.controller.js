@@ -23,6 +23,8 @@ sap.ui.define([
             let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.getRoute("jalousien").attachMatched(this._onRouteMatched, this);
         },
+
+        //Sobald Route Jalousien aufgerufen wird, hole den letzten Wert und setze ihn auf den Slider
         _onRouteMatched : function (oEvent){
             this.getStatus().done(function(result) {
                 console.log(result.d.results[0])  
@@ -30,6 +32,8 @@ sap.ui.define([
                 self.byId("sliderrealtime").setValue(currentvalue)       
             })
         },
+
+        //Get Abfrage des letzten Status der Jalousie
         getStatus: function() {
             return jQuery.ajax({
                 url: "/sap/LastStatusJalousien",
@@ -37,25 +41,28 @@ sap.ui.define([
               });
         },
 
-        onLiveChange: function (oEvent) {
-            var sNewValue = oEvent.getParameter("value");
-            this.byId("getValue").setText(sNewValue);
-        },
+        //Button WeeklyPlan führt zu Wochenplan-View
         pressnavWeeklyPlan: function (evt) {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("wochenplan")
         },
+
+        //Button Regeln führt zu Regel-View
         pressnavRegeln: function (evt) {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("regelnjalousien")
         },
+
+        //Post Methode nach Einstellen eines neuen Werts
         sendValue: function (oEvent) {
             sap.ui.core.BusyIndicator.hide(0);
             //var oThis = this;
+            //Daten, hier nur Wert, der gesendet werden soll
             var oData = {
                 'value': oEvent.getParameter("value")
             };
             console.log(oData),
+                //Senden der Daten an folgende Route
                 jQuery.ajax({
                     url: "/sap/Jalousien",
                     type: "POST",

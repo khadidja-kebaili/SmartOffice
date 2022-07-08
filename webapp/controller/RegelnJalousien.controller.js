@@ -16,11 +16,12 @@ sap.ui.define([
                 self = this;
                 var oModel = new sap.ui.model.json.JSONModel({"id": null, "startzeit":null,"endzeit":null,"min":null,"max": null});
                 this.getView().setModel(oModel)
+                //Route an match-Funktion binden
                 let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.getRoute("regelnjalousien").attachMatched(this._onRouteMatched, this);
                 
               },
-
+            //Funktion um leeres Objekt, leere Zeile hinzuzufügen
             addEmptyObject : function() {
                 var oModel = this.getView().getModel();
                 console.log(oModel)
@@ -33,13 +34,8 @@ sap.ui.define([
                 this.addEntry();
               },
 
-            test: function() {
-                ///var selectedDay = oEvent.getParameter("item").getText()
-                MessageToast.show("Hallo Juhu")
-               
-            },
+            //Wenn Route "regelnjalousien" aufgerufen wird alle bestehenden Regeln abrufen und anzeigen
             _onRouteMatched : function (oEvent){
-              //this.addEmptyObject()
                 var datatest2 = []
                 this.getData().done(function(result) {
                     
@@ -51,10 +47,10 @@ sap.ui.define([
                     var oModel = new sap.ui.model.json.JSONModel({data: datatest2});
                     self.getView().setModel(oModel);
                     self.addEmptyObject();
-                    //console.log("Jetzt bin ich am Ende")
                 })
 
             },
+            //Get-Funktion, um bestehende Regeln aus Datenbank zu holen
             getData: function () {
               console.log('Get data für Regeln Jalousien')
               return jQuery.ajax({
@@ -70,7 +66,7 @@ sap.ui.define([
               disableControl : function(value) {
                 return !value;
               },
-
+              //Eintrag hinzufügen, wird nach Klicken auf das Plus aufgerufen. Erstellt neues Objekt
               addEntry : function(oEvent) {
                 var path = oEvent.getSource().getBindingContext().getPath();
                 var obj = {
@@ -88,7 +84,8 @@ sap.ui.define([
 
                 oModel.setProperty(path, obj);
               },
-
+              //Eintrag speichern, wird nach Klicken auf Speichern aufgerufen
+              //Speichert eingetragene Werte, schickt diese ins Backend und fügt Eintrag in Tabelle hinzu
               saveEntry : function(oEvent) {
                 var path = oEvent.getSource().getBindingContext().getPath();
                 var obj = oEvent.getSource().getBindingContext().getObject();
@@ -102,7 +99,7 @@ sap.ui.define([
 
                 console.log("Neuer Wert wurde eingestellt.");
                 sap.ui.core.BusyIndicator.hide(0);
-                //var oThis = this;
+                //Hier werden Werte in oData gepspeichert
                 var oData = {
                     'start': obj.startzeit,
                     'end': obj.endzeit, 
@@ -110,7 +107,7 @@ sap.ui.define([
                     'max': obj.max
                 };
                 console.log(oData),
-
+                //POST-Methode zum senden der Werte
                 jQuery.ajax({
                     url : "/SetJalRule",
                     type : "POST",
@@ -131,6 +128,7 @@ sap.ui.define([
                         console.log(response);
                     }
                 }).done(function() {
+                  //Nachdem Werte gesendet wurden, hole erneut alle aktuellen Werte aus der Datenbank und zeige diese an
                   var datatest2 = []
                   self.getData().done(function(result) {
                     
@@ -141,11 +139,12 @@ sap.ui.define([
                     console.log(datatest2)                
                     var oModel = new sap.ui.model.json.JSONModel({data: datatest2});
                     self.getView().setModel(oModel);
+                    //Hinzufügen einer neuen leeren Spalte
                     self.addEmptyObject();
                   })
                 })
             },
-
+            //Eintrag löschen, wird aufgerufen nach Klicken auf das Löschen-Icon
             removeEntry: function (oEvent) {
                 var path = oEvent.getSource().getBindingContext().getPath();
                 var obj = oEvent.getSource().getBindingContext().getObject();
@@ -156,11 +155,12 @@ sap.ui.define([
                 var oModel = this.getView().getModel();
 
                 oModel.setProperty(path, obj);
-                //MessageToast.show("Löschen Eintrag mit ID:" + obj.id) 
+                //ID des zu löschenden EIntrags speichern
                 var oData = {
                     'id_entry': obj.id
                 }; 
                 console.log(oData)
+                //DElETE-Methode sendet ID ans backend und löscht das zugehörige Objekt
                  jQuery.ajax({
                     url : "/DeleteJalRule",
                     type : "DELETE",
@@ -174,8 +174,8 @@ sap.ui.define([
                         console.log(response);
                     }
                 });
+                //Außerdem wird das Objekt so direkt aus der angezeigten Tabelle gelöscht
                 var idx = parseInt(path.substring(path.lastIndexOf('/') +1));
-                //console.log(idx)
                 var m = this.getView().getModel();
                 var aData  = m.getProperty("/data");
                 aData.splice(idx, 1);
@@ -187,19 +187,20 @@ sap.ui.define([
                 FlexBox.addItem(Button)
             },
             handleChange: function (oEvent) {
-				var oText = this.byId("T1"),
-					oTP = oEvent.getSource(),
-					sValue = oEvent.getParameter("value"),
-					bValid = oEvent.getParameter("valid");
-				this._iEvent++;
-				oText.setText("'change' Event #" + this._iEvent + " from TimePicker '" + oTP.getId() + "': " + sValue + (bValid ? ' (valid)' : ' (invalid)'));
+              var oText = this.byId("T1"),
+                oTP = oEvent.getSource(),
+                sValue = oEvent.getParameter("value"),
+                bValid = oEvent.getParameter("valid");
+              this._iEvent++;
+              oText.setText("'change' Event #" + this._iEvent + " from TimePicker '" + oTP.getId() + "': " + sValue + (bValid ? ' (valid)' : ' (invalid)'));
 
-				if (bValid) {
-					oTP.setValueState(ValueState.None);
-				} else {
-					oTP.setValueState(ValueState.Error);
-				}
-			},
+              if (bValid) {
+                oTP.setValueState(ValueState.None);
+              } else {
+                oTP.setValueState(ValueState.Error);
+              }
+            },
+            //Zurück Navigation führt zur vorherigen Seite
             onNavBack: function(){
 
               var oHistory = History.getInstance();
@@ -215,5 +216,5 @@ sap.ui.define([
 
 		});
 
-     });
+});
         

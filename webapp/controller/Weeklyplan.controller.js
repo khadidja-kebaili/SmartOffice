@@ -9,6 +9,7 @@ sap.ui.define([
 ], function(SmartOfficeController, JSONModel, MessageToast, MessageBox, Element, Core, History) {
         "use strict";
 
+        //Leere Listen für Wochenpläne pro Tag initiieren
         var self;
         var mondayData = []
         var tuesdayData = []
@@ -21,23 +22,31 @@ sap.ui.define([
                     self = this;
                     var oModel = new sap.ui.model.json.JSONModel({"id": null, "day": null, "startzeit":null,"endzeit":null,"wert":null});
                     this.getView().setModel(oModel);
+                    //Route an match-Funktion binden
                     let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                     oRouter.getRoute("wochenplan").attachMatched(this._onRouteMatched, this);
               },
-              
+              //Sobald Route aufgerufen wird, hole alle Einträge für die Wochentage aus der Datenbank 
             _onRouteMatched : function (oEvent){
+                //Listen wieder auf null setzen damit nichts doppelt angezeigt wird
                 mondayData.length = 0
                 tuesdayData.length = 0
                 wednesdayData.length = 0
                 thursdayData.length = 0
                 fridayData.length = 0
+
+                //Daten für Montag aus Datenbank abrufen, gleich für alle Wochentage
                 this.getData("/GetStandardJalousienMonday").done(function(result) {
                     var data = result.d.results
+                    //Daten in Liste pushen
                     data.map(function(eintrag, index) {
                       mondayData.push(eintrag)
                       })     
-                    console.log(mondayData)  
+                    console.log(mondayData)
+                    //Liste mit Daten an Model hängen  
                     var oModel = new sap.ui.model.json.JSONModel({data: mondayData});
+                    //Daten in Tabelle anzeigen, hier nur für Montag da dass die erste Ansicht ist
+                    //Andere Wochentage werden erst bei Wechsel des Tages angezeigt
                     self.getView().setModel(oModel);
                   
                 })
@@ -72,7 +81,7 @@ sap.ui.define([
               
                 })
             },
-            
+            //GET-Methode um Daten aus Datenbank zu holen
             getData: function (url) {
               console.log('Get data für Wochenplan Jalousien')
               return jQuery.ajax({
@@ -81,6 +90,7 @@ sap.ui.define([
               });
             },
 
+            //Leeres Objekt erstellen und anzeigen lassen
               addEmptyObject : function() {
                 var oModel = this.getView().getModel();
                 var aData  = oModel.getProperty("/data");
@@ -100,7 +110,8 @@ sap.ui.define([
               disableControl : function(value) {
                 return !value;
               },
-
+              //Eintrag hinzufügen, wird bei Klicken auf Plus aufgerufen
+              //Jetzt kann der Eintrag konfiguriert werden
               addEntry : function(oEvent) {
                 var path = oEvent.getSource().getBindingContext().getPath();
                 var oSegmentedButton = this.byId('SB1');
@@ -121,6 +132,8 @@ sap.ui.define([
                 oModel.setProperty(path, obj);
               },
 
+              //Eintrag speichern, wird bei Klicken auf Speichern aufgerufen
+              //Eingestellte Werte werden gespeichert und an Backend gesendet
               saveEntry : function(oEvent) {
                 
                 var path = oEvent.getSource().getBindingContext().getPath();
@@ -128,30 +141,31 @@ sap.ui.define([
                 obj.saveNew = false;
                 obj.removeNew = true;
 
-                //var oModel = this.getView().getModel();
-
-                //oModel.setProperty(path, obj);
-                console.log("Neuer Wert wurde eingestellt.");
                 sap.ui.core.BusyIndicator.hide(0);
-                //var oThis = this;
-                //console.log('objSave', obj, "path", path, "obj.", )
-              
+
+                //IF-Schleifen für jeden Tag: Hier wird nur Montag erklärt, gilt für alle gleich
+                //Prüfen, ob Tag = Montag ist
                 if(obj.day == "Mo"){
                     console.log("Send Monday")
+                    //Speichern der Start- und Endzeit sowie des Werts
                     var oData = {
                     'start': obj.startzeit,
                     'end': obj.endzeit, 
                     'value': parseInt(obj.wert)
                     };
+                    //Senden der Werte an Backend
                     this.sendValues(oData, "/SetJalousienStandardMonday").done(function(result) {
+                      //Rückgabewerte in variablen speichern
                       var errorcheck = result.type
                       var mindestwert = result.min
                       var maximalwert = result.max
                       var start = result.start
                       var end = result.end
+                        //Variable errorcheck prüfen: Wenn 0 liegt Regelverstoß vor
                         if (errorcheck == "0") {
+                            //MessageBox mit erlaubter Zeit und Werten anzeigen
                             MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Für diesen Zeitraum muss der Wert zwischen " + mindestwert + "% und " + maximalwert + "% liegen. \n Bitte versuche eine andere Einstellung!");
-
+                            //Eintrag kann nicht in Datenbank gespeichert werden, deswegen entfernen
                             var idx = parseInt(path.substring(path.lastIndexOf('/') +1));
                             var m = self.getView().getModel();
                             var aData  = m.getProperty("/data");
@@ -159,11 +173,14 @@ sap.ui.define([
                             m.setProperty("/data", aData);
                         }
                         else {
+                          //Wenn errorcheck = 1 liegt Überschneidung vor
                           if (errorcheck == "1") {
+                            //MessageBox mit Info, dass vorheriger Eintrag gelöscht wurde
                             MessageBox.information("Auf Grund von Überschneidungen wurde der Eintrag von " + start + " Uhr bis " + end + " Uhr gelöscht. \n Der so eben eingestelle Eintrag wurde gespeichert.");
                             var oModel = self.getView().getModel();
                             oModel.setProperty(path, obj);
                             mondayData.length = 0
+                            //Erneut Daten für Montag aus Datenbank holen, damit gelöschter Eintrag nicht mehr angezeigt wird
                             self.getData("/GetStandardJalousienMonday").done(function(result) {
                               var data = result.d.results
                               data.map(function(eintrag, index) {
@@ -174,9 +191,11 @@ sap.ui.define([
                               })
                           }  
                           else {
+                            //Hier liegt weder Regelverstoß noch Überschneidung vor, kann also normal gespeichert werden
                             var oModel = self.getView().getModel();
                             oModel.setProperty(path, obj);
                             mondayData.length = 0
+                            //Erneut Daten aus Datenbank holen damit Werte in richtiger Reihenfolge angezeigt werden
                             self.getData("/GetStandardJalousienMonday").done(function(result) {
                               var data = result.d.results
                               data.map(function(eintrag, index) {
@@ -412,6 +431,7 @@ sap.ui.define([
 
 
               },
+              //POST-Methode um Daten ins Backend zu senden
               sendValues: function(oData, url) {
                 return jQuery.ajax({
                   url : url,
@@ -425,19 +445,14 @@ sap.ui.define([
                       console.log(response.max)
                       console.log(response.min)
                       sap.ui.core.BusyIndicator.hide();
-                      //var errorcheck = response.type
-                      //var mindestwert = response.min
-                      //var maximalwert = response.max
-                        //if (errorcheck == "0") {
-                            //MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Für diesen Zeitraum muss der Wert zwischen " + mindestwert + " und " + maximalwert + " liegen. \n Bitte versuche eine andere Einstellung!");
-                        //}
+                      
                   },
                   error: function(response){
                       console.log(response);
                   }
                 });
               },
-
+              //Eintrag aus Datenbank löschen, wird bei Klicken auf Löschen aufgerufen
               removeEntry: function (oEvent) {
                 var oTable = this.getView().byId("tbl");
                 var path = oEvent.getSource().getBindingContext().getPath();
@@ -452,13 +467,15 @@ sap.ui.define([
                 var oSelectedItemId = oSegmentedButton.getSelectedItem();
                 var oSelectedItem = Element.registry.get(oSelectedItemId);
                 var selectedDay = oSelectedItem.getText()
-
+                //Eigene Abfrage pro Tag damit richtige Route aufgerufen werden kann
                 if(selectedDay == "Mo"){
                   console.log("Löschen Montag")
+                  //Speichern der ID
                   var oData = {
                     'id_entry': obj.id,
                   };
                   console.log(oData)
+                  //Löschen des Eintrags mit dieser ID
                   this.deleteValues(oData, "/DeleteStandardJalousienMonday")
                 }
                 if(selectedDay == "Di"){
@@ -494,7 +511,7 @@ sap.ui.define([
                 m.setProperty("/data", aData);
                  
             },
-
+            //DELETE-Methode
             deleteValues: function(oData, url) {
               jQuery.ajax({
                     url : url,
@@ -510,7 +527,8 @@ sap.ui.define([
                     }
                 })
             },
-
+            //Auswahländerung des Wochentags
+            //Wenn Wochentag geändert wird, werden die jeweiligen Daten angezeigt
             onSelectionChange: function (oEvent) {
                 //MessageToast.show("Ausgewählter Wochentag:" + oEvent.getParameter("item").getText() );
               
@@ -536,6 +554,8 @@ sap.ui.define([
                     this.getView().setModel(oModel);
                 }
             },
+
+            //Zurück-Navigation zur vorherigen Seite
             onNavBack: function(){
 
               var oHistory = History.getInstance();
