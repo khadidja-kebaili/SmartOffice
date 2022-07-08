@@ -1,0 +1,173 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "2.5"
+metadata:
+  name: com.quanto.solutions.ui.smartoffice
+type: application
+server:
+  customMiddleware:
+    - name: fiori-tools-proxy
+      afterMiddleware: compression
+      configuration:
+        ignoreCertError: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+        ui5:
+          path:
+            - /resources
+            - /test-resources
+          url: https://ui5.sap.com
+        backend:
+          - path: /LastStatusJalousien
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /Jalousien
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /GetJalRule
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /SetJalRule
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /DeleteJalRule
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /GetStandardJalousienMonday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /GetStandardJalousienTuesday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /GetStandardJalousienWednesday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /GetStandardJalousienThursday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /GetStandardJalousienFriday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /SetJalousienStandardMonday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /SetJalousienStandardTuesday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /SetJalousienStandardWednesday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /SetJalousienStandardThursday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /SetJalousienStandardFriday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /DeleteStandardJalousienMonday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /DeleteStandardJalousienTuesday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /DeleteStandardJalousienWednesday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /DeleteStandardJalousienThursday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /DeleteStandardJalousienFriday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /GetTemp
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /GetSollTemp
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /SetTemp
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /GetMinTemp
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /GetMaxTemp
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /SetMinTemp
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /SetMaxTemp
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /GetStandardThermostatMonday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /GetStandardThermostatTuesday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /GetStandardThermostatWednesday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /GetStandardThermostatThursday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /GetStandardThermostatFriday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /SetThermostatStandardMonday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /SetThermostatStandardTuesday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /SetThermostatStandardWednesday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /SetThermostatStandardThursday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /SetThermostatStandardFriday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /DeleteStandardThermoMonday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /DeleteStandardThermoTuesday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /DeleteStandardThermoWednesday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /DeleteStandardThermoThursday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /DeleteStandardThermoFriday
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /JalIstStatusPerDay
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /JalSollStatusPerDay
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /JalCombinedPerDay
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /TempIstStatusPerDay
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /TempSollStatusPerDay
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+          - path: /TempCombinedPerDay
+            url: https://192.168.2.187:5000
+            destination: QOfficeGruppeA_HTTPS
+    - name: fiori-tools-appreload
+      afterMiddleware: compression
+      configuration:
+        port: 35729
+        path: static
+        delay: 300
+    - name: fiori-tools-preview
+      afterMiddleware: fiori-tools-appreload
+      configuration:
+        component: com.quanto.solutions.ui.smartoffice
+        ui5Theme: sap_fiori_3

@@ -36,7 +36,7 @@ sap.ui.define([
         //Get Abfrage des letzten Status der Jalousie
         getStatus: function() {
             return jQuery.ajax({
-                url: "/sap/LastStatusJalousien",
+                url: "/LastStatusJalousien",
                 type: "GET"
               });
         },
@@ -64,7 +64,7 @@ sap.ui.define([
             console.log(oData),
                 //Senden der Daten an folgende Route
                 jQuery.ajax({
-                    url: "/sap/Jalousien",
+                    url: "/Jalousien",
                     type: "POST",
                     dataType: "json",
                     async: true,
