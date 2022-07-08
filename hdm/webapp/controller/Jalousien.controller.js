@@ -20,9 +20,11 @@ sap.ui.define([
             this.getView().setModel(this.oModelSettings, "settings");
             this.getView().setModel(sap.ui.getCore().getModel("TestModel"), "TestModel");
             sap.ui.core.BusyIndicator.hide(0);
+            //Route an match-Funktion binden
             let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.getRoute("jalousien").attachMatched(this._onRouteMatched, this);
         },
+        //Wenn Route aufgerufen wird, rufe den letzten Status aus der Datenbank ab und setz ihn auf den Slider
         _onRouteMatched : function (oEvent){
             this.getStatus().done(function(result) {
                 console.log(result.d.results[0])  
@@ -30,32 +32,23 @@ sap.ui.define([
                 self.byId("sliderrealtime").setValue(currentvalue)       
             })
         },
+        //GET-Methode zum Abrufen des letzten Status der Jalousien
         getStatus: function() {
             return jQuery.ajax({
                 url: "/LastStatusJalousien",
                 type: "GET"
               });
         },
-
-        onLiveChange: function (oEvent) {
-            var sNewValue = oEvent.getParameter("value");
-            this.byId("getValue").setText(sNewValue);
-        },
-        pressnavWeeklyPlan: function (evt) {
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("wochenplan")
-        },
-        pressnavRegeln: function (evt) {
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("regelnjalousien")
-        },
+        //Neuen Wert einstellen, sobald Slider bewegt wurde/neuer Wert eingestellt wurde
         sendValue: function (oEvent) {
             sap.ui.core.BusyIndicator.hide(0);
             //var oThis = this;
+            //Wert speichern
             var oData = {
                 'value': oEvent.getParameter("value")
             };
             console.log(oData),
+                //POST-Methode um Wert an Backend zu senden
                 jQuery.ajax({
                     url: "/Jalousien",
                     type: "POST",
@@ -68,7 +61,9 @@ sap.ui.define([
                         var errorcheck = response.type
                         var mindestwert = response.min
                         var maximalwert = response.max
+                        //Wenn Wert von errorcheck = 0 ist liegt ein Regelverstoß vor
                         if (errorcheck == "0") {
+                            //MessageBox mit erlaubten Werten anzeigen
                             MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Aktuell darf sich der Wert nur zwischen " + mindestwert + "% und " + maximalwert + "% befinden.");
                         }
                     },
@@ -77,6 +72,7 @@ sap.ui.define([
                         
                     }
                 }).done(function() { 
+                    //Erneut letzten Wert abrufen und setzen
                     self.getStatus().done(function(result) { 
                         var currentvalue = result.d.results[0]
                         self.byId("sliderrealtime").setValue(currentvalue)       
@@ -84,6 +80,7 @@ sap.ui.define([
             })
                 
         },
+        //Zurück-Navigation führt zu vorheriger Seite
         onNavBack: function () {
 
             var oHistory = History.getInstance();
