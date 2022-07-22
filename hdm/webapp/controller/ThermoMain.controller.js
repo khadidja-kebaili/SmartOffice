@@ -32,6 +32,8 @@ sap.ui.define([
                 self.byId("targetTemp").setValue(targetTemp)
             })
         },
+
+        // get current temperature
         getTemp: function () {
             return jQuery.ajax({
                 url: "/GetTemp",
@@ -39,17 +41,21 @@ sap.ui.define([
             });
         },
 
+        // get target temperature
         getSollTemp: function() {
             return jQuery.ajax({
                 url: "/GetSollTemp",
                 type: "GET"
             });
         },
-        
+
+        // go to weekly plan
         pressnavWeeklyPlanThermo: function (evt) {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("wochenplanthermo")
         },
+
+        // go to rules
         pressNavRegelnThermo: function(oEvent) {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("regelnthermo")
@@ -66,9 +72,11 @@ sap.ui.define([
             oRouter.navTo("/", {}, true);
           }
         },
-        
+
+        // change target temperature and get feedback
         changeTargetTemp: function(oEvent) {
             sap.ui.core.BusyIndicator.hide(0);
+            //
             var oData = {
                 'value': oEvent.getParameter("value")
             };

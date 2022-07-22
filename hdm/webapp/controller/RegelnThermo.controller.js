@@ -31,6 +31,7 @@ sap.ui.define([
 
         },
 
+        // get min temperature
         getMinTemp: function() {
           return jQuery.ajax({
               url: "/GetMinTemp",
@@ -38,6 +39,7 @@ sap.ui.define([
           });
         },
 
+        // get max temperature
         getMaxTemp: function() {
           return jQuery.ajax({
             url: "/GetMaxTemp",
@@ -45,6 +47,7 @@ sap.ui.define([
         });
         },
 
+        // change min temperature
         changeMinTemp: function(oEvent) {
           sap.ui.core.BusyIndicator.hide(0);
           var oData = {
@@ -63,6 +66,8 @@ sap.ui.define([
               },
           });
         },
+
+        // change max temperature
         changeMaxTemp: function(oEvent) {
           sap.ui.core.BusyIndicator.hide(0);
           var oData = {
