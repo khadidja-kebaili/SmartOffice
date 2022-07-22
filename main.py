@@ -1,7 +1,6 @@
 from flaskr import app
 from flaskr.server.DeviceAdministration import DeviceAdministration
 from datetime import datetime
-
 import threading
 import time
 
@@ -17,11 +16,13 @@ class myThread(threading.Thread):
     def run(self):
         print("Starting " + self.name)
         if self.name == 'Thread1':
+            check_jal_stat(self.name, 50)
             check_jal_stat(self.name, 60)
             print("Exiting " + self.name)
         elif self.name == 'main_server_thread':
             something()
         elif self.name == 'Thread2':
+            check_temp_stat(self.name, 50)
             check_temp_stat(self.name, 3550)
             print('nothings going on')
         else:
@@ -56,19 +57,22 @@ def check_jal_stat(thread_name, delay):
             stats.append(elem)
     else:
         print('It´s the weekend!')
-    count = 0
+    count = True
+    while count:
+        count = 0
     while count < len(stats):
         for elem in stats:
             date_hour = datetime.strftime(date, '%H:%M:%S')
             print('Hier ist die Datehour:', date_hour, 'hier ist elem_get_start_time:', elem.get_start_time())
             if adm.in_between_times(date_hour, elem.get_start_time(), elem.get_end_time()) is True:
                 print('It is overlapping!')
+                adm.set_status_to_percentage_by_id(1, 60)
                 adm.set_status_to_percentage_by_id(1, elem.get_value())
                 count += 1
             else:
                 print('keine overlapping')
+                time.sleep(delay)
                 count += 1
-                
     if exitFlag:
         thread_name.exit()
     print("%s" % thread_name, count)
@@ -80,9 +84,9 @@ def check_temp_stat(thread_name, delay):
     print(date, weekday)
     adm = DeviceAdministration()
     stats = []
-    if weekday == 1: 
+    if weekday == 1:
         entries = adm.get_all_temp_standard_entries_monday()
-        if len(entries)>0:
+        if len(entries) > 0:
             print('Heute ist Montag')
             for elem in entries:
                 stats.append(elem)
@@ -91,7 +95,7 @@ def check_temp_stat(thread_name, delay):
             return 0
     elif weekday == 2:
         entries = adm.get_all_temp_standard_entries_tuesday()
-        if len(entries)>0:
+        if len(entries) > 0:
             print('Heute ist Dienstag')
             for elem in entries:
                 stats.append(elem)
@@ -100,7 +104,7 @@ def check_temp_stat(thread_name, delay):
             stats.append(elem)
     elif weekday == 3:
         entries = adm.get_all_temp_standard_entries_wednesday()
-        if len(entries)>0:
+        if len(entries) > 0:
             print('Heute ist Mittwoch')
             for elem in entries:
                 stats.append(elem)
@@ -109,7 +113,7 @@ def check_temp_stat(thread_name, delay):
             stats.append(elem)
     elif weekday == 4:
         entries = adm.get_all_temp_standard_entries_thursday()
-        if len(entries)>0:
+        if len(entries) > 0:
             print('Heute ist Donnerstag')
             for elem in entries:
                 stats.append(elem)
@@ -118,7 +122,7 @@ def check_temp_stat(thread_name, delay):
             stats.append(elem)
     elif weekday == 5:
         entries = adm.get_all_temp_standard_entries_friday()
-        if len(entries)>0:
+        if len(entries) > 0:
             print('Heute ist Freitag')
             for elem in entries:
                 stats.append(elem)
@@ -126,14 +130,12 @@ def check_temp_stat(thread_name, delay):
             return 0
     else:
         print('It´s the weekend!')
-
     count = True
     while count:
         for elem in stats:
             elem_hour = datetime.strptime(elem.get_start_time(), '%H:%M:%S').hour
             if elem_hour == date.hour:
                 print('Geh runter!')
-            #adm.set_status_to_percentage_by_id(1, elem.get_value())
             else:
                 time.sleep(delay)
     if exitFlag:
@@ -149,14 +151,13 @@ def something():
 # Create new threads
 checking_jal = myThread('Thread1', 0)
 checking_temp = myThread('Thread2', 0)
-main_server_thread = myThread('main_server_thread',0)
+main_server_thread = myThread('main_server_thread', 0)
 
-#Start new Threads
+# Start new Threads
 checking_jal.start()
 checking_temp.start()
 main_server_thread.start()
 
 print("Exiting Main Thread")
-
 
 

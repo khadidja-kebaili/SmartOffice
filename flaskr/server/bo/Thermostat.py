@@ -1,13 +1,11 @@
 from flaskr.server.bo.BusinessObject import Businessobject as bo
 '''Dieser Code ist von Quelle: xxx. Er generiert die SID-Authenfizierungsdaten um die Fritzbox über einen HTTP-Request anzusprechen.'''
-import sys
 import hashlib
 import time
 import urllib.request
 import urllib.parse
 import xml.etree.ElementTree as ET
 import ssl
-import datetime
 
 try:
     _create_unverified_https_context = ssl._create_unverified_context
@@ -120,19 +118,19 @@ class ThermostatBO(bo):
     def get_ain(self):
         return self._ain
 
-    '''    def set_timestamp(self, timestamp):
-        self._timestamp = int(timestamp.strftime("%Y%m%d%H%M%S"))
-
-    def get_timestamp(self):
-        return self._timestamp'''
-
     def __str__(self):
-        """Erzeugen einer einfachen textuellen Repräsentation der jeweiligen Kontoinstanz."""
+        '''
+        Gibt eine lesbare Representation des Objekts zurück
+        '''
         return "Jalousie: id {}, ain {}".format(self.get_id(), self.get_ain())
 
     @staticmethod
     def from_dict(dictionary=dict()):
-        """Umwandeln eines Python dict() in ein Account()."""
+        '''
+        Pickt Werte aus einem dictionary und setzt sie ins Objekt ein
+        :param dictionary: Dict mit Werten (dict kommt aus dem Frontend und wird per Flask bzw. restX automatisch
+        aus einer JSON-Datei erstellt)
+        '''
         obj = ThermostatBO()
         obj.set_id(dictionary["id"])
         obj.set_ain(dictionary["ain"])

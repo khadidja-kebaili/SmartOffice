@@ -1,6 +1,7 @@
 from flaskr.server.database.Mapper import Mapper
 from flaskr.server.bo.weekdays_jal.FridayBO import Friday
 
+
 class FridayMapper(Mapper):
 
     def __init__(self):
@@ -17,7 +18,7 @@ class FridayMapper(Mapper):
             else:
                 """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
-                friday.set_id(maxid[0]+1)
+                friday.set_id(maxid[0] + 1)
 
         command = "INSERT INTO friday (id, type, start_time, end_time, value) VALUES (%s, %s, %s, %s, %s)"
         data = (
@@ -26,7 +27,7 @@ class FridayMapper(Mapper):
             friday.get_start_time(),
             friday.get_end_time(),
             friday.get_value()
-            )
+        )
 
         cursor.execute(command, data)
 
@@ -188,7 +189,7 @@ class FridayMapper(Mapper):
         cursor = self._cnx.cursor()
 
         command = "UPDATE friday " + \
-            "SET value=%s, start_time=%s, end_time=%s WHERE id=%s and type=%s"
+                  "SET value=%s, start_time=%s, end_time=%s WHERE id=%s and type=%s"
         data = (friday.get_value(), friday.get_start_time(), friday.get_end_time(), friday.get_id(), friday.get_type())
         cursor.execute(command, data)
 
@@ -206,4 +207,3 @@ class FridayMapper(Mapper):
 
         self._cnx.commit()
         cursor.close()
-

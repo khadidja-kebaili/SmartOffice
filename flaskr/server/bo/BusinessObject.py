@@ -2,6 +2,10 @@ from abc import ABC, abstractmethod
 
 
 class Businessobject(ABC):
+    '''
+    Superklasse alle Businessobjekte
+    Vererbung einer globalen Id, die für alle Objekte in der Applikation gilt.
+    '''
 
     def __init__(self):
         # Die eindeutige Identifikationsnummer einer Instanz dieser Klasse.

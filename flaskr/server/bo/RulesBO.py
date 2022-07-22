@@ -41,13 +41,20 @@ class RulesBO(Businessobject):
     def get_end_time(self):
         return self._end
 
-
     def __str__(self):
+        '''
+        Gibt eine lesbare Representation des Objekts zurück
+        '''
         return "id:{}, type_of_device:{}, min-value:{}, max-value:{}, start_of_rule: {}, end_of_rule: {}".format(
                 self.get_id(), self.get_type(), self.get_min(), self.get_max(), self.get_start_time(), self.get_end_time())
 
     @staticmethod
     def from_dict(dictionary=dict()):
+        '''
+        Pickt Werte aus einem dictionary und setzt sie ins Objekt ein
+        :param dictionary: Dict mit Werten (dict kommt aus dem Frontend und wird per Flask bzw. restX automatisch
+        aus einer JSON-Datei erstellt)
+        '''
         obj = RulesBO()
         obj.set_id(dictionary['id'])
         obj.set_type(dictionary['type'])

@@ -43,13 +43,19 @@ class JalousienBO(bo):
         return self._d.status()
 
     def __str__(self):
-        """Erzeugen einer einfachen textuellen Repräsentation der jeweiligen Kontoinstanz."""
+        '''
+        Gibt eine lesbare Representation des Objekts zurück
+        '''
         return "Jalousie: id {}, device_id {}, ip_address {}, local_key {}".format(
             self.get_id(), self.get_device_id(), self.get_ip_address(), self.get_local_key())
 
     @staticmethod
     def from_dict(dictionary=dict()):
-        """Umwandeln eines Python dict() in ein Account()."""
+        '''
+        Pickt Werte aus einem dictionary und setzt sie ins Objekt ein
+        :param dictionary: Dict mit Werten (dict kommt aus dem Frontend und wird per Flask bzw. restX automatisch
+        aus einer JSON-Datei erstellt)
+        '''
         obj = JalousienBO()
         obj.set_id(dictionary["id"])
         obj.set_device_id(dictionary["device_id"])

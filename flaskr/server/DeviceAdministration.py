@@ -4,7 +4,6 @@ from flaskr.server.bo.Thermostat import ThermostatBO
 from flaskr.server.database.ThermostatMapper import ThermostatMapper
 from flaskr.server.bo.JalosuienStatusBO import JalousienStatusBO
 from flaskr.server.database.JalousienStatusMapper import JalousienStatusMapper
-from flaskr.server.bo.WochenplanJalBO import WeeklyPlanJalBO
 from flaskr.server.database.WochenplanJalMapper import WeeklyPlanJalMapper
 from flaskr.server.bo.WochenplanThermoBO import WeeklyPlanTempBO
 from flaskr.server.database.WochenplanTempMapper import WeeklyPlanTempMapper
@@ -23,11 +22,9 @@ from flaskr.server.database.RulesMapper import RulesMapper
 from flaskr.server.AuthGen import get_sid
 from flaskr.server.bo.ThermostatStatusBO import ThermostatStatusBO
 from flaskr.server.database.ThermostatStatusMapper import ThermostatStatusMapper
-import time
 import http.client
 from datetime import datetime, timedelta
 import datetime
-import statistics
 import tinytuya
 
 
@@ -39,7 +36,7 @@ class DeviceAdministration(object):
     def __init__(self):
         pass
 
-######## Jalousie-spezifische Methoden ########
+    ######## Jalousie-spezifische Methoden ########
 
     def add_device(self, device_id, ip_address, local_key):
         '''
@@ -117,7 +114,7 @@ class DeviceAdministration(object):
         with JalousienMapper() as mapper:
             mapper.delete(jalousie)
 
-### Jalousie Steuerungsoperationen ###
+    ### Jalousie Steuerungsoperationen ###
 
     def set_status_to_percentage_by_id(self, id, perc):
         '''
@@ -138,7 +135,9 @@ class DeviceAdministration(object):
             #      message = 'Die No_Access Zeit ist eingetroffen'
             #     print(message)
             #    return message
-            if elem.get_min() is not None and elem.get_max() is not None and self.in_between_times(datehour, elem.get_start_time(), elem.get_end_time()) is True:
+            if elem.get_min() is not None and elem.get_max() is not None and self.in_between_times(datehour,
+                                                                                                   elem.get_start_time(),
+                                                                                                   elem.get_end_time()) is True:
                 if perc > elem.get_max() or perc < elem.get_min():
                     message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
@@ -174,7 +173,7 @@ class DeviceAdministration(object):
             with JalousienStatusMapper() as mapper:
                 return mapper.insert(status)
 
-### Jalousien Status-Operationen ###
+    ### Jalousien Status-Operationen ###
 
     def get_status_of_jalousie_by_id(self, id):
         '''
@@ -343,64 +342,6 @@ class DeviceAdministration(object):
             return hourly_rate[-1]
         else:
             return 0
-
-    '''    def get_jal_mean_per_day(self, day):
-            result = []
-            i = 6
-            while i <= 20:
-                x = self.get_last_jal_ist_entry_of_hour_for_day(day, i)
-                result.append(x)
-                i += 1
-            return statistics.mean(result)
-    
-        def get_temp_mean_per_day(self, day):
-            result = []
-            i = 6
-            while i <= 20:
-                x = self.get_last_ist_temp_entry_of_hour_for_day(day, i)
-                result.append(x)
-                i += 1
-            return statistics.mean(result)
-
-        def get_jal_median_per_week(self, week):
-            liste = self.get_all_jal_status()
-            stats_for_week = []
-            weekly_stats = []
-            for elem in liste:
-                if elem.get_date().isocalendar()[1] == week:
-                    stats_for_week.append(elem)
-            for elem in stats_for_week:
-                elem_week = elem.get_date().isocalendar()[1]
-                day = elem.get_date().strftime('%Y-%m-%d')
-                if elem_week == week:
-                    x = self.get_jal_mean_per_day(day)
-                    weekly_stats.append(x)
-            if len(weekly_stats) > 1:
-                return statistics.median(weekly_stats)
-            elif len(weekly_stats) == 1:
-                return weekly_stats[0]
-            else:
-                return 0
-    
-        def get_temp_median_per_week(self, week):
-            liste = self.get_all_thermostat_status()
-            stats_for_week = []
-            weekly_stats = []
-            for elem in liste:
-                if elem.get_date().isocalendar()[1] == week:
-                    stats_for_week.append(elem)
-            for elem in stats_for_week:
-                elem_week = elem.get_date().isocalendar()[1]
-                day = elem.get_date().strftime('%Y-%m-%d')
-                if elem_week == week:
-                    x = self.get_temp_mean_per_day(day)
-                    weekly_stats.append(x)
-            if len(weekly_stats) > 1:
-                return statistics.median(weekly_stats)
-            elif len(weekly_stats) == 1:
-                return weekly_stats[0]
-            else:
-                return 0'''
 
     def get_ist_value_jal_for_timespan(self, von, bis, day):
         values = []
@@ -633,29 +574,39 @@ class DeviceAdministration(object):
 
     def get_last_temp_status(self):
         '''
-
-        :return:
+        Lädt die Thermostatstatus aus der Datenbank und gibt den letzten zurück.
+        :return: ThermostatStatusBO
         '''
         status = self.get_all_thermostat_status()
         return status[-1]
 
     def delete_thermostat_status_by_id(self, id):
+        '''
+        Löscht eine ThermostatStatusBO per id
+        :param id: ID des ThermostatStatus
+        '''
         status = self.get_status_of_thermostat_by_id(id)
         with ThermostatStatusMapper() as mapper:
             mapper.delete(status)
 
-    def get_last_thermostat_status(self):
-        status = self.get_all_thermostat_status()
-        return status[-1]
-
     def get_all_thermostat_status(self):
+        '''
+        Lädt alle Thermostatstatus aus der Datenbank
+        :return: Liste mit ThermostatStatusBOs
+        '''
         with ThermostatStatusMapper() as mapper:
             return mapper.find_all()
 
-
-########Thermostat-spezifische Methoden########
+    ########Thermostat-spezifische Methoden########
 
     def generate_sid(self, box_url, user_name, password):
+        '''
+        Generiert die SID um sich in die Fritzbox einloggen zu können.
+        :param box_url: Fritzbox-IP-Adresse
+        :param user_name: Benutzername
+        :param password: Passwort
+        :return: SID (string)
+        '''
         sid = get_sid(box_url, user_name, password)
         return sid
 
@@ -704,7 +655,7 @@ class DeviceAdministration(object):
         with ThermostatMapper() as mapper:
             mapper.update(thermostat)
 
-### Thermostat Steuerungsoperationen ###
+    ### Thermostat Steuerungsoperationen ###
 
     def set_temperature(self, temp, device_id=1):
         """
@@ -807,6 +758,10 @@ class DeviceAdministration(object):
         return data
 
     def get_soll_temp(self):
+        '''
+        Lädt die Soll-Temperatur aus dem Wochenplaneintrag aus der Datenbank
+        :return: Temperatur (integer)
+        '''
         date = datetime.datetime.now()
         weekday = date.isoweekday()
         if weekday == 1:
@@ -830,7 +785,7 @@ class DeviceAdministration(object):
         if weekday == 4:
             thurs = self.get_latest_temp_standard_entry_thursday()
             if thurs == None or thurs == 0:
-                return self.self.get_min_temp()
+                return self.get_min_temp()
             else:
                 return thurs.get_value()
         if weekday == 5:
@@ -841,6 +796,11 @@ class DeviceAdministration(object):
                 return fri.get_value()
 
     def set_min_temp_of_device(self, temp):
+        '''
+        Setzt die Mindesttemperatur am Device.
+        :param temp: Mindesttemperatur
+        :return: Mindesttemperaur
+        '''
         conn = http.client.HTTPSConnection("192.168.2.254", 8254)
         payload = ''
         sid = self.generate_sid(
@@ -857,9 +817,18 @@ class DeviceAdministration(object):
         data = data.decode("utf-8")
         return data
 
-######## Standardwochenplan Operationen ########
+    ######## Standardwochenplan Operationen ########
 
     def set_jal_standard_entry_monday(self, start, end, perc):
+        '''
+        Setzt den Jalousienstand zu einer gegebenen Zeitspanne in den Wochenplan am Montag.
+        Wenn sich die Zeiten mit einem bereits vorhandenen Eintrag schneiden, wird der alte Eintrag gelöscht.
+        Wenn der Eintrag gegen eine Regel gestößt wird dieser verworfen bzw. nicht gespeichert.
+        :param start: Startzeitpunkt des neuen Eintrags
+        :param end: Endzeitpunkt des neuen Eintrags
+        :param perc: Jalousienstand (Wertebereich von 0 für geschlossen und 100 für ganz offen)
+        :return: Wochenplaneintrag
+        '''
         trigger = False
         rules = self.get_all_jal_rules()
         if len(rules) == 0:
@@ -916,6 +885,10 @@ class DeviceAdministration(object):
                 mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_monday(self):
+        '''
+        Lädt alle Jalousien-Wochenplaneinträge für den Montag aus der Datenbank
+        :return: Liste mit MondayBOs Type J (Jalousie)
+        '''
         with MondayMapper() as mapper:
             return mapper.find_all_jal_entries()
 
@@ -924,12 +897,23 @@ class DeviceAdministration(object):
             return mapper.find_latest_jal_entry()
 
     def set_jal_standard_entry_tuesday(self, start, end, perc):
+        '''
+        Setzt den Jalousienstand zu einer gegebenen Zeitspanne in den Wochenplan am Dienstag.
+        Wenn sich die Zeiten mit einem bereits vorhandenen Eintrag schneiden, wird der alte Eintrag gelöscht.
+        Wenn der Eintrag gegen eine Regel gestößt wird dieser verworfen bzw. nicht gespeichert.
+        :param start: Startzeitpunkt des neuen Eintrags
+        :param end: Endzeitpunkt des neuen Eintrags
+        :param perc: Jalousienstand (Wertebereich von 0 für geschlossen und 100 für ganz offen)
+        :return: Wochenplaneintrag
+        '''
         trigger = False
         rules = self.get_all_jal_rules()
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end,
+                                                                                              elem.get_start_time(),
+                                                                                              elem.get_end_time()) is True:
                 if perc > elem.get_max() or perc < elem.get_min():
                     message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
@@ -983,16 +967,31 @@ class DeviceAdministration(object):
             return mapper.find_all_jal_entries()
 
     def get_latest_jal_standard_entry_tuesday(self):
+        '''
+        Lädt alle Jalousien-Wochenplaneinträge für den Dienstag aus der Datenbank
+        :return: Liste mit TuesdayBOs Type J (Jalousie)
+        '''
         with TuesdayMapper() as mapper:
             return mapper.find_latest_jal_entry()
 
     def set_jal_standard_entry_wednesday(self, start, end, perc):
+        '''
+        Setzt den Jalousienstand zu einer gegebenen Zeitspanne in den Wochenplan am Mittwoch.
+        Wenn sich die Zeiten mit einem bereits vorhandenen Eintrag schneiden, wird der alte Eintrag gelöscht.
+        Wenn der Eintrag gegen eine Regel gestößt wird dieser verworfen bzw. nicht gespeichert.
+        :param start: Startzeitpunkt des neuen Eintrags
+        :param end: Endzeitpunkt des neuen Eintrags
+        :param perc: Jalousienstand (Wertebereich von 0 für geschlossen und 100 für ganz offen)
+        :return: Wochenplaneintrag
+        '''
         trigger = False
         rules = self.get_all_jal_rules()
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end,
+                                                                                              elem.get_start_time(),
+                                                                                              elem.get_end_time()) is True:
                 if perc > elem.get_max() or perc < elem.get_min():
                     message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
@@ -1043,6 +1042,10 @@ class DeviceAdministration(object):
                 mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_wednesday(self):
+        '''
+        Lädt alle Jalousien-Wochenplaneinträge für den Mittwoch aus der Datenbank
+        :return: Liste mit WednesdayBOs Type J (Jalousie)
+        '''
         with WednesdayMapper() as mapper:
             return mapper.find_all_jal_entries()
 
@@ -1051,12 +1054,23 @@ class DeviceAdministration(object):
             return mapper.find_latest_jal_entry()
 
     def set_jal_standard_entry_thursday(self, start, end, perc):
+        '''
+        Setzt den Jalousienstand zu einer gegebenen Zeitspanne in den Wochenplan am Donnerstag.
+        Wenn sich die Zeiten mit einem bereits vorhandenen Eintrag schneiden, wird der alte Eintrag gelöscht.
+        Wenn der Eintrag gegen eine Regel gestößt wird dieser verworfen bzw. nicht gespeichert.
+        :param start: Startzeitpunkt des neuen Eintrags
+        :param end: Endzeitpunkt des neuen Eintrags
+        :param perc: Jalousienstand (Wertebereich von 0 für geschlossen und 100 für ganz offen)
+        :return: Wochenplaneintrag
+        '''
         trigger = False
         rules = self.get_all_jal_rules()
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end,
+                                                                                              elem.get_start_time(),
+                                                                                              elem.get_end_time()) is True:
                 if perc > elem.get_max() or perc < elem.get_min():
                     message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
@@ -1106,6 +1120,10 @@ class DeviceAdministration(object):
                 mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_thursday(self):
+        '''
+        Lädt alle Jalousien-Wochenplaneinträge für den Donnerstag aus der Datenbank
+        :return: Liste mit ThursdayBOs Type J (Jalousie)
+        '''
         with ThursdayMapper() as mapper:
             return mapper.find_all_jal_entries()
 
@@ -1114,12 +1132,23 @@ class DeviceAdministration(object):
             return mapper.find_latest_jal_entry()
 
     def set_jal_standard_entry_friday(self, start, end, perc):
+        '''
+        Setzt den Jalousienstand zu einer gegebenen Zeitspanne in den Wochenplan am Freitag.
+        Wenn sich die Zeiten mit einem bereits vorhandenen Eintrag schneiden, wird der alte Eintrag gelöscht.
+        Wenn der Eintrag gegen eine Regel gestößt wird dieser verworfen bzw. nicht gespeichert.
+        :param start: Startzeitpunkt des neuen Eintrags
+        :param end: Endzeitpunkt des neuen Eintrags
+        :param perc: Jalousienstand (Wertebereich von 0 für geschlossen und 100 für ganz offen)
+        :return: Wochenplaneintrag
+        '''
         trigger = False
         rules = self.get_all_jal_rules()
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end,
+                                                                                              elem.get_start_time(),
+                                                                                              elem.get_end_time()) is True:
                 if perc > elem.get_max() or perc < elem.get_min():
                     message = 'Das geht so nicht!', perc, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
@@ -1170,6 +1199,10 @@ class DeviceAdministration(object):
                 mapper.insert(standard_entry)
 
     def get_all_jal_standard_entries_friday(self):
+        '''
+        Lädt alle Jalousien-Wochenplaneinträge für den Freitag aus der Datenbank
+        :return: Liste mit FridayBOs Type J (Jalousie)
+        '''
         with FridayMapper() as mapper:
             return mapper.find_all_jal_entries()
 
@@ -1178,12 +1211,23 @@ class DeviceAdministration(object):
             return mapper.find_latest_jal_entry()
 
     def set_temp_standard_entry_monday(self, start, end, temp):
+        '''
+        Setzt die Temperatur zu einer gegebenen Zeitspanne in den Wochenplan am Montag.
+        Wenn sich die Zeiten mit einem bereits vorhandenen Eintrag schneiden, wird der alte Eintrag gelöscht.
+        Wenn der Eintrag gegen eine Regel gestößt wird dieser verworfen bzw. nicht gespeichert.
+        :param start: Startzeitpunkt des neuen Eintrags
+        :param end: Endzeitpunkt des neuen Eintrags
+        :param perc: Temperatur (Wertebereich von 16 für 16°C und 34 für 34°C)
+        :return: Wochenplaneintrag
+        '''
         trigger = False
         rules = self.get_all_temp_rules()
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end,
+                                                                                              elem.get_start_time(),
+                                                                                              elem.get_end_time()) is True:
                 if temp > elem.get_max() or temp < elem.get_min():
                     message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
@@ -1233,6 +1277,10 @@ class DeviceAdministration(object):
                 mapper.insert(standard_entry)
 
     def get_all_temp_standard_entries_monday(self):
+        '''
+        Lädt alle Themrostat-Wochenplaneinträge für den Montag aus der Datenbank
+        :return: Liste mit MondayBOs Type T (Thermostat)
+        '''
         with MondayMapper() as mapper:
             return mapper.find_all_temp_entries()
 
@@ -1249,12 +1297,23 @@ class DeviceAdministration(object):
             return mapper.delete_byId(id)
 
     def set_temp_standard_entry_tuesday(self, start, end, temp):
+        '''
+        Setzt die Temperatur zu einer gegebenen Zeitspanne in den Wochenplan am Dienstag.
+        Wenn sich die Zeiten mit einem bereits vorhandenen Eintrag schneiden, wird der alte Eintrag gelöscht.
+        Wenn der Eintrag gegen eine Regel gestößt wird dieser verworfen bzw. nicht gespeichert.
+        :param start: Startzeitpunkt des neuen Eintrags
+        :param end: Endzeitpunkt des neuen Eintrags
+        :param perc: Temperatur (Wertebereich von 16 für 16°C und 34 für 34°C)
+        :return: Wochenplaneintrag
+        '''
         trigger = False
         rules = self.get_all_temp_rules()
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end,
+                                                                                              elem.get_start_time(),
+                                                                                              elem.get_end_time()) is True:
                 if temp > elem.get_max() or temp < elem.get_min():
                     message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
@@ -1304,6 +1363,11 @@ class DeviceAdministration(object):
                 mapper.insert(standard_entry)
 
     def get_all_temp_standard_entries_tuesday(self):
+        '''
+        Lädt alle Themrostat-Wochenplaneinträge für den Dienstag aus der Datenbank
+        :return: Liste mit TuesdayBOs Type T (Thermostat)
+        '''
+
         with TuesdayMapper() as mapper:
             return mapper.find_all_temp_entries()
 
@@ -1316,12 +1380,23 @@ class DeviceAdministration(object):
             return mapper.delete(entry)
 
     def set_temp_standard_entry_wednesday(self, start, end, temp):
+        '''
+        Setzt die Temperatur zu einer gegebenen Zeitspanne in den Wochenplan am Mittwoch.
+        Wenn sich die Zeiten mit einem bereits vorhandenen Eintrag schneiden, wird der alte Eintrag gelöscht.
+        Wenn der Eintrag gegen eine Regel gestößt wird dieser verworfen bzw. nicht gespeichert.
+        :param start: Startzeitpunkt des neuen Eintrags
+        :param end: Endzeitpunkt des neuen Eintrags
+        :param perc: Temperatur (Wertebereich von 16 für 16°C und 34 für 34°C)
+        :return: Wochenplaneintrag
+        '''
         trigger = False
         rules = self.get_all_temp_rules()
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end,
+                                                                                              elem.get_start_time(),
+                                                                                              elem.get_end_time()) is True:
                 if temp > elem.get_max() or temp < elem.get_min():
                     message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
@@ -1372,6 +1447,10 @@ class DeviceAdministration(object):
                 mapper.insert(standard_entry)
 
     def get_all_temp_standard_entries_wednesday(self):
+        '''
+        Lädt alle Themrostat-Wochenplaneinträge für den Mittwoch aus der Datenbank
+        :return: Liste mit WednesdayBOs Type T (Thermostat)
+        '''
         with WednesdayMapper() as mapper:
             return mapper.find_all_temp_entries()
 
@@ -1384,12 +1463,23 @@ class DeviceAdministration(object):
             return mapper.delete(entry)
 
     def set_temp_standard_entry_thursday(self, start, end, temp):
+        '''
+        Setzt die Temperatur zu einer gegebenen Zeitspanne in den Wochenplan am Donnerstag.
+        Wenn sich die Zeiten mit einem bereits vorhandenen Eintrag schneiden, wird der alte Eintrag gelöscht.
+        Wenn der Eintrag gegen eine Regel gestößt wird dieser verworfen bzw. nicht gespeichert.
+        :param start: Startzeitpunkt des neuen Eintrags
+        :param end: Endzeitpunkt des neuen Eintrags
+        :param perc: Temperatur (Wertebereich von 16 für 16°C und 34 für 34°C)
+        :return: Wochenplaneintrag
+        '''
         trigger = False
         rules = self.get_all_temp_rules()
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end,
+                                                                                              elem.get_start_time(),
+                                                                                              elem.get_end_time()) is True:
                 if temp > elem.get_max() or temp < elem.get_min():
                     message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
@@ -1439,6 +1529,10 @@ class DeviceAdministration(object):
                 mapper.insert(standard_entry)
 
     def get_all_temp_standard_entries_thursday(self):
+        '''
+        Lädt alle Themrostat-Wochenplaneinträge für den Donnerstag aus der Datenbank
+        :return: Liste mit ThursdayBOs Type T (Thermostat)
+        '''
         with ThursdayMapper() as mapper:
             return mapper.find_all_temp_entries()
 
@@ -1451,12 +1545,23 @@ class DeviceAdministration(object):
             return mapper.delete(entry)
 
     def set_temp_standard_entry_friday(self, start, end, temp):
+        '''
+        Setzt die Temperatur zu einer gegebenen Zeitspanne in den Wochenplan am Freitag.
+        Wenn sich die Zeiten mit einem bereits vorhandenen Eintrag schneiden, wird der alte Eintrag gelöscht.
+        Wenn der Eintrag gegen eine Regel gestößt wird dieser verworfen bzw. nicht gespeichert.
+        :param start: Startzeitpunkt des neuen Eintrags
+        :param end: Endzeitpunkt des neuen Eintrags
+        :param perc: Temperatur (Wertebereich von 16 für 16°C und 34 für 34°C)
+        :return: Wochenplaneintrag
+        '''
         trigger = False
         rules = self.get_all_temp_rules()
         if len(rules) == 0:
             trigger = True
         for elem in rules:
-            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end, elem.get_start_time(), elem.get_end_time()) is True:
+            if elem.get_min() is not None and elem.get_max() is not None and self.overlapping(start, end,
+                                                                                              elem.get_start_time(),
+                                                                                              elem.get_end_time()) is True:
                 if temp > elem.get_max() or temp < elem.get_min():
                     message = 'Das geht so nicht!', temp, 'Mindesttemp:', elem.get_min(
                     ), 'Maxtemp:', elem.get_max()
@@ -1506,6 +1611,10 @@ class DeviceAdministration(object):
                 mapper.insert(standard_entry)
 
     def get_all_temp_standard_entries_friday(self):
+        '''
+        Lädt alle Themrostat-Wochenplaneinträge für den Freitag aus der Datenbank
+        :return: Liste mit FridayBOs Type T (Thermostat)
+        '''
         with FridayMapper() as mapper:
             return mapper.find_all_temp_entries()
 
@@ -1530,7 +1639,6 @@ class DeviceAdministration(object):
             return mapper.find_by_weekday(weekday)
 
     def delete_entry_in_standard_weeklyplan_jal(self, entry):
-        print(entry)
         with WeeklyPlanJalMapper() as mapper:
             mapper.delete(entry)
 
@@ -1545,6 +1653,15 @@ class DeviceAdministration(object):
     '''Regel-Operationen'''
 
     def set_jal_rule(self, min, max, start, end):
+        '''
+        Setzten einer neuen Regel für Jalousiensteuerung.
+        Wenn die neue Regel sich mit einer alten überlappt, wird die alte gelöscht.
+        :param min: Mindeststand der Jalousie (0-100)
+        :param max: Maximalstand der Jalousie (0-100)
+        :param start: Startzeitpunkt der Regel
+        :param end: Endzeitpunkt der Regel
+        :return:
+        '''
         rule = RulesBO()
         rule.set_min(min)
         rule.set_max(max)
@@ -1576,27 +1693,13 @@ class DeviceAdministration(object):
         with RulesMapper() as mapper:
             mapper.delete_jal_rules_byId(id_entry)
 
-    def set_temp_rule(self, min, max, start, end):
-        '''    def set_temp_rule(self, min, max, start, end):
-            rule = RulesBO()
-            rule.set_min(min)
-            rule.set_max(max)
-            rule.set_type('T')
-            rule.set_start_time(start)
-            rule.set_end_time(end)
-            rules = self.get_all_temp_rules()
-            for elem in rules:
-                if elem.get_start_time() is None and elem.get_end_time() is None and min is None and elem.get_min()
-
-                    print(elem, 'wurde gelöscht.')
-                    self.delete_rule(elem)
-                else:
-                    print('nichts passiert', start, end,
-                          elem.get_start_time(), elem.get_end_time())
-            with RulesMapper() as mapper:
-                return mapper.insert(rule)'''
-
     def set_temp_rule_min(self, min):
+        '''
+        Setzten einer neue Mindesttemperatur für die Thermostatsteuerung.
+        Wenn die neue Regel sich mit einer alten überlappt, wird die alte gelöscht.
+        :param min: Mindestemperatur, die nicht unterschritten werden darf.
+        :return: Mindesttemperatur (integer)
+        '''
         rule = RulesBO()
         rule.set_min(min)
         rule.set_type('T')
@@ -1624,6 +1727,12 @@ class DeviceAdministration(object):
                 return min
 
     def set_temp_rule_max(self, max):
+        '''
+        Setzten einer neue Maximaltemperatur für die Thermostatsteuerung.
+        Wenn die neue Regel sich mit einer alten überlappt, wird die alte gelöscht.
+        :param max: Maximaltemperatur, die nicht überschritten werden darf.
+        :return: Maximaltemperatur (integer)
+        '''
         rule = RulesBO()
         rule.set_max(max)
         rule.set_type('T')
@@ -1652,22 +1761,44 @@ class DeviceAdministration(object):
                 return max
 
     def get_all_rules(self):
+        '''
+        Lädt alle Regeln aus der Datenbank
+        :return: Liste mit RuleBOs
+        '''
         with RulesMapper() as mapper:
             return mapper.find_all()
 
     def get_all_jal_rules(self):
+        '''
+        Lädt alle Jalousien-Regeln aus der Datenbank
+        :return: Liste mit RuleBOs Type J
+        '''
         with RulesMapper() as mapper:
             return mapper.find_by_type('J')
 
     def get_all_temp_rules(self):
+        '''
+        Lädt alle Thermostat-Regeln aus der Datenbank
+        :return: Liste mit RuleBOs Type T
+        '''
         with RulesMapper() as mapper:
             return mapper.find_by_type('T')
 
     def get_rule_by_id(self, id):
+        '''
+        Lädt Regel mit einer bestimmten ID
+        :param id: RulesBO Id
+        :return: RuleBO
+        '''
         with RulesMapper() as mapper:
             return mapper.find_by_key(id)
 
     def get_min_temp(self):
+        '''
+        Lädt die Mindesttemperatur aus der Datenbank, wenn kein Eintrag in der Datenbank, dann die voreingestellte
+        Mindesttemperatur aus dem Device (16°C)
+        :return: Mindesttemperatur (integer)
+        '''
         rules = self.get_all_temp_rules()
         min_of_db = []
         if len(rules) > 0:
@@ -1682,6 +1813,11 @@ class DeviceAdministration(object):
             return self.get_temp_from_device()
 
     def get_max_temp(self):
+        '''
+        Lädt die Maximaltemperatur aus der Datenbank, wenn kein Eintrag in der Datenbank, dann die voreingestellte
+        Maximaltemperatur aus dem Device
+        :return: Maximaltemperatur (integer)
+        '''
         rules = self.get_all_temp_rules()
         max_of_db = []
         if len(rules) > 0:
@@ -1696,6 +1832,14 @@ class DeviceAdministration(object):
             return self.get_temp_from_device()
 
     def overlapping(self, new_start, new_end, old_start, old_end):
+        '''
+        Supportfunktion, die checkt ob eine Zeitspanne sich mit einer anderen Zeitspanne deckt.
+        :param new_start: Startzeitpunkt der neuen Zeitspanne
+        :param new_end: Endzeitpunkt der neuen Zeitspanne
+        :param old_start: Startzeitpunkt der alten Zeitspanne
+        :param old_end: Endzeitpunkt der alten Zeitspanne
+        :return: boolean-Value, True oder False
+        '''
         new_start = datetime.datetime.strptime(new_start, '%H:%M:%S').hour
         new_start = float(new_start)
         new_end = datetime.datetime.strptime(new_end, '%H:%M:%S').hour

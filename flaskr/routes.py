@@ -17,8 +17,8 @@ def index():
 # former Test()
 def Status():
     """
-    Return a simple odata container with date time information
-    :return:
+    Generieriung einer JSON-Datei anhand Liste aller Jalousienstatus
+    :return: JSON-Datei mit Datum und Jalousienstand (0-100)
     """
     adm = DeviceAdministration()
 
@@ -27,7 +27,7 @@ def Status():
             'results': []
         }
     }
-    i = 0
+
     names = adm.get_all_jal_status()
 
     for elem in names:
@@ -43,8 +43,8 @@ def Status():
 # hier ist die get_Status Methode
 def LastStatusJalousien():
     """
-    Return a simple odata container with date time information
-    :return:
+    Generieriung einer JSON-Datei anhand des letzten Jalousienstatus
+    :return: JSON-Datei mit letztem Jalousienstatus
     """
     adm = DeviceAdministration()
 
@@ -64,8 +64,8 @@ def LastStatusJalousien():
 @app.route('/Jalousien', methods=["POST"])
 def set_jal():
     """
-    Return a simple odata container with date time information
-    :return:
+    Lädt Werte aus dem Frontend und steuert mit dem Wert eine Jalousie
+    :return: Dict()
     """
 
     adm = DeviceAdministration()
@@ -84,8 +84,8 @@ def set_jal():
 @app.route('/JalousienStatusPerHour', methods=["GET"])
 def get_jal_stats_per_hour_for_weekday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Generieriung einer JSON-Datei anhand Liste mit Werten für das Reporting
+    :return: JSON-Datei mit 4 Werten.
     """
 
     adm = DeviceAdministration()
@@ -108,15 +108,6 @@ def get_jal_stats_per_hour_for_weekday():
 
 @app.route('/JalIstStatusPerDay', methods=["GET"])
 def status_per_day():
-    """
-    Return a simple odata container with date time information
-    :return:
-    """
-    """
-    Return a simple odata container with date time information
-    :return:
-    """
-
     adm = DeviceAdministration()
 
     day = request.args.get('day')
@@ -145,11 +136,6 @@ def status_per_day():
 def temp_ist_status_per_day():
     """
     Return a simple odata container with date time information
-    :return:
-    """
-    """
-    Return a simple odata container with date time information
-    :return:
     """
 
     adm = DeviceAdministration()
@@ -180,12 +166,8 @@ def temp_ist_status_per_day():
 def jal_soll_status_per_day():
     """
     Return a simple odata container with date time information
-    :return:
     """
-    """
-    Return a simple odata container with date time information
-    :return:
-    """
+
 
     adm = DeviceAdministration()
 
@@ -215,11 +197,6 @@ def jal_soll_status_per_day():
 def temp_soll_status_per_day():
     """
     Return a simple odata container with date time information
-    :return:
-    """
-    """
-    Return a simple odata container with date time information
-    :return:
     """
 
     adm = DeviceAdministration()
@@ -248,7 +225,6 @@ def temp_soll_status_per_day():
 def jalstatuscombined_per_day():
     """
     Return a simple odata container with date time information
-    :return:
     """
     adm = DeviceAdministration()
 
@@ -276,7 +252,6 @@ def jalstatuscombined_per_day():
 def tempstatuscombined_per_day():
     """
     Return a simple odata container with date time information
-    :return:
     """
     adm = DeviceAdministration()
 
@@ -304,11 +279,6 @@ def tempstatuscombined_per_day():
 def status_for_week():
     """
     Return a simple odata container with date time information
-    :return:
-    """
-    """
-    Return a simple odata container with date time information
-    :return:
     """
 
     adm = DeviceAdministration()
@@ -337,7 +307,6 @@ def status_for_week():
 def set_temp():
     """
     Return a simple odata container with date time information
-    :return:
     """
 
     adm = DeviceAdministration()
@@ -359,7 +328,6 @@ def set_temp():
 def get_temp():
     """
     Return a simple odata container with date time information
-    :return:
     """
     adm = DeviceAdministration()
 
@@ -382,7 +350,6 @@ def get_temp():
 def get_soll_temp():
     """
     Return a simple odata container with date time information
-    :return:
     """
     adm = DeviceAdministration()
 
@@ -406,7 +373,6 @@ def get_soll_temp():
 def get_entries_jal_monday():
     """
     Return a simple odata container with date time information
-    :return:
     """
     adm = DeviceAdministration()
 
@@ -435,7 +401,6 @@ def get_entries_jal_monday():
 def get_entries_jal_tuesday():
     """
     Return a simple odata container with date time information
-    :return:
     """
     adm = DeviceAdministration()
 
@@ -462,7 +427,6 @@ def get_entries_jal_tuesday():
 def get_entries_jal_wednesday():
     """
     Return a simple odata container with date time information
-    :return:
     """
     adm = DeviceAdministration()
 
@@ -489,7 +453,6 @@ def get_entries_jal_wednesday():
 def get_entries_jal_thursday():
     """
     Return a simple odata container with date time information
-    :return:
     """
     adm = DeviceAdministration()
 
@@ -516,7 +479,6 @@ def get_entries_jal_thursday():
 def get_entries_jal_friday():
     """
     Return a simple odata container with date time information
-    :return:
     """
     adm = DeviceAdministration()
 
@@ -543,7 +505,6 @@ def get_entries_jal_friday():
 def set_jal_standard_monday():
     """
     Return a simple odata container with date time information
-    :return:
     """
 
     adm = DeviceAdministration()
@@ -565,7 +526,6 @@ def set_jal_standard_monday():
 def set_jal_standard_tuesday():
     """
     Return a simple odata container with date time information
-    :return:
     """
 
     adm = DeviceAdministration()
@@ -586,7 +546,6 @@ def set_jal_standard_tuesday():
 def set_jal_standard_wednesday():
     """
     Return a simple odata container with date time information
-    :return:
     """
 
     adm = DeviceAdministration()
@@ -607,7 +566,6 @@ def set_jal_standard_wednesday():
 def set_jal_standard_thursday():
     """
     Return a simple odata container with date time information
-    :return:
     """
 
     adm = DeviceAdministration()
@@ -648,7 +606,6 @@ def set_jal_standard_friday():
 def delete_entry_jal_monday():
     """
     Return a simple odata container with date time information
-    :return:
     """
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]
@@ -668,7 +625,6 @@ def delete_entry_jal_monday():
 def delete_entry_jal_tuesday():
     """
     Return a simple odata container with date time information
-    :return:
     """
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]
@@ -688,7 +644,6 @@ def delete_entry_jal_tuesday():
 def delete_entry_jal_wednesday():
     """
     Return a simple odata container with date time information
-    :return:
     """
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]
@@ -728,7 +683,6 @@ def delete_entry_jal_thursday():
 def delete_entry_jal_friday():
     """
     Return a simple odata container with date time information
-    :return:
     """
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]
