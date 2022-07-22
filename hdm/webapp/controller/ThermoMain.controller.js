@@ -23,37 +23,39 @@ sap.ui.define([
         
         _onRouteMatched : function (oEvent){
             this.getTemp().done(function(result) {
-                console.log(result.d.results[0].temperature)  
                 var currentTemp = result.d.results[0].temperature
                 self.byId("currentTemp").setValue(currentTemp)
             })
 
             this.getSollTemp().done(function(result) {
-                console.log(result.d.results[0].temperature)  
                 var targetTemp = result.d.results[0].temperature
                 self.byId("targetTemp").setValue(targetTemp)
             })
         },
+
+        // get current temperature
         getTemp: function () {
-            console.log('Get data für Thermo')
             return jQuery.ajax({
                 url: "/GetTemp",
                 type: "GET"
             });
         },
 
+        // get target temperature
         getSollTemp: function() {
-            console.log('Get soll temp')
             return jQuery.ajax({
                 url: "/GetSollTemp",
                 type: "GET"
             });
         },
-        
+
+        // go to weekly plan
         pressnavWeeklyPlanThermo: function (evt) {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("wochenplanthermo")
         },
+
+        // go to rules
         pressNavRegelnThermo: function(oEvent) {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("regelnthermo")
@@ -70,9 +72,11 @@ sap.ui.define([
             oRouter.navTo("/", {}, true);
           }
         },
-        
+
+        // change target temperature and get feedback
         changeTargetTemp: function(oEvent) {
             sap.ui.core.BusyIndicator.hide(0);
+            //
             var oData = {
                 'value': oEvent.getParameter("value")
             };
@@ -92,14 +96,11 @@ sap.ui.define([
                 var errorcheck = result.type
                 var mindestwert = result.min / 10
                 var maximalwert = result.max / 10
-                console.log(errorcheck)
                 if (errorcheck === "0") {
-                    console.log('Temp zu hoch')
                     MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Die Temperatur darf maximal " + maximalwert + "°C betragen. \n Bitte versuche eine andere Einstellung!");
                     self.byId("targetTemp").setValue(null)
                 }
                 else if (errorcheck === "1") {
-                    console.log('Temp zu niedrig')
                     MessageBox.error("Der Eintrag verstößt gegen eine Regel. \n Die Temperatur muss mindestens " + mindestwert + "°C betragen. \n Bitte versuche eine andere Einstellung!");
                     self.byId("targetTemp").setValue(null)
                 }
