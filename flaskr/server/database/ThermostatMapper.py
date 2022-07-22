@@ -3,6 +3,12 @@ from flaskr.server.bo.Thermostat import ThermostatBO
 
 
 class ThermostatMapper(Mapper):
+    '''
+    Implemenierung der Mapper-Klasse für Thermostate.
+    Hierzu wird eine Reihe von Methoden zur Verfügung gestellt, mit deren Hilfe z.B.
+    Objekte gesucht, erzeugt, modifiziert und gelöscht werden können.
+    Das Mapping ist bidirektional. D.h., Objekte können in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+    '''
 
     def __init__(self):
         super().__init__()
@@ -31,7 +37,10 @@ class ThermostatMapper(Mapper):
         return thermostat
 
     def find_all(self):
-
+        """
+        Auslesen aller Thermostate aus der Datenbank.
+        :return: Array mit ThermostatBOs
+        """
         result = []
         cursor = self._cnx.cursor()
         command = "SELECT id, ain FROM thermostate"
@@ -99,6 +108,10 @@ class ThermostatMapper(Mapper):
         return result
 
     def update(self, thermostat):
+        """
+        Wiederholtes Schreiben eines Objekts in die Datenbank.
+        :param thermostat: das Objekt, das in die DB geschrieben werden soll
+        """
         cursor = self._cnx.cursor()
 
         command = "UPDATE thermostate " + \
@@ -112,6 +125,10 @@ class ThermostatMapper(Mapper):
         return thermostat
 
     def delete(self, thermostat):
+        """
+        Löschen eines Thermostat-Objekts aus der Datenbank.
+        :param thermostat: das aus der DB zu löschende "Objekt"
+        """
         cursor = self._cnx.cursor()
 
         command = "DELETE FROM thermostate WHERE id={}".format(

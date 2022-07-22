@@ -2,11 +2,25 @@ from flaskr.server.database.Mapper import Mapper
 from flaskr.server.bo.weekdays_jal.ThursdayBO import Thursday
 
 class ThursdayMapper(Mapper):
+    '''
+    Implemenierung der Mapper-Klasse für Wochenplaneinträge am Donnerstag.
+    Hierzu wird eine Reihe von Methoden zur Verfügung gestellt, mit deren Hilfe z.B.
+    Objekte gesucht, erzeugt, modifiziert und gelöscht werden können.
+    Das Mapping ist bidirektional. D.h., Objekte können in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+    '''
 
     def __init__(self):
         super().__init__()
 
     def insert(self, thursday):
+        """Einfügen eines Thursday-Objekts in die Datenbank.
+
+        Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
+        berichtigt.
+
+        :param thursday das zu speichernde Objekt
+        :return das bereits übergebene Objekt, jedoch mit ggf. korrigierter ID.
+        """
         cursor = self._cnx.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM thursday")
         tuples = cursor.fetchall()
@@ -35,6 +49,10 @@ class ThursdayMapper(Mapper):
         return thursday
 
     def find_all(self):
+        """
+        Auslesen aller Einträge zu Donnerstag.
+        :return: Array mit ThursdayBOs
+        """
         result = []
         cursor = self._cnx.cursor()
         command = "SELECT * FROM thursday"
@@ -56,6 +74,11 @@ class ThursdayMapper(Mapper):
         return result
 
     def find_by_key(self, key):
+        """
+        Lädt einen Donnerstagseintrag aus der Datenbank mithilfe der Id
+        :param id: ThursdayBO-Id
+        :return: ThursdayBO
+        """
         result = None
         cursor = self._cnx.cursor()
         command = "SELECT * FROM thursday WHERE id={}".format(key)
@@ -83,6 +106,10 @@ class ThursdayMapper(Mapper):
         return result
 
     def find_all_jal_entries(self):
+        '''
+        Lädt alle  Jalousien-Eintrage am Donnertstag aus der Datenbank
+        :return: Liste mit ThursdayBOs
+        '''
         result = []
         cursor = self._cnx.cursor()
         command = "SELECT * FROM thursday WHERE type='J'"
@@ -104,6 +131,10 @@ class ThursdayMapper(Mapper):
         return result
 
     def find_all_temp_entries(self):
+        '''
+        Lädt alle  Thermostat-Eintrage am Donnertstag aus der Datenbank
+        :return: Liste mit ThursdayBOs
+        '''
         result = []
         cursor = self._cnx.cursor()
         command = "SELECT * FROM thursday WHERE type='T'"
@@ -125,6 +156,10 @@ class ThursdayMapper(Mapper):
         return result
 
     def find_latest_jal_entry(self):
+        '''
+        Lädt den letzten Jalousien-Eintrag am Donnerstag aus der Datenbank
+        :return: ThursdayBO
+        '''
         cursor = self._cnx.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM thursday")
         tuples = cursor.fetchall()
@@ -155,6 +190,10 @@ class ThursdayMapper(Mapper):
             return result
 
     def find_latest_temp_entry(self):
+        '''
+        Lädt den letzten Thermostat-Eintrag am Donnerstag aus der Datenbank
+        :return: ThursdayBO
+        '''
         cursor = self._cnx.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM thursday")
         tuples = cursor.fetchall()
@@ -185,6 +224,10 @@ class ThursdayMapper(Mapper):
             return result
 
     def update(self, thursday):
+        """Wiederholtes Schreiben eines Objekts in die Datenbank.
+
+        :param jalousie das Objekt, das in die DB geschrieben werden soll
+        """
         cursor = self._cnx.cursor()
 
         command = "UPDATE thursday " + \
@@ -198,6 +241,11 @@ class ThursdayMapper(Mapper):
         return thursday
 
     def delete(self, thursday):
+        """
+        Löschen eines Donnerstag-Objekts aus der Datenbank.
+
+        :param thursday: das aus der DB zu löschende "Objekt"
+        """
         cursor = self._cnx.cursor()
 
         command = "DELETE FROM thursday WHERE id=%s and type=%s"

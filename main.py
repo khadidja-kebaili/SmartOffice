@@ -8,21 +8,28 @@ exitFlag = 0
 
 
 class myThread(threading.Thread):
+    '''
+    Implementierung des Multi-Threading Ansatzes.
+    '''
+
     def __init__(self, name, n):
         threading.Thread.__init__(self)
         self.name = name
         self.n = n
 
     def run(self):
+        '''
+        Die verschiedenen Threads, die weiter unten definiert wurden, werden hier über deren Namen aufgerufen.
+        Bei check_jal_stat() und check_temp_stat() ist  auch die Zeitspanne,
+        in welcher diese wiederholt werden sollen anzugeben.
+        '''
         print("Starting " + self.name)
         if self.name == 'Thread1':
-            check_jal_stat(self.name, 50)
-            check_jal_stat(self.name, 60)
+            check_jal_stat(self.name, 3550)
             print("Exiting " + self.name)
         elif self.name == 'main_server_thread':
-            something()
+            flask_app()
         elif self.name == 'Thread2':
-            check_temp_stat(self.name, 50)
             check_temp_stat(self.name, 3550)
             print('nothings going on')
         else:
@@ -30,6 +37,11 @@ class myThread(threading.Thread):
 
 
 def check_jal_stat(thread_name, delay):
+    '''
+    Stündlicher Check ob der jetztige Jalousienstand dem Planwert entspricht.
+    :param thread_name: Name des Threads
+    :param delay: Wie lange bis zur Wiederholung des Threads
+    '''
     date = datetime.now()
     weekday = date.isoweekday()
     adm = DeviceAdministration()
@@ -79,6 +91,11 @@ def check_jal_stat(thread_name, delay):
 
 
 def check_temp_stat(thread_name, delay):
+    '''
+    Stündlicher Check ob der jetztige Temperatur dem Planwert entspricht.
+    :param thread_name: Name des Threads
+    :param delay: Wie lange bis zur Wiederholung des Threads
+    '''
     date = datetime.now()
     weekday = date.isoweekday()
     print(date, weekday)
@@ -86,13 +103,9 @@ def check_temp_stat(thread_name, delay):
     stats = []
     if weekday == 1:
         entries = adm.get_all_temp_standard_entries_monday()
-        if len(entries) > 0:
-            print('Heute ist Montag')
-            for elem in entries:
-                stats.append(elem)
-        else:
-            print('Heute ist Montag')
-            return 0
+        for elem in entries:
+            print(elem)
+            stats.append(elem)
     elif weekday == 2:
         entries = adm.get_all_temp_standard_entries_tuesday()
         if len(entries) > 0:
@@ -101,7 +114,6 @@ def check_temp_stat(thread_name, delay):
                 stats.append(elem)
         else:
             return 0
-            stats.append(elem)
     elif weekday == 3:
         entries = adm.get_all_temp_standard_entries_wednesday()
         if len(entries) > 0:
@@ -110,7 +122,6 @@ def check_temp_stat(thread_name, delay):
                 stats.append(elem)
         else:
             return 0
-            stats.append(elem)
     elif weekday == 4:
         entries = adm.get_all_temp_standard_entries_thursday()
         if len(entries) > 0:
@@ -119,7 +130,6 @@ def check_temp_stat(thread_name, delay):
                 stats.append(elem)
         else:
             return 0
-            stats.append(elem)
     elif weekday == 5:
         entries = adm.get_all_temp_standard_entries_friday()
         if len(entries) > 0:
@@ -143,9 +153,12 @@ def check_temp_stat(thread_name, delay):
     print("%s" % thread_name, count)
 
 
-def something():
+def flask_app():
+    '''
+    Flask-App Ausführung durch diesen Thread
+    '''
     if __name__ == "__main__":
-        app.run('0.0.0.0', debug=False, ssl_context='adhoc')
+        app.run('192.168.2.187', debug=False, ssl_context='adhoc')
 
 
 # Create new threads

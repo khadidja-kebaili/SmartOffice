@@ -4,18 +4,18 @@ from datetime import datetime
 
 
 class JalousienStatusMapper(Mapper):
-    """Mapper-Klasse, die Account-Objekte auf eine relationale
-    Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
-    gestellt, mit deren Hilfe z.B. Objekte gesucht, erzeugt, modifiziert und
-    gelöscht werden können. Das Mapping ist bidirektional. D.h., Objekte können
-    in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
-    """
+    '''
+    Implemenierung der Mapper-Klasse für JalousienStatus.
+    Hierzu wird eine Reihe von Methoden zur Verfügung gestellt, mit deren Hilfe z.B.
+    Objekte gesucht, erzeugt, modifiziert und gelöscht werden können.
+    Das Mapping ist bidirektional. D.h., Objekte können in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+    '''
 
     def __init__(self):
         super().__init__()
 
     def insert(self, status):
-        """Einfügen eines Account-Objekts in die Datenbank.
+        """Einfügen eines Jalousiestatus-Objekts in die Datenbank.
 
         Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
         berichtigt.
@@ -43,10 +43,9 @@ class JalousienStatusMapper(Mapper):
         return status
 
     def find_all(self):
-        """Auslesen aller Konten.
-
-        :return Eine Sammlung mit Account-Objekten, die sämtliche Konten
-                repräsentieren.
+        """
+        Auslesen aller Jalousiestatus aus der Datenbank.
+        :return: Array mit JalousieStatusBOs
         """
         result = []
         cursor = self._cnx.cursor()
@@ -69,11 +68,10 @@ class JalousienStatusMapper(Mapper):
         return result
 
     def find_by_key(self, id):
-        """Auslesen aller Konten eines durch Fremdschlüssel (Kundennr.) gegebenen Kunden.
-
-        :param device_id Schlüssel des zugehörigen Kunden.
-        :return Eine Sammlung mit Account-Objekten, die sämtliche Konten des
-                betreffenden Kunden repräsentieren.
+        """
+        Lädt eine Jalousie aus der Datenbank mithilfe der JalousieStatus-Id
+        :param id: Id des JalousieStatusBOs
+        :return: JalousieStatusBO
         """
         result = None
         cursor = self._cnx.cursor()
@@ -97,9 +95,9 @@ class JalousienStatusMapper(Mapper):
         return result
 
     def update(self, status):
-        """Wiederholtes Schreiben eines Objekts in die Datenbank.
-
-        :param status das Objekt, das in die DB geschrieben werden soll
+        """
+        Wiederholtes Schreiben eines Objekts in die Datenbank.
+        :param status: das Objekt, das in die DB geschrieben werden soll
         """
         cursor = self._cnx.cursor()
 
@@ -111,9 +109,9 @@ class JalousienStatusMapper(Mapper):
         cursor.close()
 
     def delete(self, status):
-        """Löschen der Daten eines Account-Objekts aus der Datenbank.
-
-        :param status das aus der DB zu löschende "Objekt"
+        """
+        Löschen eines JalousienStatus-Objekts aus der Datenbank.
+        :param status: das aus der DB zu löschende "Objekt"
         """
         cursor = self._cnx.cursor()
 

@@ -9,6 +9,10 @@ from flaskr.server.bo.RulesBO import RulesBO
 
 @app.route('/')
 def index():
+    '''
+    main-HTML Seite, die gerendert werden soll
+    :return: index.html
+    '''
     return render_template("index.html")
 
 
@@ -109,7 +113,6 @@ def get_jal_stats_per_hour_for_weekday():
 @app.route('/JalIstStatusPerDay', methods=["GET"])
 def status_per_day():
     adm = DeviceAdministration()
-
     day = request.args.get('day')
     print(day)
     stats = adm.get_ist_values_jal(day)
@@ -306,7 +309,8 @@ def status_for_week():
 @app.route('/SetTemp', methods=["POST"])
 def set_temp():
     """
-    Return a simple odata container with date time information
+    Setzten der Temperatur mithilfe von Werten aus dem Frontend.
+    :return: dict()
     """
 
     adm = DeviceAdministration()
@@ -327,7 +331,7 @@ def set_temp():
 @app.route('/GetTemp', methods=["GET"])
 def get_temp():
     """
-    Return a simple odata container with date time information
+    Generierung einer JSON-Datei mit der jetztigen Temperatur.
     """
     adm = DeviceAdministration()
 
@@ -349,7 +353,7 @@ def get_temp():
 @app.route('/GetSollTemp', methods=["GET"])
 def get_soll_temp():
     """
-    Return a simple odata container with date time information
+    Generierung einer JSON-Datei mit der Soll-Temperatur.
     """
     adm = DeviceAdministration()
 
@@ -372,7 +376,7 @@ def get_soll_temp():
 @app.route('/GetStandardJalousienMonday', methods=["GET"])
 def get_entries_jal_monday():
     """
-    Return a simple odata container with date time information
+    Generierung einer JSON-Datei mit einem Jalousien-Wochenplaneintrag am Montag
     """
     adm = DeviceAdministration()
 
@@ -400,7 +404,7 @@ def get_entries_jal_monday():
 @app.route('/GetStandardJalousienTuesday', methods=["GET"])
 def get_entries_jal_tuesday():
     """
-    Return a simple odata container with date time information
+    Generierung einer JSON-Datei mit einem Jalousien-Wochenplaneintrag am Dienstag.
     """
     adm = DeviceAdministration()
 
@@ -426,7 +430,7 @@ def get_entries_jal_tuesday():
 @app.route('/GetStandardJalousienWednesday', methods=["GET"])
 def get_entries_jal_wednesday():
     """
-    Return a simple odata container with date time information
+    Generierung einer JSON-Datei mit einem Jalousien-Wochenplaneintrag am Mittwoch.
     """
     adm = DeviceAdministration()
 
@@ -452,7 +456,7 @@ def get_entries_jal_wednesday():
 @app.route('/GetStandardJalousienThursday', methods=["GET"])
 def get_entries_jal_thursday():
     """
-    Return a simple odata container with date time information
+    Generierung einer JSON-Datei mit einem Jalousien-Wochenplaneintrag am Donnerstag.
     """
     adm = DeviceAdministration()
 
@@ -478,7 +482,7 @@ def get_entries_jal_thursday():
 @app.route('/GetStandardJalousienFriday', methods=["GET"])
 def get_entries_jal_friday():
     """
-    Return a simple odata container with date time information
+    Generierung einer JSON-Datei mit einem Jalousien-Wochenplaneintrag am Freitag.
     """
     adm = DeviceAdministration()
 
@@ -504,9 +508,8 @@ def get_entries_jal_friday():
 @app.route('/SetJalousienStandardMonday', methods=["POST"])
 def set_jal_standard_monday():
     """
-    Return a simple odata container with date time information
+    Setzen eines Jalousien-Wochenplaneintrag am Montag
     """
-
     adm = DeviceAdministration()
 
     start = request.form["start"]
@@ -525,9 +528,8 @@ def set_jal_standard_monday():
 @app.route('/SetJalousienStandardTuesday', methods=["POST"])
 def set_jal_standard_tuesday():
     """
-    Return a simple odata container with date time information
+    Setzen eines Jalousien-Wochenplaneintrag am Dienstag.
     """
-
     adm = DeviceAdministration()
 
     start = request.form["start"]
@@ -545,9 +547,8 @@ def set_jal_standard_tuesday():
 @app.route('/SetJalousienStandardWednesday', methods=["POST"])
 def set_jal_standard_wednesday():
     """
-    Return a simple odata container with date time information
+    Setzen eines Jalousien-Wochenplaneintrag am Mittwoch
     """
-
     adm = DeviceAdministration()
 
     start = request.form["start"]
@@ -565,9 +566,8 @@ def set_jal_standard_wednesday():
 @app.route('/SetJalousienStandardThursday', methods=["POST"])
 def set_jal_standard_thursday():
     """
-    Return a simple odata container with date time information
+    Setzen eines Jalousien-Wochenplaneintrag am Donnerstag
     """
-
     adm = DeviceAdministration()
 
     start = request.form["start"]
@@ -585,10 +585,8 @@ def set_jal_standard_thursday():
 @app.route('/SetJalousienStandardFriday', methods=["POST"])
 def set_jal_standard_friday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Setzen eines Jalousien-Wochenplaneintrag am Freitag.
     """
-
     adm = DeviceAdministration()
 
     start = request.form["start"]
@@ -605,7 +603,7 @@ def set_jal_standard_friday():
 @app.route('/DeleteStandardJalousienMonday', methods=["DELETE"])
 def delete_entry_jal_monday():
     """
-    Return a simple odata container with date time information
+    Löschen eines Jalousien-Wochenplaneintrag am Montag
     """
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]
@@ -624,7 +622,7 @@ def delete_entry_jal_monday():
 @app.route('/DeleteStandardJalousienTuesday', methods=["DELETE"])
 def delete_entry_jal_tuesday():
     """
-    Return a simple odata container with date time information
+    Löschen eines Jalousien-Wochenplaneintrag am Dienstag
     """
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]
@@ -643,7 +641,7 @@ def delete_entry_jal_tuesday():
 @app.route('/DeleteStandardJalousienWednesday', methods=["DELETE"])
 def delete_entry_jal_wednesday():
     """
-    Return a simple odata container with date time information
+    Löschen eines Jalousien-Wochenplaneintrag am Mttwoch
     """
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]
@@ -662,8 +660,7 @@ def delete_entry_jal_wednesday():
 @app.route('/DeleteStandardJalousienThursday', methods=["DELETE"])
 def delete_entry_jal_thursday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Löschen eines Jalousien-Wochenplaneintrag am Donnerstag
     """
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]
@@ -682,7 +679,7 @@ def delete_entry_jal_thursday():
 @app.route('/DeleteStandardJalousienFriday', methods=["DELETE"])
 def delete_entry_jal_friday():
     """
-    Return a simple odata container with date time information
+    Löschen eines Jalousien-Wochenplaneintrag am Freitag
     """
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]
@@ -701,10 +698,8 @@ def delete_entry_jal_friday():
 @app.route('/SetJalRule', methods=["POST"])
 def set_jal_rule():
     """
-    Return a simple odata container with date time information
-    :return:
+    Setzen einer Jalousien-Regel
     """
-
     adm = DeviceAdministration()
 
     start = request.form["start"]
@@ -721,10 +716,8 @@ def set_jal_rule():
 @app.route('/GetJalRule', methods=["GET"])
 def get_jal_rules():
     """
-    Return a simple odata container with date time information
-    :return:
+    Laden einer Jalousien-Regel und Generierung zu einer JSON-Datei
     """
-
     adm = DeviceAdministration()
 
     odata = {
@@ -749,8 +742,7 @@ def get_jal_rules():
 @app.route('/DeleteJalRule', methods=["DELETE"])
 def delete_jal_rules():
     """
-    Return a simple odata container with date time information
-    :return:
+    Löschen einer Jalousien-Regel.
     """
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]
@@ -761,11 +753,9 @@ def delete_jal_rules():
 
 @app.route('/SetMinTemp', methods=["POST"])
 def set_min_temp():
-    """
-    Return a simple odata container with date time information
-    :return:
-    """
-
+    '''
+    Setzen einer Mindesttemperatur
+    '''
     adm = DeviceAdministration()
     data = request.form["value"]
     data = float(data)
@@ -779,8 +769,7 @@ def set_min_temp():
 # hier ist die get_Status Methode
 def get_min_temp():
     """
-    Return a simple odata container with date time information
-    :return:
+    Laden einer Mindesttemperatur und Generierung zu einer JSON-Datei
     """
     adm = DeviceAdministration()
 
@@ -802,11 +791,9 @@ def get_min_temp():
 
 @app.route('/SetMaxTemp', methods=["POST"])
 def set_max_temp():
-    """
-    Return a simple odata container with date time information
-    :return:
-    """
-
+    '''
+    Setzen einer Maximaltemperatur
+    '''
     adm = DeviceAdministration()
     data = request.form["value"]
     data = float(data)
@@ -819,11 +806,9 @@ def set_max_temp():
 # hier ist die get_Status Methode
 def get_max_temp():
     """
-    Return a simple odata container with date time information
-    :return:
+    Laden einer Maximaltemperatur und Generierung zu einer JSON-Datei
     """
     adm = DeviceAdministration()
-
     odata = {
         'd': {
             'results': []
@@ -843,8 +828,7 @@ def get_max_temp():
 @app.route('/GetStandardThermostatMonday', methods=["GET"])
 def get_entries_temp_monday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Generierung einer JSON-Datei mit einem Thermostat-Wochenplaneintrag am Montag
     """
     adm = DeviceAdministration()
 
@@ -870,8 +854,7 @@ def get_entries_temp_monday():
 @app.route('/GetStandardThermostatTuesday', methods=["GET"])
 def get_entries_temp_tuesday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Generierung einer JSON-Datei mit einem Thermostat-Wochenplaneintrag am Dienstag
     """
     adm = DeviceAdministration()
 
@@ -897,8 +880,7 @@ def get_entries_temp_tuesday():
 @app.route('/GetStandardThermostatWednesday', methods=["GET"])
 def get_entries_temp_wednesday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Generierung einer JSON-Datei mit einem Thermostat-Wochenplaneintrag am Mittwoch
     """
     adm = DeviceAdministration()
 
@@ -924,8 +906,7 @@ def get_entries_temp_wednesday():
 @app.route('/GetStandardThermostatThursday', methods=["GET"])
 def get_entries_temp_thursday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Generierung einer JSON-Datei mit einem Thermostat-Wochenplaneintrag am Donnerstag
     """
     adm = DeviceAdministration()
 
@@ -951,8 +932,7 @@ def get_entries_temp_thursday():
 @app.route('/GetStandardThermostatFriday', methods=["GET"])
 def get_entries_temp_friday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Generierung einer JSON-Datei mit einem Thermostat-Wochenplaneintrag am Freitag
     """
     adm = DeviceAdministration()
 
@@ -978,10 +958,8 @@ def get_entries_temp_friday():
 @app.route('/SetThermostatStandardMonday', methods=["POST"])
 def set_temp_standard_monday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Setzen eines Thermostat-Wochenplaneintrag am Montag.
     """
-
     adm = DeviceAdministration()
 
     start = request.form["start"]
@@ -1000,10 +978,8 @@ def set_temp_standard_monday():
 @app.route('/SetThermostatStandardTuesday', methods=["POST"])
 def set_temp_standard_tuesday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Setzen eines Thermostat-Wochenplaneintrag am Dienstag.
     """
-
     adm = DeviceAdministration()
 
     start = request.form["start"]
@@ -1020,8 +996,7 @@ def set_temp_standard_tuesday():
 @app.route('/SetThermostatStandardWednesday', methods=["POST"])
 def set_temp_standard_wednesday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Setzen eines Thermostat-Wochenplaneintrag am Mittwoch.
     """
 
     adm = DeviceAdministration()
@@ -1041,10 +1016,8 @@ def set_temp_standard_wednesday():
 @app.route('/SetThermostatStandardThursday', methods=["POST"])
 def set_temp_standard_thursday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Setzen eines Thermostat-Wochenplaneintrag am Donnerstag.
     """
-
     adm = DeviceAdministration()
 
     start = request.form["start"]
@@ -1062,10 +1035,8 @@ def set_temp_standard_thursday():
 @app.route('/SetThermostatStandardFriday', methods=["POST"])
 def set_temp_standard_friday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Setzen eines Thermostat-Wochenplaneintrag am Freitag.
     """
-
     adm = DeviceAdministration()
 
     start = request.form["start"]
@@ -1083,8 +1054,7 @@ def set_temp_standard_friday():
 @app.route('/DeleteStandardThermoMonday', methods=["DELETE"])
 def delete_entry_thermo_monday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Löschen eines Thermostat-Wochenplaneintrag am Montag.
     """
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]
@@ -1103,8 +1073,7 @@ def delete_entry_thermo_monday():
 @app.route('/DeleteStandardThermoTuesday', methods=["DELETE"])
 def delete_entry_thermo_tuesday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Löschen eines Thermostat-Wochenplaneintrag am Dienstag
     """
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]
@@ -1123,8 +1092,7 @@ def delete_entry_thermo_tuesday():
 @app.route('/DeleteStandardThermoWednesday', methods=["DELETE"])
 def delete_entry_thermo_wednesday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Löschen eines Thermostat-Wochenplaneintrag am Mittwoch.
     """
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]
@@ -1143,8 +1111,7 @@ def delete_entry_thermo_wednesday():
 @app.route('/DeleteStandardThermoThursday', methods=["DELETE"])
 def delete_entry_thermo_thursday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Löschen eines Thermostat-Wochenplaneintrag am Donnerstag.
     """
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]
@@ -1163,8 +1130,7 @@ def delete_entry_thermo_thursday():
 @app.route('/DeleteStandardThermoFriday', methods=["DELETE"])
 def delete_entry_thermo_friday():
     """
-    Return a simple odata container with date time information
-    :return:
+    Löschen eines Thermostat-Wochenplaneintrag am Freitag.
     """
     adm = DeviceAdministration()
     id_entry = request.form["id_entry"]

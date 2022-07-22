@@ -10,12 +10,14 @@ class Mapper (AbstractContextManager, ABC):
         self._cnx = None
 
     def __enter__(self):
-        """Check ob der Code im Kontext der lokalen Entwicklungsumgebung oder in der Cloud ausgeführt wird.
-        Dies ist erforderlich, da die Modalitäten für den Verbindungsaufbau mit der Datenbank kontextabhängig sind."""
+        '''
+        In der enter-Methode wird die Datenbankverbindung, sprich Datenbank, user, host und Passwort angegeben.
+        :return: self._cnx (Verbindung)
+        '''
 
-        self._cnx = connector.connect(user='root', password='hdmsw201920',
+        self._cnx = connector.connect(user='quanto_solutions', password='QUANTO-Solutions',
                                       host='localhost',
-                                      database='Smartoffice')
+                                      database='SmartOffice')
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):

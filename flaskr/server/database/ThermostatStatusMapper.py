@@ -4,18 +4,18 @@ from datetime import datetime
 
 
 class ThermostatStatusMapper(Mapper):
-    """Mapper-Klasse, die Account-Objekte auf eine relationale
-    Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
-    gestellt, mit deren Hilfe z.B. Objekte gesucht, erzeugt, modifiziert und
-    gelöscht werden können. Das Mapping ist bidirektional. D.h., Objekte können
-    in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
-    """
+    '''
+    Implemenierung der Mapper-Klasse für Thermostatstatus.
+    Hierzu wird eine Reihe von Methoden zur Verfügung gestellt, mit deren Hilfe z.B.
+    Objekte gesucht, erzeugt, modifiziert und gelöscht werden können.
+    Das Mapping ist bidirektional. D.h., Objekte können in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+    '''
 
     def __init__(self):
         super().__init__()
 
     def insert(self, status):
-        """Einfügen eines Account-Objekts in die Datenbank.
+        """Einfügen eines Thermostatstatus-Objekts in die Datenbank.
 
         Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
         berichtigt.
@@ -46,10 +46,9 @@ class ThermostatStatusMapper(Mapper):
         return status
 
     def find_all(self):
-        """Auslesen aller Konten.
-
-        :return Eine Sammlung mit Account-Objekten, die sämtliche Konten
-                repräsentieren.
+        """
+        Auslesen aller Thermostatstatus aus der Datenbank.
+        :return: Array mit ThermostatStatusBOs
         """
         result = []
         cursor = self._cnx.cursor()
@@ -100,9 +99,9 @@ class ThermostatStatusMapper(Mapper):
         return result
 
     def update(self, status):
-        """Wiederholtes Schreiben eines Objekts in die Datenbank.
-
-        :param status das Objekt, das in die DB geschrieben werden soll
+        """
+        Wiederholtes Schreiben eines Objekts in die Datenbank.
+        :param status: das Objekt, das in die DB geschrieben werden soll
         """
         cursor = self._cnx.cursor()
 
@@ -114,9 +113,9 @@ class ThermostatStatusMapper(Mapper):
         cursor.close()
 
     def delete(self, status):
-        """Löschen der Daten eines Account-Objekts aus der Datenbank.
-
-        :param status das aus der DB zu löschende "Objekt"
+        """
+        Löschen eines Thermostatstatus-Objekts aus der Datenbank.
+        :param status: das aus der DB zu löschende "Objekt"
         """
         cursor = self._cnx.cursor()
 

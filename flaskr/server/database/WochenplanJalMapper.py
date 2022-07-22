@@ -3,10 +3,24 @@ from flaskr.server.bo.WochenplanJalBO import WeeklyPlanJalBO
 
 
 class WeeklyPlanJalMapper(Mapper):
+    '''
+    Implemenierung der Mapper-Klasse für Jalousien-Wochenplaneinträge.
+    Hierzu wird eine Reihe von Methoden zur Verfügung gestellt, mit deren Hilfe z.B.
+    Objekte gesucht, erzeugt, modifiziert und gelöscht werden können.
+    Das Mapping ist bidirektional. D.h., Objekte können in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+    '''
     def __init__(self):
         super().__init__()
 
     def insert(self, entry):
+        """Einfügen eines Jalousien-Wochenplaneintrag-Objekts in die Datenbank.
+
+        Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
+        berichtigt.
+
+        :param entry das zu speichernde Objekt
+        :return das bereits übergebene Objekt, jedoch mit ggf. korrigierter ID.
+        """
         cursor = self._cnx.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM standard_jal ")
         tuples = cursor.fetchall()
@@ -38,7 +52,10 @@ class WeeklyPlanJalMapper(Mapper):
         return entry
 
     def find_all(self):
-
+        """
+        Auslesen aller Jalousien-Wochenplaneinträge aus der Datenbank.
+        :return: Array mit WeeklyPlanJalBOs
+        """
         result = []
         cursor = self._cnx.cursor()
         command = "SELECT * FROM standard_jal"
@@ -113,6 +130,10 @@ class WeeklyPlanJalMapper(Mapper):
         return result
 
     def update(self, entry):
+        """
+        Wiederholtes Schreiben eines Objekts in die Datenbank.
+        :param entry: das Objekt, das in die DB geschrieben werden soll
+        """
         cursor = self._cnx.cursor()
 
         command = "UPDATE weeklyplanjal " + \
@@ -132,7 +153,10 @@ class WeeklyPlanJalMapper(Mapper):
         return entry
 
     def delete(self, entry):
-        print(entry)
+        """
+        Löschen eines Jalousien-Wochenplan-Objekts aus der Datenbank.
+        :param entry: das aus der DB zu löschende "Objekt"
+        """
         cursor = self._cnx.cursor()
 
         command = "DELETE FROM standard_jal WHERE id={}".format(entry.get_id())
@@ -141,9 +165,12 @@ class WeeklyPlanJalMapper(Mapper):
         self._cnx.commit()
         cursor.close()
 
-    def delete_byId(self, id):
+    def delete_by_Id(self, id):
+        """
+        Löschen eines Jalousien-Wochenplan-Objekts aus der Datenbank mithilfe dessen Id.
+        :param id: Id des das aus der DB zu löschenden "Objekts"
+        """
         cursor = self._cnx.cursor()
-
         command = "DELETE FROM standard_jal WHERE monday_id={}".format(id)
         cursor.execute(command)
 

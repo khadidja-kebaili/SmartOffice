@@ -3,18 +3,18 @@ from flaskr.server.database.Mapper import Mapper
 
 
 class JalousienMapper(Mapper):
-    """Mapper-Klasse, die Account-Objekte auf eine relationale
-    Datenbank abbildet. Hierzu wird eine Reihe von Methoden zur Verfügung
-    gestellt, mit deren Hilfe z.B. Objekte gesucht, erzeugt, modifiziert und
-    gelöscht werden können. Das Mapping ist bidirektional. D.h., Objekte können
-    in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
-    """
+    '''
+    Implemenierung der Mapper-Klasse für Jalousien bzw. Jalousiensteuerungsgeräte.
+    Hierzu wird eine Reihe von Methoden zur Verfügung gestellt, mit deren Hilfe z.B.
+    Objekte gesucht, erzeugt, modifiziert und gelöscht werden können.
+    Das Mapping ist bidirektional. D.h., Objekte können in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+    '''
 
     def __init__(self):
         super().__init__()
 
     def insert(self, jalousie):
-        """Einfügen eines Account-Objekts in die Datenbank.
+        """Einfügen eines Jalousie-Objekts in die Datenbank.
 
         Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
         berichtigt.
@@ -42,10 +42,9 @@ class JalousienMapper(Mapper):
         return jalousie
 
     def find_all(self):
-        """Auslesen aller Konten.
-
-        :return Eine Sammlung mit Account-Objekten, die sämtliche Konten
-                repräsentieren.
+        """
+        Auslesen aller Jalousie-Steuerungsgeräte.
+        :return: Array mit Jalousie-Steuerungsgeräten
         """
         result = []
         cursor = self._cnx.cursor()
@@ -67,11 +66,10 @@ class JalousienMapper(Mapper):
         return result
 
     def find_by_device_id(self, device_id):
-        """Auslesen aller Konten eines durch Fremdschlüssel (Kundennr.) gegebenen Kunden.
-
-        :param device_id Schlüssel des zugehörigen Kunden.
-        :return Eine Sammlung mit Account-Objekten, die sämtliche Konten des
-                betreffenden Kunden repräsentieren.
+        """
+        Lädt eine Jalousie aus der Datenbank mithilfe einer Device-Id.
+        :param device_id Id des Geräts
+        :return: JalousieBO
         """
         result = None
         cursor = self._cnx.cursor()
@@ -93,11 +91,10 @@ class JalousienMapper(Mapper):
         return result
 
     def find_by_id(self, id):
-        """Auslesen aller Konten eines durch Fremdschlüssel (Kundennr.) gegebenen Kunden.
-
-        :param device_id Schlüssel des zugehörigen Kunden.
-        :return Eine Sammlung mit Account-Objekten, die sämtliche Konten des
-                betreffenden Kunden repräsentieren.
+        """
+        Lädt eine Jalousie aus der Datenbank mithilfe der Jalousie-Id
+        :param id: Id des JalousieBOs
+        :return: JalousieBO
         """
         result = None
         cursor = self._cnx.cursor()
@@ -119,12 +116,10 @@ class JalousienMapper(Mapper):
         return result
 
     def find_by_key(self, local_key):
-        """Suchen eines Kontos mit vorgegebener Kontonummer. Da diese eindeutig ist,
-        wird genau ein Objekt zurückgegeben.
-
-        :param id Primärschlüsselattribut (->DB)
-        :return Konto-Objekt, das dem übergebenen Schlüssel entspricht, None bei
-            nicht vorhandenem DB-Tupel.
+        """
+        Lädt eine Jalousie aus der Datenbank mithilfe einer local-key.
+        :param local_key: Local-Key des Geräts
+        :return: JalousieBO
         """
         result = None
 
@@ -148,8 +143,8 @@ class JalousienMapper(Mapper):
         return result
 
     def update(self, jalousie):
-        """Wiederholtes Schreiben eines Objekts in die Datenbank.
-
+        """
+        Wiederholtes Schreiben eines Objekts in die Datenbank.
         :param jalousie das Objekt, das in die DB geschrieben werden soll
         """
         cursor = self._cnx.cursor()
@@ -164,9 +159,9 @@ class JalousienMapper(Mapper):
         cursor.close()
 
     def delete(self, jalousie):
-        """Löschen der Daten eines Account-Objekts aus der Datenbank.
-
-        :param jalousie das aus der DB zu löschende "Objekt"
+        """
+        Löschen eines Jalousie-Objekts aus der Datenbank.
+        :param jalousie: das aus der DB zu löschende "Objekt"
         """
         cursor = self._cnx.cursor()
 

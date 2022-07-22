@@ -1294,7 +1294,7 @@ class DeviceAdministration(object):
 
     def delete_jal_monday_by_id(self, id):
         with WeeklyPlanJalMapper() as mapper:
-            return mapper.delete_byId(id)
+            return mapper.delete_by_Id(id)
 
     def set_temp_standard_entry_tuesday(self, start, end, temp):
         '''
@@ -1644,7 +1644,7 @@ class DeviceAdministration(object):
 
     def delete_entry_in_standard_weeklyplan_jal_byId(self, id):
         with WeeklyPlanJalMapper() as mapper:
-            mapper.delete_byId(id)
+            mapper.delete_by_Id(id)
 
     def delete_entry_in_standard_weeklyplan_temp(self, entry):
         with WeeklyPlanTempMapper() as mapper:

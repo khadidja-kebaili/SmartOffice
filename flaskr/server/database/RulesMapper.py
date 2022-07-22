@@ -3,6 +3,12 @@ from flaskr.server.bo.RulesBO import RulesBO
 
 
 class RulesMapper(Mapper):
+    '''
+    Implemenierung der Mapper-Klasse für Regeln bzw. Einschränkungen der Gerätesteuerung.
+    Hierzu wird eine Reihe von Methoden zur Verfügung gestellt, mit deren Hilfe z.B.
+    Objekte gesucht, erzeugt, modifiziert und gelöscht werden können.
+    Das Mapping ist bidirektional. D.h., Objekte können in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+    '''
 
     def __init__(self):
         super().__init__()
@@ -37,7 +43,10 @@ class RulesMapper(Mapper):
         return rule
 
     def find_all(self):
-
+        """
+        Auslesen aller Regelungen aus der Datenbank.
+        :return: Array mit RuleBOs
+        """
         result = []
         cursor = self._cnx.cursor()
         command = "SELECT id, type, min, max, start, end FROM rules"
@@ -60,8 +69,12 @@ class RulesMapper(Mapper):
         return result
 
     def find_by_type(self, type):
+        """
+        Lädt alle Regeln eines bestimmten Typs mithilfe des angegebenen Typs.
+        :param type: 'T' oder 'J'
+        :return: Liste mit RuleBOs
+        """
         result = []
-
         cursor = self._cnx.cursor()
         command = "SELECT id, type, min, max, start, end FROM rules WHERE type='{}'".format(type)
         cursor.execute(command)
@@ -83,8 +96,12 @@ class RulesMapper(Mapper):
         return result
 
     def find_by_key(self, id):
+        """
+        Lädt eine Jalousie aus der Datenbank mithilfe der Regel-Id
+        :param id: Id des RuleBOs
+        :return: RuleBO
+        """
         result = None
-
         cursor = self._cnx.cursor()
         command = "SELECT id, type, min, max, start, end  FROM rules WHERE id={}".format(
             id)
@@ -113,6 +130,10 @@ class RulesMapper(Mapper):
         return result
 
     def update(self, rule):
+        """
+        Wiederholtes Schreiben eines Objekts in die Datenbank.
+        :param rule: das Objekt, das in die DB geschrieben werden soll
+        """
         cursor = self._cnx.cursor()
 
         command = "UPDATE rules " + \
@@ -131,6 +152,10 @@ class RulesMapper(Mapper):
         return rule
 
     def delete(self, rule):
+        """
+        Löschen eines Regel-Objekts aus der Datenbank.
+        :param rule: das aus der DB zu löschende "Objekt"
+        """
         cursor = self._cnx.cursor()
 
         command = "DELETE FROM rules WHERE id={}".format(
@@ -142,7 +167,6 @@ class RulesMapper(Mapper):
 
     def delete_jal_rules_byId(self, id_entry):
         cursor = self._cnx.cursor()
-
         command = "DELETE FROM rules WHERE id=%s and type=%s"
         data=(id_entry, "J")
         cursor.execute(command, data)

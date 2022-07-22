@@ -3,42 +3,60 @@ from flaskr.server.bo.WochenplanThermoBO import WeeklyPlanTempBO
 
 
 class WeeklyPlanTempMapper(Mapper):
+    '''
+    Implemenierung der Mapper-Klasse für Thermostat-Wochenplaneinträge.
+    Hierzu wird eine Reihe von Methoden zur Verfügung gestellt, mit deren Hilfe z.B.
+    Objekte gesucht, erzeugt, modifiziert und gelöscht werden können.
+    Das Mapping ist bidirektional. D.h., Objekte können in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+    '''
 
     def __init__(self):
         super().__init__()
 
-    def insert(self, weeklyplantemp):
+    def insert(self, entry):
+        """Einfügen eines Thermostat-Wochenplaneintrag-Objekts in die Datenbank.
+
+        Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
+        berichtigt.
+
+        :param entry das zu speichernde Objekt
+        :return das bereits übergebene Objekt, jedoch mit ggf. korrigierter ID.
+        """
         cursor = self._cnx.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM standard_temp ")
         tuples = cursor.fetchall()
 
         for (maxid) in tuples:
             if maxid[0] is None:
-                weeklyplantemp.set_id(1)
+                entry.set_id(1)
             else:
                 """Wenn wir KEINE maximale ID feststellen konnten, dann gehen wir
                 davon aus, dass die Tabelle leer ist und wir mit der ID 1 beginnen können."""
-                weeklyplantemp.set_id(maxid[0] + 1)
+                entry.set_id(maxid[0] + 1)
 
         command = "INSERT INTO standard_temp (id, weekday, monday_id, tuesday_id, wednesday_id, thursday_id, friday_id) \
                   VALUES (%s, %s, %s, %s, %s, %s, %s)"
         data = (
-            weeklyplantemp.get_id(),
-            weeklyplantemp.get_weekday(),
-            weeklyplantemp.get_monday_id(),
-            weeklyplantemp.get_tuesday_id(),
-            weeklyplantemp.get_wednesday_id(),
-            weeklyplantemp.get_thursday_id(),
-            weeklyplantemp.get_friday_id()
+            entry.get_id(),
+            entry.get_weekday(),
+            entry.get_monday_id(),
+            entry.get_tuesday_id(),
+            entry.get_wednesday_id(),
+            entry.get_thursday_id(),
+            entry.get_friday_id()
         )
 
         cursor.execute(command, data)
 
         self._cnx.commit()
         cursor.close()
-        return weeklyplantemp
+        return entry
 
     def find_all(self):
+        """
+        Auslesen aller Thermostat-Wochenplaneinträge aus der Datenbank.
+        :return: Array mit WeeklyPlanTempBOs
+        """
         result = []
         cursor = self._cnx.cursor()
         command = "SELECT * FROM standard_temp"
@@ -113,27 +131,35 @@ class WeeklyPlanTempMapper(Mapper):
         return result
 
 
-    def update(self, weeklyplanjal):
+    def update(self, entry):
+        """
+        Wiederholtes Schreiben eines Objekts in die Datenbank.
+        :param entry: das Objekt, das in die DB geschrieben werden soll
+        """
         cursor = self._cnx.cursor()
 
         command = "UPDATE standard_temp" + \
                   "SET weekday=%s, monday_id=%s, tuesday_id=%s, wednesday_id=%s, thursday_id=%s, friday_id=%s WHERE " \
                   "id=%s "
-        data = (weeklyplanjal.get_id(),
-                weeklyplanjal.get_weekday(),
-                weeklyplanjal.get_monday_id(),
-                weeklyplanjal.get_tuesday_id(),
-                weeklyplanjal.get_wednesday_id(),
-                weeklyplanjal.get_thursday_id(),
-                weeklyplanjal.get_friday_id())
+        data = (entry.get_id(),
+                entry.get_weekday(),
+                entry.get_monday_id(),
+                entry.get_tuesday_id(),
+                entry.get_wednesday_id(),
+                entry.get_thursday_id(),
+                entry.get_friday_id())
         cursor.execute(command, data)
 
         self._cnx.commit()
         cursor.close()
 
-        return weeklyplanjal
+        return entry
 
     def delete(self, entry):
+        """
+        Löschen eines Thermostat-Wochenplan-Objekts aus der Datenbank.
+        :param entry: das aus der DB zu löschende "Objekt"
+        """
         cursor = self._cnx.cursor()
 
         command = "DELETE FROM standard_temp WHERE id={}".format(

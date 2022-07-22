@@ -3,11 +3,24 @@ from flaskr.server.bo.weekdays_jal.FridayBO import Friday
 
 
 class FridayMapper(Mapper):
-
+    '''
+    Implemenierung der Mapper-Klasse für Wochenplaneinträge am Freitag.
+    Hierzu wird eine Reihe von Methoden zur Verfügung gestellt, mit deren Hilfe z.B.
+    Objekte gesucht, erzeugt, modifiziert und gelöscht werden können.
+    Das Mapping ist bidirektional. D.h., Objekte können in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+    '''
     def __init__(self):
         super().__init__()
 
     def insert(self, friday):
+        """Einfügen eines Friday-Objekts in die Datenbank.
+
+        Dabei wird auch der Primärschlüssel des übergebenen Objekts geprüft und ggf.
+        berichtigt.
+
+        :param friday das zu speichernde Objekt
+        :return das bereits übergebene Objekt, jedoch mit ggf. korrigierter ID.
+        """
         cursor = self._cnx.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM friday")
         tuples = cursor.fetchall()
@@ -36,6 +49,10 @@ class FridayMapper(Mapper):
         return friday
 
     def find_all(self):
+        """
+        Auslesen aller Einträge zu Freitag.
+        :return: Array mit FridayBOs
+        """
         result = []
         cursor = self._cnx.cursor()
         command = "SELECT * FROM friday"
@@ -57,6 +74,11 @@ class FridayMapper(Mapper):
         return result
 
     def find_by_key(self, key):
+        """
+        Lädt einen Freitagseintrag aus der Datenbank mithilfe der Id
+        :param id: FridayBO-Id
+        :return: FridayBO
+        """
         result = None
         cursor = self._cnx.cursor()
         command = "SELECT * FROM friday WHERE id={}".format(key)
@@ -84,6 +106,10 @@ class FridayMapper(Mapper):
         return result
 
     def find_all_jal_entries(self):
+        '''
+        Lädt alle  Jalousien-Eintrage am Freitag aus der Datenbank
+        :return: Liste mit FridayBOs
+        '''
         result = []
         cursor = self._cnx.cursor()
         command = "SELECT * FROM friday WHERE type='J'"
@@ -105,6 +131,10 @@ class FridayMapper(Mapper):
         return result
 
     def find_all_temp_entries(self):
+        '''
+        Lädt alle Thermostat-Eintrage am Freitag aus der Datenbank
+        :return: Liste mit FridayBOs
+        '''
         result = []
         cursor = self._cnx.cursor()
         command = "SELECT * FROM friday WHERE type='T'"
@@ -126,6 +156,10 @@ class FridayMapper(Mapper):
         return result
 
     def find_latest_jal_entry(self):
+        '''
+        Lädt den letzten Jalousien-Eintrag am Freitag aus der Datenbank
+        :return: FridayBO
+        '''
         cursor = self._cnx.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM friday")
         tuples = cursor.fetchall()
@@ -156,6 +190,10 @@ class FridayMapper(Mapper):
             return result
 
     def find_latest_temp_entry(self):
+        '''
+        Lädt den letzten Thermostat-Eintrag aus der Datenbank
+        :return: FridayBO
+        '''
         cursor = self._cnx.cursor()
         cursor.execute("SELECT MAX(id) AS maxid FROM friday")
         tuples = cursor.fetchall()
@@ -186,6 +224,10 @@ class FridayMapper(Mapper):
             return result
 
     def update(self, friday):
+        """
+        Wiederholtes Schreiben eines Objekts in die Datenbank.
+        :param jalousie das Objekt, das in die DB geschrieben werden soll
+        """
         cursor = self._cnx.cursor()
 
         command = "UPDATE friday " + \
@@ -199,6 +241,10 @@ class FridayMapper(Mapper):
         return friday
 
     def delete(self, friday):
+        """
+        Löschen eines Freitag-Objekts aus der Datenbank.
+        :param friday: das aus der DB zu löschende "Objekt"
+        """
         cursor = self._cnx.cursor()
 
         command = "DELETE FROM friday WHERE id=%s and type=%s"
